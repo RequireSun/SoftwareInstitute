@@ -1,0 +1,17 @@
+{
+  "name": "softwareinstitute",
+  "version": "0.0.1",
+  "description": "A Node.js CMS using MySQL.",
+  "main": "app.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "keywords": [
+    "cms",
+    "nodejs",
+    "mysql",
+    "express"
+  ],
+  "author": "kelvinsen@outlook.com",
+  "license": "MIT"
+}
