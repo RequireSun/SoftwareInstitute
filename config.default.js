@@ -122,9 +122,9 @@ if ('test' === process.env.NODE_ENV) {
     config.db = {
         host: '127.0.0.1',
         port: 3306,
-        user: 'sa',
-        password: '1234',
-        database: 'software_institute_test',
+        user: 'user_name',
+        password: 'user_password',
+        database: 'project_database',
         charset: 'UTF8MB4_UNICODE_CI'
     };
 }
