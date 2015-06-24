@@ -23,43 +23,43 @@ var Loader      = require('loader');
 var express     = require('express');
 var session     = require('express-session');
 // 用来验证登陆
-var passport    = require('passport');
+//var passport    = require('passport');
 
 ////////// 引入类库 结束 //////////
 
 
 ////////// 引入自定 model 开始 //////////
 
-require('./models');
+//require('./models');
 
-var webRouter   = require('./web_router');
-var apiRouter   = require('./api_router');
+// var webRouter   = require('./web_router');
+// var apiRouter   = require('./api_router');
 
 ////////// 引入自定 model 结束 //////////
 
 
 ////////// 引入中间件 开始 //////////
 
-var proxyMiddleware     = require('./middlewares/proxy');
+//var proxyMiddleware     = require('./middlewares/proxy');
 // redis session 管理
 var RedisStore          = require('connect-redis')(session);
 // lodash 常用函数库
 var _                   = require('lodash');
+// 用于解析请求体
+var bodyParser          = require('body-parser');
 // 验证用的模块，必须在 session 模块之后引用
 //var csurf               = require('csurf');
 // http 压缩用的模块（deflate，gzip）
 //var compression         = require('compression');
-// 用于解析请求体
-var bodyParser          = require('body-parser');
 // 用于大文件上传
 //var busboy              = require('connect-busboy');
 // 用于在开发环境下打印错误信息
 var errorhandler        = require('errorhandler');
 // 用于支持 CORS 跨域
 //var cors                = require('cors');
-var requestLog          = require('./middlewares/request_log');
-var renderMiddleware    = require('./middlewares/render');
-var logger              = require('./common/logger');
+//var requestLog          = require('./middlewares/request_log');
+//var renderMiddleware    = require('./middlewares/render');
+//var logger              = require('./common/logger');
 
 ////////// 引入中间件 结束 //////////
 
@@ -94,18 +94,18 @@ app.locals._layoutFile = 'layout.html';
 app.enable('trust proxy');
 
 // 请求记录
-app.use(requestLog);
+//app.use(requestLog);
 
-if (config.debug) {
-    // 渲染时间
-    app.use(renderMiddleware.render);
-}
+// if (config.debug) {
+//     // 渲染时间
+//     app.use(renderMiddleware.render);
+// }
 
 // 静态资源
 // sign 会用之后找个 sass 的
 app.use(Loader.less(__dirname));
 app.use('/public', express.static(staticDir));
-app.use('/agent', proxyMiddleware.proxy);
+//app.use('/agent', proxyMiddleware.proxy);
 
 // 每日访问限制
 
@@ -115,8 +115,62 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // 添加额外的支持头，如 PUT DELETE
 //app.use(require('method-override')());
 app.use(require('cookie-parser')(config.session_secret));
-app.use(compression());
+//app.use(compression());
 app.use(session({
-    secret: config.session_secret
+    secret: config.session_secret,
+    // 使用 redis 存储
+    store: new RedisStore({
+        port: config.redis_port,
+        host: config.redis_host
+    }),
+    // 就算 session 没有变化也要进行一次存储（因为仓储有时限）
+    resave: true,
+    // 存储没有修改过的 session （刚刚生成，但是没有修改过的情况就属于此种情况）
+    saveUninitialized: true,
 }));
+
+
+//app.use(passport.initiallize());
+
+
+// 自定义中间件
+// app.use(auth.authUser);
+// app.use(auth.blockUser());
+
+// 非 debug 模式下调用api是需要验证的
+// if (!config.debug) {
+//     app.use(function (req, res, next) {
+//         if (-1 === req.path.indexOf('/api')) {
+//             csurf()(req, res, next);
+//             return;
+//         }
+//         next();
+//     });
+//     // 启用模板预编译缓存
+//     app.set('view cache', true);
+// }
+
+// for debug
+app.get('/err', function (req, res, next) {
+    next(new Error('Artificial Error!'));
+});
+
+// 设置辅助函数
+_.extend(app.locals, {
+    config: config,
+    Loader: Loader,
+    assets: assets,
+});
+
+// app.use(errorPageMiddleware.errorPage);
+// _.extend(app.locals, require('./common/render_helper'));
+
+// 加载csrf模块，必须在 cookie-parser 之后加载
+app.use(function (req, res, next) {
+    res.locals.csrf = req.csrfToken ? req.csrfToken() : '';
+    next();
+});
+
+
+
 

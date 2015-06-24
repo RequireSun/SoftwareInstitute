@@ -7,7 +7,7 @@
  */
 
 var express         = require('express');
-var passport        = require('passport');
+//var passport        = require('passport');
 // 引入各个 controller
 // var controllerName  = require('pathToController');
 // 引入各个 middleware
