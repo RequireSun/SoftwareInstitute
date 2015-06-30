@@ -16,7 +16,7 @@ var config = require('./config');
 ////////// 引入类库 开始 //////////
 
 // sign 一个漂亮的 css 颜色库，暂时用不着
-// require('colors');
+require('colors');
 var path        = require('path');
 // 一个用来压缩、加载 css 的插件
 var Loader      = require('loader');
@@ -59,7 +59,7 @@ var errorhandler        = require('errorhandler');
 //var cors                = require('cors');
 //var requestLog          = require('./middlewares/request_log');
 //var renderMiddleware    = require('./middlewares/render');
-//var logger              = require('./common/logger');
+var logger              = require('./common/logger');
 
 ////////// 引入中间件 结束 //////////
 
@@ -171,6 +171,22 @@ app.use(function (req, res, next) {
     next();
 });
 
+// 引用 router
 
+if (config.debug) {
+    app.use(errorhandler());
+} else {
+    app.use(function (err, req, res, next) {
+        console.error('server 500 error: ', err);
+        return res.status(500).send('500 status');
+    });
+}
+
+app.listen(config.port, function () {
+  logger.info('CMS listening on port', config.port);
+  logger.info('You can debug your app with http://' + config.hostname + ':' + config.port);
+});
+
+module.exports = app;
 
 
