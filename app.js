@@ -15,7 +15,7 @@ var config = require('./config');
 
 ////////// 引入类库 开始 //////////
 
-// sign 一个漂亮的 css 颜色库，暂时用不着
+// 用于更改命令行显示的字色
 require('colors');
 var path        = require('path');
 // 一个用来压缩、加载 css 的插件
@@ -57,7 +57,7 @@ var bodyParser          = require('body-parser');
 var errorhandler        = require('errorhandler');
 // 用于支持 CORS 跨域
 //var cors                = require('cors');
-//var requestLog          = require('./middlewares/request_log');
+var requestLog          = require('./middlewares/request_log');
 //var renderMiddleware    = require('./middlewares/render');
 var logger              = require('./common/logger');
 
@@ -94,7 +94,7 @@ app.locals._layoutFile = 'layout.html';
 app.enable('trust proxy');
 
 // 请求记录
-//app.use(requestLog);
+app.use(requestLog);
 
 // if (config.debug) {
 //     // 渲染时间
@@ -167,6 +167,7 @@ _.extend(app.locals, {
 
 // 加载csrf模块，必须在 cookie-parser 之后加载
 app.use(function (req, res, next) {
+    // 将获取到的 csrf token 附加到当前作用域中
     res.locals.csrf = req.csrfToken ? req.csrfToken() : '';
     next();
 });
