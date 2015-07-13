@@ -2,7 +2,7 @@ var mysql = require('mysql');
 var config = require('../config');
 var pool = mysql.createPool(config.db);
 
-pool.config.queryFormat = function (query, values) {
+pool.config.connectionConfig.queryFormat = function (query, values) {
   if (!values) return query;
   return query.replace(/\:(\w+)/g, function (txt, key) {
     if (values.hasOwnProperty(key)) {

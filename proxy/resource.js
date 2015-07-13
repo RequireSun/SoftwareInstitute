@@ -1,6 +1,4 @@
 var EventProxy  = require('eventproxy');
-var models      = require('../models');
-var resource    = models.Resource;
 var _           = require('lodash');
 var database    = require('../common/database')
 
@@ -9,7 +7,7 @@ exports.getResources = function (pageSize, pageRequest, callback) {
         return callback(new Error('Parameter: pageSize / pageRequest must be number!'));
     }
 
-    var queryString = 'SELECT * FROM resource ORDER BY update_time DESC LIMIT pageLimit OFFSET pageOffset';
+    var queryString = 'SELECT * FROM resource ORDER BY update_time DESC LIMIT :pageLimit OFFSET :pageOffset';
     
     database.query(queryString, { 
         pageLimit: pageSize, 

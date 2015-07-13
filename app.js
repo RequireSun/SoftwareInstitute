@@ -32,7 +32,7 @@ var session     = require('express-session');
 
 //require('./models');
 
-// var webRouter   = require('./web_router');
+var webRouter   = require('./web_router');
 // var apiRouter   = require('./api_router');
 
 ////////// 引入自定 model 结束 //////////
@@ -58,6 +58,7 @@ var errorhandler        = require('errorhandler');
 // 用于支持 CORS 跨域
 //var cors                = require('cors');
 var requestLog          = require('./middlewares/request_log');
+var errorPageMiddleware = require("./middlewares/error_page");
 //var renderMiddleware    = require('./middlewares/render');
 var logger              = require('./common/logger');
 
@@ -162,8 +163,10 @@ _.extend(app.locals, {
     assets: assets,
 });
 
-// app.use(errorPageMiddleware.errorPage);
-// _.extend(app.locals, require('./common/render_helper'));
+// 为 response 添加信息提示渲染方法的中间件
+app.use(errorPageMiddleware.errorPage);
+// 为当前作用域添加 lodash 方法（标识符为 _）和渲染相关方法
+_.extend(app.locals, require('./common/render_helper'));
 
 // 加载csrf模块，必须在 cookie-parser 之后加载
 app.use(function (req, res, next) {
@@ -173,6 +176,7 @@ app.use(function (req, res, next) {
 });
 
 // 引用 router
+app.use('/', webRouter);
 
 if (config.debug) {
     app.use(errorhandler());

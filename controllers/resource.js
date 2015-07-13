@@ -1,13 +1,16 @@
 var Resource = require('../proxy').Resource;
+// var validator = require('validator');
 
 // 资源视图
 exports.index = function (req, res, next) {
     // var referer = req.get('referer');
-    if ('number' !== typeof req.param.pageSize || 'number' !== typeof req.param.pageRequest) {
+    var pageSize = parseInt(req.query.pageSize);
+    var pageRequest = parseInt(req.query.pageRequest);
+    if (isNaN(pageSize) || isNaN(pageRequest)) {
         res.render404('请选择正确的页码！');
         return;
     }
-    Resource.getResources(req.param.pageSize, req.param.pageRequest, function (err, data) {
+    Resource.getResources(pageSize, pageRequest, function (err, data) {
         if (err) {
             return next(err);
         } else if (!data) {

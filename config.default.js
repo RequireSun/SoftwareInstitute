@@ -20,6 +20,8 @@ var config = {
     site_logo: ''，
     // 站点标题栏 logo
     site_icon: '/public/images/logo.png',
+    // cdn host，如 http://cnodejs.qiniudn.com
+    site_static_host: '', // 静态文件存储域名
     // 网站的域名
     host: '127.0.0.1',
     // 默认的 Google tracker ID，自有站点请修改，申请地址：http://www.google.com/analytics/

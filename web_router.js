@@ -9,7 +9,7 @@
 var express         = require('express');
 //var passport        = require('passport');
 // 引入各个 controller
-// var controllerName  = require('pathToController');
+var resource  = require('./controllers/resource');
 // 引入各个 middleware
 // var middlewareName  = require('pathToMiddleware');
 // 引入 middleware 配置
@@ -17,5 +17,7 @@ var express         = require('express');
 var config          = require('./config');
 
 var router          = express.Router();
+
+router.get('/resource', resource.index);
 
 module.exports = router;
