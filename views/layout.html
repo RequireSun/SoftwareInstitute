@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="<%= config.description %>">
+  <meta name="keywords" content="<%= config.keywords %>">
+  <meta name="apple-itunes-app" content="app-id=8888888">
+  <title>Software Institute</title>
+  <!-- 这个页面是 http 的, 这条属性没有用, 但还是留着这个了, 详细解释请见: -->
+  <!-- see http://smerity.com/articles/2013/where_did_all_the_http_referrers_go.html -->
+  <meta name="referrer" content="always">
+
+  <!-- 添加自定义的 meta 头到页面中 -->
+  <%
+    var headers = config.site_headers || [];
+    for (var i = 0, l = headers.length; i < l; ++i) {
+  %>
+  <%- headers[i] %>
+  <% } %>
+  
+  <!-- 还没做 RSS 先凑个热闹 -->
+  <!-- <link rel="alternate" href="/rss" title="RSS" type="application/rss+xml"> -->
+  
+  <!-- 站点 logo -->
+  <% if (config.site_icon) { %>
+  <line rel="icon" type="image.x-icon" href="<%- staticFile(config.site_icon) %>"></line>
+  <% } %>
+  
+  <!-- 标题栏 -->
+  <% if ('undefined' !== typeof(data)) { %>
+  <title><%= data.title %> - <%= config.name %></title>
+  <% } else { %>
+  <title><%= config.name %></title>
+  <% } %> 
+  
+  <!-- csrf 相关 -->
+  <meta content="_csrf" name="csrf-param">
+  <meta content="<%= csrf %>" name="csrf-token">
+</head>
+<body>
+  <%- body %>
+</body>
+</html>

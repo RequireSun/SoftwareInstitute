@@ -1,0 +1,10 @@
+<ul>
+  <% resources.forEach(function(resource) { %>
+  <li>
+    <a href="<%- resource.path %>">
+      <%= resource.title %>
+      <span><%= resource.update_time %></span>
+    </a>
+  </li>
+  <% }) %>
+</ul>

@@ -1,0 +1,7 @@
+<% if ('undefined' !== typeof(error) && error) { %>
+  <strong><%= error %></strong>
+<% } %>
+<% if ('undefined' !== typeof(success) && success) { %>
+  <strong><%= success %></strong>
+<% } %>
+<a href="<%- 'undefined' !== typeof(referer) ? referer : '/' %>">返回</a>

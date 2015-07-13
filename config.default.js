@@ -19,7 +19,7 @@ var config = {
     // 站点左上角大图 logo
     site_logo: ''，
     // 站点标题栏 logo
-    site_icon: '',
+    site_icon: '/public/images/logo.png',
     // 网站的域名
     host: '127.0.0.1',
     // 默认的 Google tracker ID，自有站点请修改，申请地址：http://www.google.com/analytics/
