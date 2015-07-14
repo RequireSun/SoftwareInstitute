@@ -1,7 +1,13 @@
-<% if ('undefined' !== typeof(error) && error) { %>
-  <strong><%= error %></strong>
-<% } %>
-<% if ('undefined' !== typeof(success) && success) { %>
-  <strong><%= success %></strong>
-<% } %>
-<a href="<%- 'undefined' !== typeof(referer) ? referer : '/' %>">返回</a>
+<!DOCTYPE html>
+<html lang="en">
+<% include template/headNormal.html %>
+<body>
+  <% if ('undefined' !== typeof(error) && error) { %>
+    <strong><%= error %></strong>
+  <% } %>
+  <% if ('undefined' !== typeof(success) && success) { %>
+    <strong><%= success %></strong>
+  <% } %>
+  <a href="<%- 'undefined' !== typeof(referer) ? referer : '/' %>">返回</a>
+</body>
+</html>

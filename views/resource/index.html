@@ -1,10 +1,16 @@
-<ul>
-  <% resources.forEach(function(resource) { %>
-  <li>
-    <a href="<%- resource.path %>">
-      <%= resource.title %>
-      <span><%= resource.update_time %></span>
-    </a>
-  </li>
-  <% }) %>
-</ul>
+<!DOCTYPE html>
+<html lang="en">
+<% include ../template/headNormal.html %>
+<body>
+  <ul>
+    <% resources.forEach(function(resource) { %>
+    <li>
+      <a href="<%- resource.path %>">
+        <%= resource.title %>
+        <span><%= resource.update_time %></span>
+      </a>
+    </li>
+    <% }) %>
+  </ul>
+</body>
+</html>

@@ -14,7 +14,7 @@ var config = {
 
     // 添加到 html head 中的信息
     site_headers: [
-        '<meta name="author" content="KelvinSun@HITWH />'
+        '<meta name="author" content="KelvinSun@HITWH">'
     ],
     // 站点左上角大图 logo
     site_logo: ''，

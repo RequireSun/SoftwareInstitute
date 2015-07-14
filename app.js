@@ -89,8 +89,9 @@ var app         = express();
 // 视图/模板引擎相关
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
-app.engine('html', require('ejs-mate'));
-app.locals._layoutFile = 'layout.html';
+app.engine('html', require('ejs').__express);
+// app.engine('html', require('ejs-mate'));
+// app.locals._layoutFile = 'layout.html';
 // 设置信任，方便 nginx 反向代理
 app.enable('trust proxy');
 
