@@ -62,6 +62,10 @@ var errorPageMiddleware = require("./middlewares/error_page");
 //var renderMiddleware    = require('./middlewares/render');
 var logger              = require('./common/logger');
 
+// 引入的 ejs 模块并自定义了一些 filter， 引入顺序不能错
+var ejs                 = require('ejs');
+require('./common/ejs_filter');
+
 ////////// 引入中间件 结束 //////////
 
 
@@ -89,9 +93,7 @@ var app         = express();
 // 视图/模板引擎相关
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
-app.engine('html', require('ejs').__express);
-// app.engine('html', require('ejs-mate'));
-// app.locals._layoutFile = 'layout.html';
+app.engine('html', ejs.__express);
 // 设置信任，方便 nginx 反向代理
 app.enable('trust proxy');
 

@@ -7,7 +7,7 @@
     <li>
       <a href="<%- resource.path %>">
         <%= resource.title %>
-        <span><%= resource.update_time %></span>
+        <span><%=: resource.update_time | convertDatetimeToDate %></span>
       </a>
     </li>
     <% }) %>
