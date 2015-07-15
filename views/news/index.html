@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<% include ../template/headNormal.html %>
+<body>
+  <ul>
+    <% news.forEach(function (entry) { %>
+    <li>
+      <a href="<%=: entry.id | generateLink %>">
+        <%= entry.title %>
+        <span><%=: entry.update_time | convertDatetimeToDate %></span>
+      </a>
+    </li>
+    <% }) %>
+  </ul>
+</body>
+</html>

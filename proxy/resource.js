@@ -1,6 +1,6 @@
-var EventProxy  = require('eventproxy');
-var _           = require('lodash');
-var database    = require('../common/database')
+// var EventProxy  = require('eventproxy');
+// var _           = require('lodash');
+var database    = require('../common/database');
 
 exports.getResources = function (pageSize, pageRequest, callback) {
     if ('number' !== typeof pageSize || 'number' !== typeof pageRequest) {
@@ -16,6 +16,6 @@ exports.getResources = function (pageSize, pageRequest, callback) {
         if (err) {
             return callback(err);
         }
-        callback(null, rows);
+        return callback(null, rows);
     });
 };
