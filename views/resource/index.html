@@ -12,5 +12,27 @@
     </li>
     <% }) %>
   </ul>
+  <ul>
+    <li>
+      <% if (pageCurrent === 1) { %>
+      <a href="#" disabled>&laquo;</a>
+      <% } else { %>
+      <a href="<%- pageFirst %>">&laquo;</a>
+      <% } %>
+    </li>
+    <% pageList.forEach(function(number_item) { %>
+    <% if (number_item.text === pageCurrent) { %>
+    <li><a href="#" disabled><%= number_item.text %></a></li>
+    <% } else { %>
+    <li><a href="<%- number_item.link %>"><%= number_item.text %></a></li>
+    <% }}) %>
+    <li>
+      <% if (pageCurrent === pageMax) { %>
+      <a href="#" disabled>&raquo;</a>
+      <% } else { %>
+      <a href="<%- pageLast %>">&raquo;</a>
+      <% } %>
+    </li>
+  </ul>
 </body>
 </html>

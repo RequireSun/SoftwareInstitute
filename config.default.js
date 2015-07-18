@@ -118,6 +118,8 @@ var config = {
 
     create_post_pre_day: 1000, // 每个用户一天可以发的主题数
     visit_per_day: 1000, // 每个 ip 每天能访问的次数
+
+    page_jump_size: 2,
 };
 
 if ('test' === process.env.NODE_ENV) {

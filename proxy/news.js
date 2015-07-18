@@ -18,3 +18,22 @@ exports.getNewsCategory = function (pageSize, pageRequest, categoryId, callback)
         return callback(null, rows);
     });
 };
+
+exports.getCount = function (categoryId, callback) {
+    if ('number' !== typeof categoryId) {
+        return callback(new Error('Parameter: categoryId must be number!'));
+    }
+
+    var queryString = 'SELECT COUNT(*) as resourceCount FROM news WHERE category_id = :categoryId';
+
+    database.query(queryString, {
+        categoryId: categoryId
+    }, function (err, result) {
+        if (err) {
+            return callback(err);
+        } else if (!result) {
+            return callback(new Error('No data!'));
+        }
+        return callback(null, result[0].resourceCount);
+    });
+}

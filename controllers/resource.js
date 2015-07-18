@@ -1,4 +1,6 @@
 var Resource = require('../proxy').Resource;
+var EventProxy = require('eventproxy');
+var tool = require('../common/tool');
 // var validator = require('validator');
 
 // 资源视图
@@ -11,14 +13,42 @@ exports.index = function (req, res, next) {
         res.render404('请选择正确的页码！');
         return;
     }
-    
-    Resource.getResources(pageSize, pageRequest, function (err, data) {
-        if (err) {
-            return next(err);
-        } else if (!data || !data.length) {
-            res.render404('请选择正确的页码！');
-            return;
+
+    var events = [ 'resourceList', 'resourceCount' ];
+    var ep = EventProxy.create(events, function(resourceList, resourceCount) {
+        var pageMax = Math.ceil(resourceCount / pageSize),
+            pageList = [];
+
+        if (!resourceList || !resourceList.length || pageMax < pageRequest) {
+            return res.render404('请选择正确的页码！');
         }
-        res.render('resource/index', { resources: data });
+
+        pageList = tool.generatePageNumber(pageRequest, pageMax, 'resource?pageSize=' + pageSize + '&pageRequest=');
+
+        return res.render('resource/index', { 
+            resources: resourceList, 
+            pageList: pageList, 
+            pageCurrent: pageRequest, 
+            pageMax: pageMax,
+            pageFirst: 'resource?pageSize=' + pageSize + '&pageRequest=1',
+            pageLast: 'resource?pageSize=' + pageSize + '&pageRequest=' + pageMax
+        });
     });
+
+    ep.fail(function (err) {
+        return next(err);
+    });
+
+    Resource.getCount(ep.done('resourceCount'));
+    Resource.getResources(pageSize, pageRequest, ep.done('resourceList'));
+
+    // Resource.getResources(pageSize, pageRequest, function (err, data) {
+    //     if (err) {
+    //         return next(err);
+    //     } else if (!data || !data.length) {
+    //         res.render404('请选择正确的页码！');
+    //         return;
+    //     }
+    //     res.render('resource/index', { resources: data });
+    // });
 };
