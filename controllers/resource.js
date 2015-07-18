@@ -10,8 +10,7 @@ exports.index = function (req, res, next) {
     var pageRequest = parseInt(req.query.pageRequest);
     
     if (isNaN(pageSize) || isNaN(pageRequest)) {
-        res.render404('请选择正确的页码！');
-        return;
+        return res.render404('请选择正确的页码！');
     }
 
     var events = [ 'resourceList', 'resourceCount' ];
@@ -35,20 +34,8 @@ exports.index = function (req, res, next) {
         });
     });
 
-    ep.fail(function (err) {
-        return next(err);
-    });
+    ep.fail(next);
 
     Resource.getCount(ep.done('resourceCount'));
     Resource.getResources(pageSize, pageRequest, ep.done('resourceList'));
-
-    // Resource.getResources(pageSize, pageRequest, function (err, data) {
-    //     if (err) {
-    //         return next(err);
-    //     } else if (!data || !data.length) {
-    //         res.render404('请选择正确的页码！');
-    //         return;
-    //     }
-    //     res.render('resource/index', { resources: data });
-    // });
 };

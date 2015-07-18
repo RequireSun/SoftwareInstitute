@@ -9,9 +9,9 @@ exports.category = function (req, res, next) {
     var categoryId = parseInt(req.query.categoryId);
     
     if (isNaN(pageSize) || isNaN(pageRequest)) {
-        res.render404('请选择正确的页码！');
+        return res.render404('请选择正确的页码！');
     } else if (isNaN(categoryId)) {
-        res.render404('请选择正确的新闻类型！');
+        return res.render404('请选择正确的新闻类型！');
     }
 
     var events = [ 'newsList', 'newsCount'];
@@ -39,9 +39,7 @@ exports.category = function (req, res, next) {
         });
     });
 
-    ep.fail(function (err) {
-        return next(err);
-    });
+    ep.fail(next);
 
     News.getNewsCategory(pageSize, pageRequest, categoryId, ep.done('newsList'));
     News.getCount(categoryId, ep.done('newsCount'));

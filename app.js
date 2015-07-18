@@ -28,14 +28,12 @@ var session     = require('express-session');
 ////////// 引入类库 结束 //////////
 
 
-////////// 引入自定 model 开始 //////////
-
-//require('./models');
+////////// 引入自定 router 开始 //////////
 
 var webRouter   = require('./web_router');
-// var apiRouter   = require('./api_router');
+var apiRouter   = require('./api_router');
 
-////////// 引入自定 model 结束 //////////
+////////// 引入自定 router 结束 //////////
 
 
 ////////// 引入中间件 开始 //////////
