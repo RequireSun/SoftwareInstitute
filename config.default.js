@@ -120,6 +120,9 @@ var config = {
     visit_per_day: 1000, // 每个 ip 每天能访问的次数
 
     page_jump_size: 2,
+    cors_sites: [
+        'localhost'
+    ],
 };
 
 if ('test' === process.env.NODE_ENV) {

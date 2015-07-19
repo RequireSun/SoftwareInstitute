@@ -24,7 +24,7 @@ exports.index = function (req, res, next) {
 
         pageList = tool.generatePageNumber(pageRequest, pageMax, 'resource?pageSize=' + pageSize + '&pageRequest=');
 
-        return res.render('resource/index', { 
+        res.render('resource/index', { 
             resources: resourceList, 
             pageList: pageList, 
             pageCurrent: pageRequest, 

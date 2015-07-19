@@ -54,7 +54,7 @@ var bodyParser          = require('body-parser');
 // 用于在开发环境下打印错误信息
 var errorhandler        = require('errorhandler');
 // 用于支持 CORS 跨域
-//var cors                = require('cors');
+var cors                = require('cors');
 var requestLog          = require('./middlewares/request_log');
 var errorPageMiddleware = require("./middlewares/error_page");
 //var renderMiddleware    = require('./middlewares/render');
@@ -177,7 +177,8 @@ app.use(function (req, res, next) {
 });
 
 // 引用 router
-app.use('/', webRouter);
+app.use('/api', cors(config.cors_sites), apiRouter);
+app.use('/outdated', webRouter);
 
 if (config.debug) {
     app.use(errorhandler());

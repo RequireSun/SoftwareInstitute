@@ -29,7 +29,7 @@ exports.category = function (req, res, next) {
         });
         pageList = tool.generatePageNumber(pageRequest, pageMax, 'news?pageSize=' + pageSize + '&categoryId=' + categoryId + '&pageRequest=');
 
-        return res.render('news/index', { 
+        res.render('news/index', { 
             news: newsList, 
             pageList: pageList, 
             pageCurrent: pageRequest, 
