@@ -14,8 +14,8 @@ exports.category = function (req, res, next) {
         return res.render404('请选择正确的新闻类型！');
     }
 
-    var events = [ 'newsList', 'newsCount'];
-    var ep = EventProxy.create(events, function (newsList, newsCount) {
+    var events = [ 'newsList', 'newsCount', 'newsName'];
+    var ep = EventProxy.create(events, function (newsList, newsCount, newsName) {
         var pageMax = Math.ceil(newsCount / pageSize),
             pageList = [];
 
@@ -29,7 +29,8 @@ exports.category = function (req, res, next) {
         });
         pageList = tool.generatePageNumber(pageRequest, pageMax, 'category?pageSize=' + pageSize + '&categoryId=' + categoryId + '&pageRequest=');
 
-        res.render('news/index', { 
+        res.render('news/index', {
+            sectionName: newsName,
             news: newsList, 
             pageList: pageList, 
             pageCurrent: pageRequest, 
@@ -43,6 +44,7 @@ exports.category = function (req, res, next) {
 
     News.getNewsCategory(pageSize, pageRequest, categoryId, ep.done('newsList'));
     News.getCountCategory(categoryId, ep.done('newsCount'));
+    News.getNameCategory(categoryId, ep.done('newsName'));
 };
 
 // 新闻大纲视图

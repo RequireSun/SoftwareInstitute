@@ -38,6 +38,25 @@ exports.getCountCategory = function (categoryId, callback) {
     });
 };
 
+exports.getNameCategory = function (categoryId, callback) {
+    if ('number' !== typeof categoryId) {
+        return callback(new Error('Parameter: categoryId must be number!'));
+    }
+
+    var queryString = 'SELECT name FROM category WHERE id = :categoryId';
+
+    database.query(queryString, {
+        categoryId: categoryId
+    }, function (err, result) {
+        if (err) {
+            return callback(err);
+        } else if (!result) {
+            return callback(new Error('No data!'));
+        }
+        return callback(null, result[0].name);
+    });
+};
+
 exports.getNewsOutline = function (pageSize, pageRequest, outlineId, callback) {
     if ('number' !== typeof pageSize || 'number' !== typeof pageRequest || 'number' !== typeof outlineId) {
         return callback(new Error('Parameter: pageSize / pageRequest / outlineId must be number!'));
