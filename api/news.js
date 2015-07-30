@@ -29,5 +29,5 @@ exports.NewsListCategory = function (req, res, next) {
     ep.fail(next);
 
     News.getNewsCategory(pageSize, pageRequest, categoryId, ep.done('newsList'));
-    News.getCount(categoryId, ep.done('newsCount'));
+    News.getCountCategory(categoryId, ep.done('newsCount'));
 };

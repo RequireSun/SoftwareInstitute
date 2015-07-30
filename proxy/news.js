@@ -19,12 +19,12 @@ exports.getNewsCategory = function (pageSize, pageRequest, categoryId, callback)
     });
 };
 
-exports.getCount = function (categoryId, callback) {
+exports.getCountCategory = function (categoryId, callback) {
     if ('number' !== typeof categoryId) {
         return callback(new Error('Parameter: categoryId must be number!'));
     }
 
-    var queryString = 'SELECT COUNT(*) as resourceCount FROM news WHERE category_id = :categoryId';
+    var queryString = 'SELECT COUNT(*) as categoryCount FROM news WHERE category_id = :categoryId';
 
     database.query(queryString, {
         categoryId: categoryId
@@ -34,6 +34,47 @@ exports.getCount = function (categoryId, callback) {
         } else if (!result) {
             return callback(new Error('No data!'));
         }
-        return callback(null, result[0].resourceCount);
+        return callback(null, result[0].categoryCount);
     });
-}
+};
+
+exports.getNewsOutline = function (pageSize, pageRequest, outlineId, callback) {
+    if ('number' !== typeof pageSize || 'number' !== typeof pageRequest || 'number' !== typeof outlineId) {
+        return callback(new Error('Parameter: pageSize / pageRequest / outlineId must be number!'));
+    }
+
+    var queryString = 'SELECT news.id AS id, title, update_time ' +
+                      'FROM news INNER JOIN category ON news.category_id = category.id ' +
+                      'WHERE category.outline_id = :outlineId ORDER BY update_time DESC LIMIT :pageLimit OFFSET :pageOffset';
+
+    database.query(queryString, {
+        outlineId: outlineId,
+        pageLimit: pageSize,
+        pageOffset: (pageRequest - 1) * pageSize
+    }, function (err, rows) {
+        if (err) {
+            return callback(err);
+        }
+        return callback(null, rows);
+    });
+};
+
+exports.getCountOutline = function (outlineId, callback) {
+    if ('number' !== typeof outlineId) {
+        return callback(new Error('Parameter: outlineId must be number!'));
+    }
+
+    var queryString = 'SELECT COUNT(*) as outlineCount FROM news INNER JOIN category ON news.category_id = category.id ' +
+                      'WHERE category.outline_id = :outlineId';
+
+    database.query(queryString, {
+        outlineId: outlineId
+    }, function (err, result) {
+        if (err) {
+            return callback(err);
+        } else if (!result) {
+            return callback(new Error('No data!'));
+        }
+        return callback(null, result[0].outlineCount);
+    });
+};
