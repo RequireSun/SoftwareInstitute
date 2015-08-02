@@ -98,6 +98,25 @@ exports.getCountOutline = function (outlineId, callback) {
     });
 };
 
+exports.getNameOutline = function (outlineId, callback) {
+    if ('number' !== typeof outlineId) {
+        return callback(new Error('Parameter: outlineId must be number!'));
+    }
+
+    var queryString = 'SELECT name FROM outline WHERE id = :outlineId';
+
+    database.query(queryString, {
+        outlineId: outlineId
+    }, function (err, result) {
+        if (err) {
+            return callback(err);
+        } else if (!result) {
+            return callback(new Error('No data!'));
+        }
+        return callback(null, result[0].name);
+    });
+};
+
 exports.getNewsDetail = function (newsId, callback) {
     if ('number' !== typeof newsId) {
         return callback(new Error('Parameter: newsId must be number!'));

@@ -17,10 +17,10 @@ exports.staticFile = function (filePath) {
     if (0 === filePath.indexOf('http') || 0 === filePath.indexOf('//')) {
         return filePath;
     }
-    // sign 如果以后用运存储的话，需要把这里换成注释掉的内容， 并在设置中设置运存储地址
+    // sign 如果以后用云存储的话，需要把这里换成注释掉的内容， 并在设置中设置运存储地址
     // return config.site_static_host + filePath;
     return filePath;
-}
+};
 
 // 在配置中的选项卡选项中选择出入参数对应的名字
 exports.tabName = function (tab) {

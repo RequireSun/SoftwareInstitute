@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50543
 File Encoding         : 65001
 
-Date: 2015-07-13 14:22:44
+Date: 2015-08-03 00:52:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,7 +25,7 @@ CREATE TABLE `category` (
   `outline_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `outline_id` (`outline_id`) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Table structure for news
@@ -51,7 +51,7 @@ CREATE TABLE `outline` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Table structure for resource
@@ -64,7 +64,7 @@ CREATE TABLE `resource` (
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `update_time` (`update_time`) USING HASH
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Table structure for supervisor
@@ -75,8 +75,9 @@ CREATE TABLE `supervisor` (
   `alias` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
   `cipher` char(40) CHARACTER SET utf8mb4 NOT NULL,
   `salt` char(10) CHARACTER SET utf8mb4 NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_alias` (`alias`) USING HASH
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 DROP TRIGGER IF EXISTS `news_insert`;
 DELIMITER ;;
 CREATE TRIGGER `news_insert` BEFORE INSERT ON `news` FOR EACH ROW BEGIN 

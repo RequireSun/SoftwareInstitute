@@ -11,6 +11,7 @@ var express         = require('express');
 // 引入各个 controller
 var resource        = require('./controllers/resource');
 var news            = require('./controllers/news');
+var supervisor      = require('./controllers/supervisor');
 // 引入各个 middleware
 // var middlewareName  = require('pathToMiddleware');
 // 引入 middleware 配置
@@ -23,5 +24,8 @@ router.get('/resource', resource.index);
 router.get('/category', news.category);
 router.get('/outline', news.outline);
 router.get('/newsDetail', news.newsDetail);
+
+router.get('/login', supervisor.login);
+router.post('/validate', supervisor.validate);
 
 module.exports = router;

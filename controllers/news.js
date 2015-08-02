@@ -59,8 +59,8 @@ exports.outline = function (req, res, next) {
         return res.render404('请选择正确的新闻类型！');
     }
 
-    var events = [ 'newsList', 'newsCount'];
-    var ep = EventProxy.create(events, function (newsList, newsCount) {
+    var events = [ 'newsList', 'newsCount', 'newsName'];
+    var ep = EventProxy.create(events, function (newsList, newsCount, newsName) {
         var pageMax = Math.ceil(newsCount / pageSize),
             pageList = [];
 
@@ -75,6 +75,7 @@ exports.outline = function (req, res, next) {
         pageList = tool.generatePageNumber(pageRequest, pageMax, 'outline?pageSize=' + pageSize + '&outlineId=' + outlineId + '&pageRequest=');
 
         res.render('news/index', {
+            sectionName: newsName,
             news: newsList,
             pageList: pageList,
             pageCurrent: pageRequest,
@@ -88,10 +89,11 @@ exports.outline = function (req, res, next) {
 
     News.getNewsOutline(pageSize, pageRequest, outlineId, ep.done('newsList'));
     News.getCountOutline(outlineId, ep.done('newsCount'));
+    News.getNameOutline(outlineId, ep.done('newsName'));
 };
 
-exports.newsDetail = function (req, res, next) {
-    var newsId = parseInt(req.query.newsId);
+exports.newsDetail = function (req, res, next) {categoryId
+    var newsId = parseInt(req.query.id);
 
     if (isNaN(newsId)) {
         return res.render404('请输入正确的新闻编号！');
