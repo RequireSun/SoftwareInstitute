@@ -22,5 +22,6 @@ var router          = express.Router();
 router.get('/resource', resource.index);
 router.get('/category', news.category);
 router.get('/outline', news.outline);
+router.get('/newsDetail', news.newsDetail);
 
 module.exports = router;

@@ -74,7 +74,6 @@ exports.outline = function (req, res, next) {
         });
         pageList = tool.generatePageNumber(pageRequest, pageMax, 'outline?pageSize=' + pageSize + '&outlineId=' + outlineId + '&pageRequest=');
 
-
         res.render('news/index', {
             news: newsList,
             pageList: pageList,
@@ -89,4 +88,32 @@ exports.outline = function (req, res, next) {
 
     News.getNewsOutline(pageSize, pageRequest, outlineId, ep.done('newsList'));
     News.getCountOutline(outlineId, ep.done('newsCount'));
+};
+
+exports.newsDetail = function (req, res, next) {
+    var newsId = parseInt(req.query.newsId);
+
+    if (isNaN(newsId)) {
+        return res.render404('请输入正确的新闻编号！');
+    }
+
+    var events = [ 'newsDetail', 'updatePageView'];
+    var ep = EventProxy.create(events, function (newsDetail, updatePageView) {
+        if (!newsDetail) {
+            return res.render404('请输入正确的新闻编号！');
+        }
+
+        res.render('news/newsDetail', {
+            sectionName: newsDetail.title,
+            article: newsDetail.article,
+            updateTime: newsDetail.update_time,
+            pageView: newsDetail.page_view,
+            alias: newsDetail.alias
+        });
+    });
+
+    ep.fail(next);
+
+    News.getNewsDetail(newsId, ep.done('newsDetail'));
+    News.updateNewsPageView(newsId, ep.done('updatePageView'));
 };

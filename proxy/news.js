@@ -97,3 +97,43 @@ exports.getCountOutline = function (outlineId, callback) {
         return callback(null, result[0].outlineCount);
     });
 };
+
+exports.getNewsDetail = function (newsId, callback) {
+    if ('number' !== typeof newsId) {
+        return callback(new Error('Parameter: newsId must be number!'));
+    }
+
+    var queryString = 'SELECT news.title, news.article, news.update_time, news.page_view, supervisor.alias ' +
+                      'FROM news INNER JOIN supervisor ON news.supervisor_id = supervisor.id ' +
+                      'WHERE news.id = :newsId';
+
+    database.query(queryString, {
+        newsId: newsId
+    }, function (err, result) {
+        if (err) {
+            return callback(err);
+        } else if (!result) {
+            return callback(new Error('No Data!'));
+        }
+        return callback(null, result[0]);
+    });
+};
+
+exports.updateNewsPageView = function (newsId, callback) {
+    if ('number' !== typeof newsId) {
+        return callback(new Error('Parameter: newsId must be number!'));
+    }
+
+    var queryString = 'UPDATE news SET page_view = page_view + 1 WHERE id = :newsId';
+
+    database.query(queryString, {
+        newsId: newsId
+    }, function (err, result) {
+        if (err) {
+            return callback(err);
+        } else if (!result) {
+            return callback(new Error('No Data!'));
+        }
+        return callback(null, result);
+    });
+};
