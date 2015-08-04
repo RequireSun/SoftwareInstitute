@@ -19,7 +19,7 @@ exports.ResourceList = function (req, res, next) {
 
         res.json({
             data: resourceList,
-            page_count: pageMax
+            count: pageMax
         });
     });
 

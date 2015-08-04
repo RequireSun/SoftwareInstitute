@@ -18,5 +18,7 @@ var router          = express.Router();
 
 router.get('/ResourceList', resource.ResourceList);
 router.get('/NewsListCategory', news.NewsListCategory);
+router.get('/NewsListOutline', news.NewsListOutline);
+router.get('/OutlineCategory', news.OutlineCategory);
 
 module.exports = router;

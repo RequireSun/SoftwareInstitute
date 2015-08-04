@@ -156,3 +156,26 @@ exports.updateNewsPageView = function (newsId, callback) {
         return callback(null, result);
     });
 };
+
+exports.getOutlineCategory = function (callback) {
+    var queryString = 'SELECT outline.id AS outline_id, outline.name AS outline_name, ' + 
+        'category.id AS category_id, category.name AS category_name ' +
+        'FROM outline INNER JOIN category ON category.outline_id = outline.id ';
+    
+    database.query(queryString, {}, function (err, result) {
+        if (err) {
+            return callback(err);
+        }
+        var outlineCategory = {},
+            hasOwnProperty = Object.hasOwnProperty.bind(outlineCategory),
+            tempResult;
+        for (var i = 0, l = result.length; i < l; ++i) {
+            tempResult = result[i];
+            if (!hasOwnProperty(tempResult.outline_name)) {
+                outlineCategory[tempResult.outline_name] = { id: tempResult.outline_id };
+            }
+            outlineCategory[tempResult.outline_name][tempResult.category_name] = tempResult.category_id;
+        }
+        return callback(null, outlineCategory);
+    });
+};

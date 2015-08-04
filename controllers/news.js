@@ -9,18 +9,21 @@ exports.category = function (req, res, next) {
     var categoryId = parseInt(req.query.categoryId);
     
     if (isNaN(pageSize) || isNaN(pageRequest)) {
-        return res.render404('请选择正确的页码！');
+        res.render404('请选择正确的页码！');
+        return next();
     } else if (isNaN(categoryId)) {
-        return res.render404('请选择正确的新闻类型！');
+        res.render404('请选择正确的新闻类型！');
+        return next();
     }
 
     var events = [ 'newsList', 'newsCount', 'newsName'];
     var ep = EventProxy.create(events, function (newsList, newsCount, newsName) {
         var pageMax = Math.ceil(newsCount / pageSize),
-            pageList = [];
+            pageList;
 
         if (!newsList || !newsList.length) {
-            return res.render404('请选择正确的页码和新闻类型！');
+            res.render404('请选择正确的页码和新闻类型！');
+            return next();
         }
 
         newsList = newsList.map(function (value) {
@@ -38,6 +41,7 @@ exports.category = function (req, res, next) {
             pageFirst: 'category?pageSize=' + pageSize + '&categoryId=' + categoryId + '&pageRequest=1',
             pageLast: 'category?pageSize=' + pageSize + '&categoryId=' + categoryId + '&pageRequest=' + pageMax
         });
+        next();
     });
 
     ep.fail(next);
@@ -54,18 +58,21 @@ exports.outline = function (req, res, next) {
     var outlineId = parseInt(req.query.outlineId);
 
     if (isNaN(pageSize) || isNaN(pageRequest)) {
-        return res.render404('请选择正确的页码！');
+        res.render404('请选择正确的页码！');
+        return next();
     } else if (isNaN(outlineId)) {
-        return res.render404('请选择正确的新闻类型！');
+        res.render404('请选择正确的新闻类型！');
+        return next();
     }
 
     var events = [ 'newsList', 'newsCount', 'newsName'];
     var ep = EventProxy.create(events, function (newsList, newsCount, newsName) {
         var pageMax = Math.ceil(newsCount / pageSize),
-            pageList = [];
+            pageList;
 
         if (!newsList || !newsList.length) {
-            return res.render404('请选择正确的页码和新闻类型！');
+            res.render404('请选择正确的页码和新闻类型！');
+            return next();
         }
 
         newsList = newsList.map(function (value) {
@@ -83,6 +90,7 @@ exports.outline = function (req, res, next) {
             pageFirst: 'outline?pageSize=' + pageSize + '&outlineId=' + outlineId + '&pageRequest=1',
             pageLast: 'outline?pageSize=' + pageSize + '&outlineId=' + outlineId + '&pageRequest=' + pageMax
         });
+        next();
     });
 
     ep.fail(next);
@@ -92,17 +100,20 @@ exports.outline = function (req, res, next) {
     News.getNameOutline(outlineId, ep.done('newsName'));
 };
 
-exports.newsDetail = function (req, res, next) {categoryId
+// 新闻详情
+exports.newsDetail = function (req, res, next) {
     var newsId = parseInt(req.query.id);
 
     if (isNaN(newsId)) {
-        return res.render404('请输入正确的新闻编号！');
+        res.render404('请输入正确的新闻编号！');
+        return next();
     }
 
     var events = [ 'newsDetail', 'updatePageView'];
     var ep = EventProxy.create(events, function (newsDetail, updatePageView) {
         if (!newsDetail) {
-            return res.render404('请输入正确的新闻编号！');
+            res.render404('请输入正确的新闻编号！');
+            return next();
         }
 
         res.render('news/newsDetail', {
@@ -112,6 +123,7 @@ exports.newsDetail = function (req, res, next) {categoryId
             pageView: newsDetail.page_view,
             alias: newsDetail.alias
         });
+        next();
     });
 
     ep.fail(next);

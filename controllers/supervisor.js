@@ -5,7 +5,8 @@
 var Supervisor = require('../proxy').Supervisor;
 
 exports.login = function (req, res, next) {
-    return res.render('supervisor/login');
+    res.render('supervisor/login');
+    return next();
 };
 
 exports.validate = function (req, res, next) {
@@ -13,7 +14,8 @@ exports.validate = function (req, res, next) {
     var cipher = req.body.cipher;
 
     if (!alias || !cipher) {
-        return res.render404('用户名和密码不能为空！');
+        res.render404('用户名和密码不能为空！');
+        return next();
     }
 
     Supervisor.validateSupervisor(alias, cipher, function (err, result) {
@@ -21,9 +23,11 @@ exports.validate = function (req, res, next) {
             return next(err);
         }
         if (result) {
-            return res.send('success!');
+            res.send('success!');
+            return next();
         } else {
-            return res.send('failed!');
+            res.send('failed!');
+            return next();
         }
     });
 };
