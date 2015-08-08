@@ -183,9 +183,11 @@ exports.getOutlineCategory = function (callback) {
 };
 
 exports.getNavigatorCategory = function (callback) {
-    var queryString = 'SELECT navigator.id AS navigator_id, navigator.name AS navigator_name, ' +
-        'category.id AS category_id, category.name AS category_name ' +
-        'FROM navigator LEFT JOIN category ON category.navigator_id = navigator.id ';
+    var queryString = 'SELECT style.name AS style_name, category.id AS category_id, category.name AS category_name ' +
+    'FROM style_type LEFT JOIN style ON style_type.id = style.type_id ' +
+    'LEFT JOIN style_category ON style.id = style_category.style_id ' +
+    'LEFT JOIN category ON category.id = style_category.category_id ' +
+    'WHERE style_type.name = \'navigator\'';
 
     database.query(queryString, {}, function (err, result) {
         if (err) {
@@ -196,11 +198,11 @@ exports.getNavigatorCategory = function (callback) {
             tempResult;
         for (var i = 0, l = result.length; i < l; ++i) {
             tempResult = result[i];
-            if (!hasOwnProperty(tempResult.navigator_name)) {
-                navigatorCategory[tempResult.navigator_name] = { id: tempResult.navigator_id, category: {} };
+            if (!hasOwnProperty(tempResult.style_name)) {
+                navigatorCategory[tempResult.style_name] = {};
             }
             if (tempResult.category_id) {
-                navigatorCategory[tempResult.navigator_name].category[tempResult.category_name] = tempResult.category_id;
+                navigatorCategory[tempResult.style_name][tempResult.category_id] = tempResult.category_name;
             }
         }
         return callback(null, navigatorCategory);
