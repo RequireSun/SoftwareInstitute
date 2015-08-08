@@ -172,9 +172,9 @@ exports.getOutlineCategory = function (callback) {
         for (var i = 0, l = result.length; i < l; ++i) {
             tempResult = result[i];
             if (!hasOwnProperty(tempResult.outline_name)) {
-                outlineCategory[tempResult.outline_name] = { id: tempResult.outline_id };
+                outlineCategory[tempResult.outline_name] = { id: tempResult.outline_id, category: {} };
             }
-            outlineCategory[tempResult.outline_name][tempResult.category_name] = tempResult.category_id;
+            outlineCategory[tempResult.outline_name].category[tempResult.category_name] = tempResult.category_id;
         }
         return callback(null, outlineCategory);
     });
