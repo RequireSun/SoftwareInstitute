@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50543
 File Encoding         : 65001
 
-Date: 2015-08-08 21:56:51
+Date: 2015-08-09 01:23:21
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -23,19 +23,8 @@ CREATE TABLE `category` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
   `outline_id` int(10) unsigned NOT NULL,
-  `navigator_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `outline_id` (`outline_id`) USING HASH
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ----------------------------
--- Table structure for navigator
--- ----------------------------
-DROP TABLE IF EXISTS `navigator`;
-CREATE TABLE `navigator` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
-  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
@@ -62,7 +51,7 @@ CREATE TABLE `outline` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Table structure for resource
@@ -76,6 +65,36 @@ CREATE TABLE `resource` (
   PRIMARY KEY (`id`),
   KEY `update_time` (`update_time`) USING HASH
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Table structure for style
+-- ----------------------------
+DROP TABLE IF EXISTS `style`;
+CREATE TABLE `style` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
+  `type_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Table structure for style_category
+-- ----------------------------
+DROP TABLE IF EXISTS `style_category`;
+CREATE TABLE `style_category` (
+  `style_id` int(10) unsigned NOT NULL,
+  `category_id` int(10) unsigned NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Table structure for style_type
+-- ----------------------------
+DROP TABLE IF EXISTS `style_type`;
+CREATE TABLE `style_type` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Table structure for supervisor
