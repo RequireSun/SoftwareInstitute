@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50543
 File Encoding         : 65001
 
-Date: 2015-08-08 21:13:14
+Date: 2015-08-08 21:56:51
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -23,16 +23,16 @@ CREATE TABLE `category` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
   `outline_id` int(10) unsigned NOT NULL,
-  `group_id` int(10) unsigned NOT NULL,
+  `navigator_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `outline_id` (`outline_id`) USING HASH
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
--- Table structure for group
+-- Table structure for navigator
 -- ----------------------------
-DROP TABLE IF EXISTS `group`;
-CREATE TABLE `group` (
+DROP TABLE IF EXISTS `navigator`;
+CREATE TABLE `navigator` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
   PRIMARY KEY (`id`)

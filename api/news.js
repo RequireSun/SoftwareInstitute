@@ -100,3 +100,13 @@ exports.OutlineCategory = function (req, res, next) {
         next();
     });
 };
+
+exports.NavigatorCategory = function (req, res, next) {
+    News.getNavigatorCategory(function (err, result) {
+        if (err) {
+            return next(err);
+        }
+        res.json(result);
+        next();
+    });
+};

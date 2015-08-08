@@ -160,7 +160,7 @@ exports.updateNewsPageView = function (newsId, callback) {
 exports.getOutlineCategory = function (callback) {
     var queryString = 'SELECT outline.id AS outline_id, outline.name AS outline_name, ' + 
         'category.id AS category_id, category.name AS category_name ' +
-        'FROM outline INNER JOIN category ON category.outline_id = outline.id ';
+        'FROM outline LEFT JOIN category ON category.outline_id = outline.id ';
     
     database.query(queryString, {}, function (err, result) {
         if (err) {
@@ -172,10 +172,37 @@ exports.getOutlineCategory = function (callback) {
         for (var i = 0, l = result.length; i < l; ++i) {
             tempResult = result[i];
             if (!hasOwnProperty(tempResult.outline_name)) {
-                outlineCategory[tempResult.outline_name] = { id: tempResult.outline_id, category: {} };
+                outlineCategory[tempResult.outline_name] = {id: tempResult.outline_id, category: {}};
             }
-            outlineCategory[tempResult.outline_name].category[tempResult.category_name] = tempResult.category_id;
+            if (tempResult.category_id) {
+                outlineCategory[tempResult.outline_name].category[tempResult.category_name] = tempResult.category_id;
+            }
         }
         return callback(null, outlineCategory);
+    });
+};
+
+exports.getNavigatorCategory = function (callback) {
+    var queryString = 'SELECT navigator.id AS navigator_id, navigator.name AS navigator_name, ' +
+        'category.id AS category_id, category.name AS category_name ' +
+        'FROM navigator LEFT JOIN category ON category.navigator_id = navigator.id ';
+
+    database.query(queryString, {}, function (err, result) {
+        if (err) {
+            return callback(err);
+        }
+        var navigatorCategory = {},
+            hasOwnProperty = Object.hasOwnProperty.bind(navigatorCategory),
+            tempResult;
+        for (var i = 0, l = result.length; i < l; ++i) {
+            tempResult = result[i];
+            if (!hasOwnProperty(tempResult.navigator_name)) {
+                navigatorCategory[tempResult.navigator_name] = { id: tempResult.navigator_id, category: {} };
+            }
+            if (tempResult.category_id) {
+                navigatorCategory[tempResult.navigator_name].category[tempResult.category_name] = tempResult.category_id;
+            }
+        }
+        return callback(null, navigatorCategory);
     });
 };
