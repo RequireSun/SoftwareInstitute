@@ -1,7 +1,10 @@
 config.js
 node_modules
+bower_components
 
 .idea
+.tmp
+.build
 
 *.min.*.js
 *.min.*.css
