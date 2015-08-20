@@ -12,6 +12,8 @@ bower_components
 *.log
 
 public/upload/*
+public/scripts
+public/*.html
 
 *.sublime-project
 *.sublime-workspace

@@ -7,9 +7,8 @@ module.exports = function (grunt) {
 
   var config = {
     app: 'frontend',
-    dist: 'dist',
-    temp: '.tmp',
-    build: '.build'
+    dist: 'public',
+    temp: '.tmp'
   };
 
   grunt.initConfig({
@@ -162,19 +161,55 @@ module.exports = function (grunt) {
           expand: true,
           dot: true,
           cwd: '<%= config.app %>/scripts',
-          dest: '<%= config.build %>/scripts',
+          dest: '<%= config.temp %>/scripts',
           src: ['{,*/}*.js']
         }, {
-          dest: '<%= config.build %>/scripts/lib/jquery.js',
+          dest: '<%= config.temp %>/scripts/lib/jquery.js',
           src: 'bower_components/jquery/dist/jquery.js'
         }, {
-          dest: '<%= config.build %>/scripts/lib/react.js',
+          dest: '<%= config.temp %>/scripts/lib/react.js',
           src: 'bower_components/react/react.js'
         }, {
           dest: '<%= config.dist %>/scripts/lib/require.js',
           src: 'bower_components/requirejs/require.js'
         }, {
-          dest: '<%= config.build %>/scripts/lib/ReactRouter.js',
+          dest: '<%= config.temp %>/scripts/lib/ReactRouter.js',
+          src: 'bower_components/react-router/build/umd/ReactRouter.js'
+        }]
+      },
+      myserve: {
+        files: [{
+          expand: true,
+          dot: true,
+          cwd: '<%= config.app %>',
+          dest: '<%= config.dist %>',
+          src: [
+            '{,*/}*.{ico,png,txt}',
+            '{,*/}*html'
+          ]
+        }, {
+          expand: true,
+          dot: true,
+          cwd: '<%= config.app %>/scripts',
+          dest: '<%= config.dist %>/scripts',
+          src: ['{,*/}*.js']
+        }, {
+          expand: true,
+          dot: true,
+          cwd: '<%= config.temp %>/scripts',
+          dest: '<%= config.dist %>/scripts',
+          src: ['{,*/}*.js']
+        }, {
+          dest: '<%= config.dist %>/scripts/lib/jquery.js',
+          src: 'bower_components/jquery/dist/jquery.js'
+        }, {
+          dest: '<%= config.dist %>/scripts/lib/react.js',
+          src: 'bower_components/react/react.js'
+        }, {
+          dest: '<%= config.dist %>/scripts/lib/require.js',
+          src: 'bower_components/requirejs/require.js'
+        }, {
+          dest: '<%= config.dist %>/scripts/lib/ReactRouter.js',
           src: 'bower_components/react-router/build/umd/ReactRouter.js'
         }]
       }
@@ -187,17 +222,12 @@ module.exports = function (grunt) {
           dot: true,
           src: [
             '<%= config.temp %>',
-            '<%= config.build %>',
             '<%= config.dist %>/{,*/}*.html',
-            '<%= config.dist %>/{,*/,*/*/}*.js',
             '!<%= config.dist %>/.git*'
           ]
         }, {
           dot: true,
-          src: ['<%= config.dist %>/**'],
-          filter: function(filepath) {
-            return (grunt.file.isDir(filepath) && require('fs').readdirSync(filepath).length === 0);
-          }
+          src: ['<%= config.dist %>/scripts']
         }]
       }
     },
@@ -290,7 +320,7 @@ module.exports = function (grunt) {
           expand: true,
           cwd: '<%= config.app %>/scripts',
           src: ['{,*/}*.jsx'],
-          dest: '<%= config.build %>/scripts',
+          dest: '<%= config.temp %>/scripts',
           ext: '.js'
         }]
       }
@@ -300,8 +330,8 @@ module.exports = function (grunt) {
         options: {
           name: 'root/app',
           optimize: 'uglify',
-          baseUrl: '<%= config.build %>/scripts/lib',
-          mainConfigFile: '<%= config.build %>/scripts/app.js',
+          baseUrl: '<%= config.temp %>/scripts/lib',
+          mainConfigFile: '<%= config.temp %>/scripts/app.js',
           out: '<%= config.dist %>/scripts/app.js'
         }
       }
@@ -335,6 +365,10 @@ module.exports = function (grunt) {
         'sass:dist',
         'copy:styles',
         'copy:dist'
+      ],
+      myserve: [
+        'sass:dist',
+        'copy:styles'
       ]
     }
   });
@@ -356,6 +390,16 @@ module.exports = function (grunt) {
       'watch'
     ]);
   });
+
+  grunt.registerTask('myserve', [
+    'clean:dist',
+//    'wiredep',
+    'concurrent:myserve',
+    'autoprefixer',
+    'react:dist',
+    'copy:myserve',
+    'watch'
+  ]);
 
   grunt.registerTask('build', [
     'clean:dist',
