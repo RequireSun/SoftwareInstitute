@@ -101,15 +101,15 @@ exports.OutlineCategory = function (req, res, next) {
     });
 };
 
-exports.NavigatorCategory = function (req, res, next) {
-    News.getNavigatorCategory(function (err, result) {
-        if (err) {
-            return next(err);
-        }
-        res.json(result);
-        next();
-    });
-};
+//exports.NavigatorCategory = function (req, res, next) {
+//    News.getNavigatorCategory(function (err, result) {
+//        if (err) {
+//            return next(err);
+//        }
+//        res.json(result);
+//        next();
+//    });
+//};
 // 样式内填充数据 (导航栏, 快捷入口, 脚) 获取
 exports.StyleCategory = function (req, res, next) {
     var categoryType = req.query.categoryType;

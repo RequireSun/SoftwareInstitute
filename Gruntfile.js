@@ -155,11 +155,13 @@ module.exports = function (grunt) {
         }, {
           dest: '<%= config.temp %>/scripts/lib/ReactRouter.js',
           src: 'bower_components/react-router/build/umd/ReactRouter.js'
-        }/*, {
-          cwd: '',
-          dest: '<%= config.temp %>/scripts/bootstrap.js',
-          src: 'bower_components/bootstrap-sass/assets/javascripts/bootstrap.js'
         }, {
+          dest: '<%= config.temp %>/scripts/lib/react-bootstrap.js',
+          src: 'bower_components/react-bootstrap/react-bootstrap.js'
+        }, {
+          dest: '<%= config.temp %>/scripts/lib/bootstrap.js',
+          src: 'bower_components/bootstrap-sass/assets/javascripts/bootstrap.js'
+        }/*, {
           cwd: '',
           dest: '<%= config.temp %>/scripts/angular.js',
           src: 'bower_components/angular/angular.js'
@@ -197,6 +199,12 @@ module.exports = function (grunt) {
         }, {
           dest: '<%= config.temp %>/scripts/lib/ReactRouter.js',
           src: 'bower_components/react-router/build/umd/ReactRouter.js'
+        }, {
+          dest: '<%= config.temp %>/scripts/lib/react-bootstrap.js',
+          src: 'bower_components/react-bootstrap/react-bootstrap.js'
+        }, {
+          dest: '<%= config.temp %>/scripts/lib/bootstrap.js',
+          src: 'bower_components/bootstrap-sass/assets/javascripts/bootstrap.js'
         }]
       },
       nodeserve: {
@@ -233,6 +241,12 @@ module.exports = function (grunt) {
         }, {
           dest: '<%= config.dist %>/scripts/lib/ReactRouter.js',
           src: 'bower_components/react-router/build/umd/ReactRouter.js'
+        }, {
+          dest: '<%= config.dist %>/scripts/lib/react-bootstrap.js',
+          src: 'bower_components/react-bootstrap/react-bootstrap.js'
+        }, {
+          dest: '<%= config.dist %>/scripts/lib/bootstrap.js',
+          src: 'bower_components/bootstrap-sass/assets/javascripts/bootstrap.js'
         }]
       }
     },

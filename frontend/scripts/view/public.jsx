@@ -25,9 +25,9 @@ define(['react', 'ReactRouter', 'action/news', 'common/util'], function (React, 
                 );
             }
             return (
-                <li>
-                    <ul>
-                        {this.state.title}
+                <li className="dropdown">
+                    <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button">{this.state.title}<span className="caret"></span></a>
+                    <ul className="dropdown-menu">
                         {category}
                     </ul>
                 </li>
@@ -61,12 +61,23 @@ define(['react', 'ReactRouter', 'action/news', 'common/util'], function (React, 
                 }
             }
             return (
-                <div>
-                    Navigation
-                    <ul>
-                        <Link to="index">首页</Link>
-                        {navigatorCategory}
-                    </ul>
+                <div className="navbar navbar-default">
+                    <div className="container-fluid">
+                        <div className="navbar-header">
+                            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigator-collapse-all">
+                                <span className="icon-bar"></span>
+                                <span className="icon-bar"></span>
+                                <span className="icon-bar"></span>
+                            </button>
+                            <a className="navbar-brand" href="#">Brand</a>
+                        </div>
+                        <div className="collapse navbar-collapse" id="navigator-collapse-all">
+                            <ul className="nav navbar-nav">
+                                <li><Link to="index">首页</Link></li>
+                                {navigatorCategory}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             );
         }

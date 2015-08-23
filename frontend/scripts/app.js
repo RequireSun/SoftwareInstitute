@@ -8,10 +8,13 @@ requirejs.config({
         common: '../common',
         view: '../view',
         root: '..'
+    },
+    shim: {
+        bootstrap: ['jquery']
     }
 });
 
-requirejs(['react', 'ReactRouter', 'jquery', 'root/web_router'], function (React, Router, jquery, routes) {
+requirejs(['react', 'ReactRouter', 'jquery', 'root/web_router', 'bootstrap'], function (React, Router, jquery, routes) {
     Router.run(routes, Router.HashLocation, function (Handler) {
         React.render(React.createElement(Handler), jquery('#content')[0]);
     });
