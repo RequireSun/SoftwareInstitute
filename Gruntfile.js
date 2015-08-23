@@ -47,14 +47,14 @@ module.exports = function (grunt) {
       //},
       js: {
         files: ['<%= config.app %>/scripts/{,*/}*.js'],
-        tasks: ['jshint', 'copy:myserve'],
+        tasks: ['jshint', 'copy:nodeserve'],
         options: {
           livereload: true
         }
       },
       react: {
         files: ['<%= config.app %>/scripts/{,*/}*.jsx'],
-        tasks: ['react:dist'],
+        tasks: ['react:dist', 'copy:nodeserve'],
         options: {
           livereload: true
         }

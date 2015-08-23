@@ -1,6 +1,6 @@
 var News = require('../proxy').News;
 var EventProxy = require('eventproxy');
-
+// 根据小类别获取新闻列表
 exports.NewsListCategory = function (req, res, next) {
     var pageSize = parseInt(req.query.pageSize);
     var pageRequest = parseInt(req.query.pageRequest);
@@ -30,7 +30,7 @@ exports.NewsListCategory = function (req, res, next) {
     News.getNewsCategory(pageSize, pageRequest, categoryId, ep.done('newsList'));
     News.getCountCategory(categoryId, ep.done('newsCount'));
 };
-
+// 根据大类别获取新闻列表
 exports.NewsListOutline = function (req, res, next) {
     var pageSize = parseInt(req.query.pageSize);
     var pageRequest = parseInt(req.query.pageRequest);
@@ -60,7 +60,7 @@ exports.NewsListOutline = function (req, res, next) {
     News.getNewsOutline(pageSize, pageRequest, outlineId, ep.done('newsList'));
     News.getCountOutline(outlineId, ep.done('newsCount'));
 };
-
+// 获取新闻详情
 exports.NewsDetail = function (req, res, next) {
     var newsId = parseInt(req.query.id);
 
@@ -90,7 +90,7 @@ exports.NewsDetail = function (req, res, next) {
     News.getNewsDetail(newsId, ep.done('newsDetail'));
     News.updateNewsPageView(newsId, ep.done('updatePageView'));
 };
-
+// 获取大小类间的关系
 exports.OutlineCategory = function (req, res, next) {
     News.getOutlineCategory(function (err, result) {
         if (err) {
@@ -109,4 +109,20 @@ exports.NavigatorCategory = function (req, res, next) {
         res.json(result);
         next();
     });
+};
+// 样式内填充数据 (导航栏, 快捷入口, 脚) 获取
+exports.StyleCategory = function (req, res, next) {
+    var categoryType = req.query.categoryType;
+
+    if ('string' !== typeof categoryType || 0 === categoryType.length) {
+        return res.json({ error: '请输入正确的样式类型！' });
+    }
+
+    News.getStyleCategory(categoryType, function (err, result) {
+        if (err) {
+            return next(err);
+        }
+        res.json(result);
+        next();
+    })
 };

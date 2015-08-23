@@ -8,14 +8,21 @@ define(['jquery', 'root/config', 'common/network'], function ($, config, network
         path: config.path
     });
 
-    function NavigatorCategory (callback) {
-        if (!callback) {
+    /**
+     * 获取导航栏, 快捷入口, 页尾的样式数据
+     * @param categoryType  标明是那个部位的样式
+     * @param callback      传统的 callback, 成功的话, data 将会是样式对应的对象
+     * @constructor
+     */
+    function StyleCategory (categoryType, callback) {
+        if (!categoryType || !callback) {
             return;
         }
-        var url = server + '/NavigatorCategory';
+        var data = { categoryType: categoryType }, url = server + '/StyleCategory';
         $.ajax({
             url: url,
             type: 'GET',
+            data: data,
             dataType: 'json'
         }).success(function (data, status, xhr) {
             callback(null, data);
@@ -66,7 +73,7 @@ define(['jquery', 'root/config', 'common/network'], function ($, config, network
     }
 
     return {
-        NavigatorCategory: NavigatorCategory,
+        StyleCategory: StyleCategory,
         NewsList: NewsList,
         NewsDetail: NewsDetail
     };
