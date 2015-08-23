@@ -23,27 +23,49 @@ module.exports = function (grunt) {
       gruntfile: {
         files: ['Gruntfile.js']
       },
+      //js: {
+      //  files: ['<%= config.app %>/scripts/{,*/}*.js'],
+      //  tasks: ['jshint'],
+      //  options: {
+      //    livereload: true
+      //  }
+      //},
+      //react: {
+      //  files: ['<%= config.app %>/scripts/{,*/}*.jsx'],
+      //  tasks: ['react:server'],
+      //  options: {
+      //    livereload: true
+      //  }
+      //},
+      //sass: {
+      //  files: ['<%= config.app %>/styles/{,*/}*.{sass,scss}'],
+      //  tasks: ['sass:server', 'autoprefixer']
+      //},
+      //styles: {
+      //  files: ['<%= config.app %>/styles/{,*/}*.css'],
+      //  tasks: ['newer:copy:styles', 'autoprefixer']
+      //},
       js: {
         files: ['<%= config.app %>/scripts/{,*/}*.js'],
-        tasks: ['jshint'],
+        tasks: ['jshint', 'copy:myserve'],
         options: {
           livereload: true
         }
       },
       react: {
         files: ['<%= config.app %>/scripts/{,*/}*.jsx'],
-        tasks: ['react:server'],
+        tasks: ['react:dist'],
         options: {
           livereload: true
         }
       },
       sass: {
         files: ['<%= config.app %>/styles/{,*/}*.{sass,scss}'],
-        tasks: ['sass:server', 'autoprefixer']
+        tasks: ['sass:dist', 'autoprefixer']
       },
       styles: {
         files: ['<%= config.app %>/styles/{,*/}*.css'],
-        tasks: ['newer:copy:styles', 'autoprefixer']
+        tasks: ['newer:copy:styles', 'autoprefixer', 'cssmin']
       },
       livereload: {
         options: {
@@ -177,7 +199,7 @@ module.exports = function (grunt) {
           src: 'bower_components/react-router/build/umd/ReactRouter.js'
         }]
       },
-      myserve: {
+      nodeserve: {
         files: [{
           expand: true,
           dot: true,
@@ -242,7 +264,7 @@ module.exports = function (grunt) {
         sourceMap: true,
         includesPaths: ['bower_components']
       },
-      dist: {
+      server: {
         files: [{
           expand: true,
           cwd: '<%= config.app %>/styles',
@@ -251,7 +273,7 @@ module.exports = function (grunt) {
           ext: '.css'
         }]
       },
-      server: {
+      dist: {
         files: [{
           expand: true,
           cwd: '<%= config.app %>/styles',
@@ -366,7 +388,7 @@ module.exports = function (grunt) {
         'copy:styles',
         'copy:dist'
       ],
-      myserve: [
+      nodeserve: [
         'sass:dist',
         'copy:styles'
       ]
@@ -383,7 +405,6 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
-//      'wiredep',
       'concurrent:server',
       'autoprefixer',
       'connect:livereload',
@@ -391,19 +412,17 @@ module.exports = function (grunt) {
     ]);
   });
 
-  grunt.registerTask('myserve', [
+  grunt.registerTask('nodeserve', [
     'clean:dist',
-//    'wiredep',
-    'concurrent:myserve',
+    'concurrent:nodeserve',
     'autoprefixer',
     'react:dist',
-    'copy:myserve',
+    'copy:nodeserve',
     'watch'
   ]);
 
   grunt.registerTask('build', [
     'clean:dist',
-//    'wiredep',
     'concurrent:dist',
     'autoprefixer',
     'cssmin',
