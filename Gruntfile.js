@@ -263,6 +263,9 @@ module.exports = function (grunt) {
           ]
         }, {
           dot: true,
+          src: ['<%= config.dist %>/styles']
+        }, {
+          dot: true,
           src: ['<%= config.dist %>/scripts']
         }]
       }
