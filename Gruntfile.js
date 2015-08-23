@@ -430,6 +430,7 @@ module.exports = function (grunt) {
     'clean:dist',
     'concurrent:nodeserve',
     'autoprefixer',
+    'cssmin',
     'react:dist',
     'copy:nodeserve',
     'watch'
