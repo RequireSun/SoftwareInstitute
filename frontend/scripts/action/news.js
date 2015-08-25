@@ -7,7 +7,6 @@ define(['jquery', 'root/config', 'common/network'], function ($, config, network
         host: config.host,
         path: config.path
     });
-
     /**
      * 获取导航栏, 快捷入口, 页尾的样式数据
      * @param categoryType  标明是那个部位的样式
@@ -31,6 +30,26 @@ define(['jquery', 'root/config', 'common/network'], function ($, config, network
         });
     }
 
+    function OutlineCategory (callback) {
+        $.ajax({
+            url: server + '/OutlineCategory',
+            type: 'GET',
+            dataType: 'json'
+        }).success(function (data, status, xhr) {
+            callback(null, data);
+        }).error(function (xhr, status, error) {
+            network.errorToContent(callback, xhr.status, error);
+        });
+    }
+    /**
+     * 获取新闻列表
+     * @param callback      传统的 callback 函数
+     * @param newsType      outline 或是 category
+     * @param id            对应的类别 id
+     * @param pageSize      页大小
+     * @param pageRequest   请求的页
+     * @constructor
+     */
     function NewsList (callback, newsType, id, pageSize, pageRequest) {
         if (!id || !callback) {
             return;
@@ -74,6 +93,7 @@ define(['jquery', 'root/config', 'common/network'], function ($, config, network
 
     return {
         StyleCategory: StyleCategory,
+        OutlineCategory: OutlineCategory,
         NewsList: NewsList,
         NewsDetail: NewsDetail
     };

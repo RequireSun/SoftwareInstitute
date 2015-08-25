@@ -26,6 +26,23 @@ define(['react', 'ReactRouter', 'view/public', 'action/news'], function (React, 
     });
 
     var NewsList = React.createClass({
+        mixins: [actionNews],
+        getData: function (id, newsType, pageSize, pageRequest) {
+            if (!id) {
+                location.hash = '#notFound/请输入正确的类别 ID！';
+                return ;
+            }
+            this.NewsList(function (err, data) {
+                if (err) {
+                    location.hash = '#notFound/' + err;
+                    return ;
+                }
+                this.setState({
+                    newsList: data.data ? data.data : [],
+                    newsCount: data.count ? data.count : 0
+                });
+            }.bind(this), newsType, id, pageSize, pageRequest);
+        },
         getInitialState: function () {
             return {
                 newsType: this.props.params.newsType,
@@ -44,23 +61,12 @@ define(['react', 'ReactRouter', 'view/public', 'action/news'], function (React, 
                 pageRequest : nextProps.query.pageRequest,
                 newsList: [],
                 newsCount: 0
-            });
+            }, function () {
+                this.getData(this.state.id, this.state.newsType, this.state.pageSize, this.state.pageRequest)
+            }.bind(this));
         },
         componentWillMount: function () {
-            if (!this.state.id) {
-                location.hash = '#notFound/请输入正确的类别 ID！';
-                return ;
-            }
-            actionNews.NewsList(function (err, data) {
-                if (err) {
-                    location.hash = '#notFound/' + err;
-                    return ;
-                }
-                this.setState({
-                    newsList: data.data ? data.data : [],
-                    newsCount: data.count ? data.count : 0
-                });
-            }.bind(this), this.state.newsType, this.state.id, this.state.pageSize, this.state.pageRequest);
+            this.getData(this.state.id, this.state.newsType, this.state.pageSize, this.state.pageRequest)
         },
         render: function () {
             var newsItems = [], tempNewsList = this.state.newsList;

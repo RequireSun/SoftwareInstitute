@@ -1,5 +1,4 @@
 define(['react', 'view/public', 'action/resource'], function (React, templatePublic, actionResource) {
-    console.log(actionResource);
     var TitleLine = templatePublic.TitleLine,
         Shortcut = templatePublic.Shortcut;
 
@@ -27,6 +26,19 @@ define(['react', 'view/public', 'action/resource'], function (React, templatePub
         }
     });
     var ResourceList = React.createClass({
+        mixins: [actionResource],
+        getData: function (pageSize, pageRequest) {
+            this.ResourceList(function (err, data) {
+                if (err) {
+                    location.hash = '#notFound/' + err;
+                    return ;
+                }
+                this.setState({
+                    resourceList: data.data ? data.data : [],
+                    resourceCount: data.count ? data.count : 0
+                });
+            }.bind(this), pageSize, pageRequest);
+        },
         getInitialState: function () {
             return {
                 pageSize : this.props.query.pageSize,
@@ -41,19 +53,12 @@ define(['react', 'view/public', 'action/resource'], function (React, templatePub
                 pageRequest : nextProps.query.pageRequest,
                 resourceList: nextProps.resourceList,
                 resourceCount: nextProps.resourceCount
+            }, function () {
+                this.getData(this.state.pageSize, this.state.pageRequest);
             });
         },
         componentWillMount: function () {
-            actionResource.ResourceList(function (err, data) {
-                if (err) {
-                    location.hash = '#notFound/' + err;
-                    return ;
-                }
-                this.setState({
-                    resourceList: data.data ? data.data : [],
-                    resourceCount: data.count ? data.count : 0
-                });
-            }.bind(this), this.state.pageSize, this.state.pageRequest);
+            this.getData(this.state.pageSize, this.state.pageRequest);
         },
         render: function () {
             var resourceItems = [], tempResourceList = this.state.resourceList;
