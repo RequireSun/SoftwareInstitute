@@ -1,4 +1,4 @@
-define(['react', 'ReactRouter', 'action/news', 'action/resource'], function (React, Router, actionNews, actionResource) {
+define(['react', 'ReactRouter', 'action/news', 'action/resource', 'common/util'], function (React, Router, actionNews, actionResource, commonUtil) {
     var Link = Router.Link;
     var Scroll = React.createClass({
         render: function () {
@@ -9,7 +9,7 @@ define(['react', 'ReactRouter', 'action/news', 'action/resource'], function (Rea
     });
 
     var News = React.createClass({
-        mixins: [actionNews],
+        mixins: [actionNews, commonUtil],
         getData: function (id) {
             this.NewsList(function (err, data) {
                 if (err) {
@@ -42,22 +42,22 @@ define(['react', 'ReactRouter', 'action/news', 'action/resource'], function (Rea
         },
         render: function () {
             return (
-                <div>
-                    {this.state.title ? this.state.title : '暂无内容'}
-                    <ul>
+                <div className="col-sm-4">
+                    <h4>{this.state.title ? this.state.title : '暂无内容'}</h4>
+                    <div className="list-group">
                         {
                             this.state.newsList.map(function (news) {
-                                return (<li><Link to="detail" params={{ newsId: news.id }}>{news.title} {news.update_time}</Link></li>);
-                            })
+                                return (<Link className="list-group-item" to="detail" params={{ newsId: news.id }}>{news.title}<span className="pull-right">{this.ConvertDateTimeToDate(news.update_time)}</span></Link>);
+                            }.bind(this))
                         }
-                    </ul>
+                    </div>
                 </div>
             );
         }
     });
 
     var Resource = React.createClass({
-        mixins: [actionResource],
+        mixins: [actionResource, commonUtil],
         getData: function () {
             this.ResourceList(function (err, data) {
                 if (err) {
@@ -79,15 +79,15 @@ define(['react', 'ReactRouter', 'action/news', 'action/resource'], function (Rea
         },
         render: function () {
             return (
-                <div>
-                    资源下载
-                    <ul>
+                <div className="col-sm-4">
+                    <h4>资源下载</h4>
+                    <div className="list-group">
                         {
                             this.state.resourceList.map(function (resource) {
-                                return (<li><a href={resource.path}>{resource.title} {resource.update_time}</a></li>);
-                            })
+                                return (<a className="list-group-item" href={resource.path}>{resource.title}<span className="pull-right">{this.ConvertDateTimeToDate(resource.update_time)}</span></a>);
+                            }.bind(this))
                         }
-                    </ul>
+                    </div>
                 </div>
             );
         }
@@ -124,14 +124,16 @@ define(['react', 'ReactRouter', 'action/news', 'action/resource'], function (Rea
                 newsArray.push({});
             }
             return (
-                <div>
+                <div className="container">
                     <Scroll/>
-                    {
-                        newsArray.map(function (news) {
-                            return <News id={news.id} title={news.title}/>;
-                        })
-                    }
-                    <Resource/>
+                    <div className="row">
+                        {
+                            newsArray.map(function (news) {
+                                return <News id={news.id} title={news.title}/>;
+                            })
+                        }
+                        <Resource/>
+                    </div>
                 </div>
             );
         }
