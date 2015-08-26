@@ -1,6 +1,9 @@
 define(['react', 'view/public', 'action/resource'], function (React, templatePublic, actionResource) {
     var TitleLine = templatePublic.TitleLine,
-        Shortcut = templatePublic.Shortcut;
+        Shortcut = templatePublic.Shortcut,
+        Pager = templatePublic.Pager;
+
+    var resourceLink = '#/browse/resource?pageSize=20&pageRequest={#page}';
 
     var ResourceItem = React.createClass({
         getInitialState: function () {
@@ -51,8 +54,8 @@ define(['react', 'view/public', 'action/resource'], function (React, templatePub
             this.setState({
                 pageSize : nextProps.query.pageSize,
                 pageRequest : nextProps.query.pageRequest,
-                resourceList: nextProps.resourceList,
-                resourceCount: nextProps.resourceCount
+                resourceList: [],
+                resourceCount: 0
             }, function () {
                 this.getData(this.state.pageSize, this.state.pageRequest);
             });
@@ -74,6 +77,7 @@ define(['react', 'view/public', 'action/resource'], function (React, templatePub
                     <ul>
                         {resourceItems}
                     </ul>
+                    <Pager current={this.state.pageRequest} max={this.state.resourceCount} link={resourceLink}/>
                 </div>
             );
         }

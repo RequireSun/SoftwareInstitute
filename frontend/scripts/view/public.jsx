@@ -1,5 +1,47 @@
-define(['react', 'ReactRouter', 'action/news', 'common/util'], function (React, Router, actionNews, util) {
+define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], function (React, Router, actionNews, commonUtil, config) {
     var Link = Router.Link;
+    var pagerSize = config.pagerSize || 2;
+
+    /**
+     * 页码生成组件
+     * @param   current 当前页码
+     * @param   max     总页码数
+     * @param   link    页码链接, 字符串, 其中需要有 {#page} 标记, 用于将此处替换为请求的页码
+     */
+    var Pager = React.createClass({
+        getInitialState: function () {
+            return {
+                current: this.props.current,
+                max: this.props.max,
+                link: this.props.link
+            };
+        },
+        componentWillReceiveProps: function (nextProps) {
+            this.setState({
+                current: nextProps.current,
+                max: nextProps.max,
+                link: nextProps.link
+            });
+        },
+        render: function () {
+            var pagerArray = [];
+            var tempCurrent = this.state.current,
+                tempLink = this.state.link || '';
+            for (var i = Math.max(1, tempCurrent - pagerSize), l = Math.min(2 * pagerSize + i, this.state.max); i <= l; ++i) {
+                pagerArray.push(i);
+            }
+            return (
+                <ul className="pagination">
+                    {
+                        pagerArray.map(function (pager) {
+                            var activeClass = pager === tempCurrent ? 'active' : '';
+                            return (<li><a className={activeClass} href={tempLink.replace(/\{\#page\}/, pager)}>{pager}</a></li>);
+                        })
+                    }
+                </ul>
+            );
+        }
+    });
 
     // 导航栏的单个选项列表
     var NavigatorCategory = React.createClass({
@@ -37,6 +79,7 @@ define(['react', 'ReactRouter', 'action/news', 'common/util'], function (React, 
 
     // 导航栏
     var Navigation = React.createClass({
+        mixins: [commonUtil],
         getInitialState: function () {
             return {
                 navigatorCategory: {}
@@ -56,7 +99,7 @@ define(['react', 'ReactRouter', 'action/news', 'common/util'], function (React, 
         render: function () {
             var navigatorCategory = [], tempCategory = this.state.navigatorCategory;
             for (var i in tempCategory) {
-                if (util.hasOwnProperty(tempCategory, i)) {
+                if (this.HasOwnProperty(tempCategory, i)) {
                     navigatorCategory.push(<NavigatorCategory title={i} category={tempCategory[i]}/>);
                 }
             }
@@ -128,6 +171,7 @@ define(['react', 'ReactRouter', 'action/news', 'common/util'], function (React, 
 
     // 每个页面里面左边的快捷入口
     var Shortcut = React.createClass({
+        mixins: [commonUtil],
         getInitialState: function () {
             return {
                 shortcutCategory: []
@@ -147,7 +191,7 @@ define(['react', 'ReactRouter', 'action/news', 'common/util'], function (React, 
         render: function () {
             var shortcutCategory = [], tempCategory = this.state.shortcutCategory;
             for (var i in tempCategory) {
-                if (util.hasOwnProperty(tempCategory, i)) {
+                if (this.HasOwnProperty(tempCategory, i)) {
                     shortcutCategory.push(<NavigatorCategory title={i} category={tempCategory[i]}/>);
                 }
             }
@@ -183,6 +227,7 @@ define(['react', 'ReactRouter', 'action/news', 'common/util'], function (React, 
         Navigation: Navigation,
         Footer: Footer,
         Shortcut: Shortcut,
-        TitleLine: TitleLine
+        TitleLine: TitleLine,
+        Pager: Pager
     };
 });

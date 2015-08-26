@@ -1,7 +1,10 @@
 define(['react', 'ReactRouter', 'view/public', 'action/news'], function (React, Router, templatePublic, actionNews) {
     var Link = Router.Link;
     var TitleLine = templatePublic.TitleLine,
-        Shortcut = templatePublic.Shortcut;
+        Shortcut = templatePublic.Shortcut,
+        Pager = templatePublic.Pager;
+
+    var newsLink = '';
 
     var NewsItem = React.createClass({
         getInitialState: function () {
@@ -82,6 +85,7 @@ define(['react', 'ReactRouter', 'view/public', 'action/news'], function (React, 
                     <ul>
                         {newsItems}
                     </ul>
+                    {/*<Pager/>*/}
                 </div>
             );
         }
