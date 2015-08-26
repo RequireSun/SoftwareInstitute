@@ -168,9 +168,9 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
 
     // 每个页面里面左边的快捷入口
     var Shortcut = React.createClass({
-        mixins: [commonUtil],
+        mixins: [actionNews, commonUtil],
         getData: function () {
-            actionNews.StyleCategory('shortcut', function (err, data) {
+            this.StyleCategory('shortcut', function (err, data) {
                 if (err) {
                     location.hash = '#notFound/' + err;
                 } else {
@@ -179,18 +179,28 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
                     });
                 }
             }.bind(this));
+            this.StyleOutline('shortcut', function (err, data) {
+                if (err) {
+                    location.hash = '#notFound/' + err;
+                } else {
+                    this.setState({
+                        shortcutOutline: data
+                    });
+                }
+            }.bind(this));
         },
         getInitialState: function () {
             return {
-                shortcutCategory: []
+                shortcutCategory: [],
+                shortcutOutline: []
             };
         },
         componentWillMount: function () {
             this.getData();
         },
         render: function () {
-            var shortcutCategory = {}, tempCategory = this.state.shortcutCategory;
-            var categoryArray = [];
+            var shortcutCategory = {}, tempCategory = this.state.shortcutCategory, categoryArray = [];
+            var shortcutOutline = {}, tempOutline = this.state.shortcutOutline, outlineArray = [];
             var i, j;
             // 遍历去重
             for (i in tempCategory) {
@@ -207,8 +217,24 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
                     categoryArray.push(<ShortcutItem id={i} title={shortcutCategory[i]} newsType="category"/>);
                 }
             }
+            // 遍历去重
+            for (i in tempOutline) {
+                if (this.HasOwnProperty(tempOutline, i)) {
+                    for (j in tempOutline[i]) {
+                        if (this.HasOwnProperty(tempOutline[i], j)) {
+                            shortcutOutline[j] = tempOutline[i][j];
+                        }
+                    }
+                }
+            }
+            for (i in shortcutOutline) {
+                if (this.HasOwnProperty(shortcutOutline, i)) {
+                    outlineArray.push(<ShortcutItem id={i} title={shortcutOutline[i]} newsType="outline"/>);
+                }
+            }
             return (
                 <div className="list-group">
+                    {outlineArray}
                     {categoryArray}
                     <Link className="list-group-item" to="resource" query={{ pageSize: 20, pageRequest: 1 }}>资源下载</Link>
                 </div>

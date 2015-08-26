@@ -21,7 +21,7 @@ router.get('/NewsListCategory', news.NewsListCategory);
 router.get('/NewsListOutline', news.NewsListOutline);
 router.get('/NewsDetail', news.NewsDetail);
 router.get('/OutlineCategory', news.OutlineCategory);
-//router.get('/NavigatorCategory', news.NavigatorCategory);
 router.get('/StyleCategory', news.StyleCategory);
+router.get('/StyleOutline', news.StyleOutline);
 
 module.exports = router;

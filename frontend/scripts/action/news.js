@@ -9,7 +9,7 @@ define(['jquery', 'root/config', 'common/network'], function ($, config, network
     });
     /**
      * 获取导航栏, 快捷入口, 页尾的样式数据
-     * @param categoryType  标明是那个部位的样式
+     * @param categoryType  标明是哪个部位的样式
      * @param callback      传统的 callback, 成功的话, data 将会是样式对应的对象
      * @constructor
      */
@@ -18,6 +18,28 @@ define(['jquery', 'root/config', 'common/network'], function ($, config, network
             return;
         }
         var data = { categoryType: categoryType }, url = server + '/StyleCategory';
+        $.ajax({
+            url: url,
+            type: 'GET',
+            data: data,
+            dataType: 'json'
+        }).success(function (data, status, xhr) {
+            callback(null, data);
+        }).error(function (xhr, status, error) {
+            network.errorToContent(callback, xhr.status, error);
+        });
+    }
+    /**
+     * 获取导航栏, 快捷入口, 页尾的样式数据
+     * @param outlineType   标明是哪个部位的样式
+     * @param callback      传统的 callback, 成功的话, data 将会是样式对应的对象
+     * @constructor
+     */
+    function StyleOutline (outlineType, callback) {
+        if (!outlineType || !callback) {
+            return;
+        }
+        var data = { outlineType: outlineType }, url = server + '/StyleOutline';
         $.ajax({
             url: url,
             type: 'GET',
@@ -93,6 +115,7 @@ define(['jquery', 'root/config', 'common/network'], function ($, config, network
 
     return {
         StyleCategory: StyleCategory,
+        StyleOutline: StyleOutline,
         OutlineCategory: OutlineCategory,
         NewsList: NewsList,
         NewsDetail: NewsDetail
