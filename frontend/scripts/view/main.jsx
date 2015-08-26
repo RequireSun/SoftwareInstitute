@@ -7,9 +7,9 @@ define(['react', 'ReactRouter', 'view/public'], function (React, Router, templat
         render: function () {
             return (
                 <div>
-                    <Navigation />
-                    <RouteHandler />
-                    <Footer />
+                    <Navigation/>
+                    <RouteHandler/>
+                    <Footer/>
                 </div>
             );
         }

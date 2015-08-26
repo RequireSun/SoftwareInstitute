@@ -71,13 +71,21 @@ define(['react', 'view/public', 'action/resource'], function (React, templatePub
                 );
             }
             return (
-                <div>
-                    <Shortcut/>
-                    <TitleLine/>
-                    <ul>
-                        {resourceItems}
-                    </ul>
-                    <Pager current={this.state.pageRequest} max={this.state.resourceCount} link={resourceLink}/>
+                <div className="container">
+                    <div className="row">
+                        <TitleLine title="资源下载"/>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-3 hidden-xs">
+                            <Shortcut/>
+                        </div>
+                        <div className="col-sm-9">
+                            <ul>
+                                {resourceItems}
+                            </ul>
+                            <Pager current={this.state.pageRequest} max={this.state.resourceCount} link={resourceLink}/>
+                        </div>
+                    </div>
                 </div>
             );
         }

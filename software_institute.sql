@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50543
 File Encoding         : 65001
 
-Date: 2015-08-09 01:23:21
+Date: 2015-08-27 01:10:45
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -41,7 +41,7 @@ CREATE TABLE `news` (
   `page_view` int(10) unsigned DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `category_update_date` (`category_id`,`update_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Table structure for outline
@@ -64,7 +64,7 @@ CREATE TABLE `resource` (
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `update_time` (`update_time`) USING HASH
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Table structure for style
@@ -75,15 +75,16 @@ CREATE TABLE `style` (
   `name` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
   `type_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
--- Table structure for style_category
+-- Table structure for style_relation
 -- ----------------------------
-DROP TABLE IF EXISTS `style_category`;
-CREATE TABLE `style_category` (
+DROP TABLE IF EXISTS `style_relation`;
+CREATE TABLE `style_relation` (
   `style_id` int(10) unsigned NOT NULL,
-  `category_id` int(10) unsigned NOT NULL
+  `category_id` int(10) unsigned DEFAULT NULL,
+  `outline_id` int(10) unsigned DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------

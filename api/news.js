@@ -14,13 +14,15 @@ exports.NewsListCategory = function (req, res, next) {
 
     var events = [ 'newsList', 'newsCount'];
     var ep = EventProxy.create(events, function (newsList, newsCount) {
-        if (!newsList || !newsList.length) {
+        var pageMax = Math.ceil(newsCount / pageSize);
+
+        if (!newsList || !newsList.length || pageMax < pageRequest) {
             return res.json({ error: '请选择正确的页码和新闻类型！' });
         }
 
         res.json({ 
             data: newsList,
-            count: newsCount
+            count: pageMax
         });
         next();
     });
@@ -44,13 +46,15 @@ exports.NewsListOutline = function (req, res, next) {
 
     var events = [ 'newsList', 'newsCount'];
     var ep = EventProxy.create(events, function (newsList, newsCount) {
-        if (!newsList || !newsList.length) {
+        var pageMax = Math.ceil(newsCount / pageSize);
+
+        if (!newsList || !newsList.length || pageMax < pageRequest) {
             return res.json({ error: '请选择正确的页码和新闻类型！' });
         }
 
         res.json({
             data: newsList,
-            count: newsCount
+            count: pageMax
         });
         next();
     });
@@ -100,7 +104,6 @@ exports.OutlineCategory = function (req, res, next) {
         next();
     });
 };
-
 // 样式内填充数据 (导航栏, 快捷入口, 脚) 获取
 exports.StyleCategory = function (req, res, next) {
     var categoryType = req.query.categoryType;

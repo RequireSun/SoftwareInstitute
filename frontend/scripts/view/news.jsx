@@ -4,7 +4,7 @@ define(['react', 'ReactRouter', 'view/public', 'action/news'], function (React, 
         Shortcut = templatePublic.Shortcut,
         Pager = templatePublic.Pager;
 
-    var newsLink = '';
+    var newsLink = '#/browse/news/{#newsType}?id={#id}&pageSize=20&pageRequest={#page}';
 
     var NewsItem = React.createClass({
         getInitialState: function () {
@@ -73,19 +73,28 @@ define(['react', 'ReactRouter', 'view/public', 'action/news'], function (React, 
         },
         render: function () {
             var newsItems = [], tempNewsList = this.state.newsList;
+            var tempNewsLink = newsLink.replace(/\{\#newsType\}/, this.state.newsType).replace(/\{\#id\}/, this.state.id);
             for (var i = 0, l = tempNewsList.length; i < l; ++i) {
                 newsItems.push(
                     <NewsItem item={tempNewsList[i]}/>
                 );
             }
             return (
-                <div>
-                    <Shortcut/>
-                    <TitleLine/>
-                    <ul>
-                        {newsItems}
-                    </ul>
-                    {/*<Pager/>*/}
+                <div className="container">
+                    <div className="row">
+                        <TitleLine/>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-3 hidden-xs">
+                            <Shortcut/>
+                        </div>
+                        <div className="col-sm-9">
+                            <ul>
+                                {newsItems}
+                            </ul>
+                            <Pager current={this.state.pageRequest} max={this.state.newsCount} link={tempNewsLink}/>
+                        </div>
+                    </div>
                 </div>
             );
         }
