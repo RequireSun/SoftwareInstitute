@@ -27,17 +27,22 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
             var pagerArray = [];
             var tempCurrent = this.state.current,
                 tempLink = this.state.link || '';
+            // 生成对应的前一页 / 后一页
+            var prevLink = tempCurrent <= 1 ? (<li className="disabled"><a href="#">&laquo;</a></li>) : (<li><a href={tempLink.replace(/\{\#page\}/, tempCurrent - 1)}>&laquo;</a></li>),
+                nextLink = tempCurrent >= this.state.max ? (<li className="disabled"><a href="#">&raquo;</a></li>) : (<li><a href={tempLink.replace(/\{\#page\}/, tempCurrent - 0 + 1)}>&raquo;</a></li>);
             for (var i = Math.max(1, tempCurrent - pagerSize), l = Math.min(2 * pagerSize + i, this.state.max); i <= l; ++i) {
                 pagerArray.push(i);
             }
             return (
                 <ul className="pagination">
+                    {prevLink}
                     {
                         pagerArray.map(function (pager) {
                             var activeClass = pager === tempCurrent ? 'active' : '';
                             return (<li><a className={activeClass} href={tempLink.replace(/\{\#page\}/, pager)}>{pager}</a></li>);
                         })
                     }
+                    {nextLink}
                 </ul>
             );
         }
