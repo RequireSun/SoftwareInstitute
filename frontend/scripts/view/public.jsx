@@ -88,14 +88,14 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
 
     // 导航栏
     var Navigation = React.createClass({
-        mixins: [commonUtil],
+        mixins: [actionNews, commonUtil],
         getInitialState: function () {
             return {
                 navigatorCategory: {}
             };
         },
         componentWillMount: function () {
-            actionNews.StyleCategory('navigator', function (err, data) {
+            this.StyleCategory('navigator', function (err, data) {
                 if (err) {
                     location.hash = '#notFound/' + err;
                 } else {
