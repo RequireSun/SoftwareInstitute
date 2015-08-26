@@ -1,6 +1,9 @@
 define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], function (React, Router, actionNews, commonUtil, config) {
     var Link = Router.Link;
-    var pagerSize = config.pagerSize || 2;
+    var pagerSize = config.pagerSize || 2,
+        pageSize = config.pageSize || 20,
+        pageRequest = config.pageRequest || 1;
+
 
     /**
      * 页码生成组件
@@ -144,32 +147,21 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
     var ShortcutItem = React.createClass({
         getInitialState: function () {
             return {
+                id: this.props.id,
                 title: this.props.title,
-                category: this.props.category
+                newsType: this.props.newsType
             };
         },
         componentWillReceiveProps: function (nextProps) {
             this.setState({
+                id: nextProps.id,
                 title: nextProps.title,
-                category: nextProps.category
+                newsType: nextProps.newsType
             });
         },
         render: function () {
-            var category = [], tempCategory = this.state.category;
-            for (var i in tempCategory) {
-                category.push(
-                    <li>
-                        <Link to="news" params={{ newsType: 'category' }} query={{ id: i, pageSize: 20, pageRequest: 1 }}>{tempCategory[i]}</Link>
-                    </li>
-                );
-            }
             return (
-                <li>
-                    <ul>
-                        {this.state.title}
-                        {category}
-                    </ul>
-                </li>
+                <Link className="list-group-item" to="news" params={{ newsType: this.state.newsType }} query={{ id: this.state.id, pageSize: pageSize, pageRequest: pageRequest }}>{this.state.title}</Link>
             );
         }
     });
@@ -177,12 +169,7 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
     // 每个页面里面左边的快捷入口
     var Shortcut = React.createClass({
         mixins: [commonUtil],
-        getInitialState: function () {
-            return {
-                shortcutCategory: []
-            };
-        },
-        componentWillMount: function () {
+        getData: function () {
             actionNews.StyleCategory('shortcut', function (err, data) {
                 if (err) {
                     location.hash = '#notFound/' + err;
@@ -193,18 +180,38 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
                 }
             }.bind(this));
         },
+        getInitialState: function () {
+            return {
+                shortcutCategory: []
+            };
+        },
+        componentWillMount: function () {
+            this.getData();
+        },
         render: function () {
-            var shortcutCategory = [], tempCategory = this.state.shortcutCategory;
-            for (var i in tempCategory) {
+            var shortcutCategory = {}, tempCategory = this.state.shortcutCategory;
+            var categoryArray = [];
+            var i, j;
+            // 遍历去重
+            for (i in tempCategory) {
                 if (this.HasOwnProperty(tempCategory, i)) {
-                    shortcutCategory.push(<NavigatorCategory title={i} category={tempCategory[i]}/>);
+                    for (j in tempCategory[i]) {
+                        if (this.HasOwnProperty(tempCategory[i], j)) {
+                            shortcutCategory[j] = tempCategory[i][j];
+                        }
+                    }
+                }
+            }
+            for (i in shortcutCategory) {
+                if (this.HasOwnProperty(shortcutCategory, i)) {
+                    categoryArray.push(<ShortcutItem id={i} title={shortcutCategory[i]} newsType="category"/>);
                 }
             }
             return (
-                <ul>
-                    {shortcutCategory}
-                    <li><Link to="resource" query={{ pageSize: 20, pageRequest: 1 }}>资源下载</Link></li>
-                </ul>
+                <div className="list-group">
+                    {categoryArray}
+                    <Link className="list-group-item" to="resource" query={{ pageSize: 20, pageRequest: 1 }}>资源下载</Link>
+                </div>
             );
         }
     });
