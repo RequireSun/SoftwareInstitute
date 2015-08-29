@@ -83,7 +83,7 @@ define(['react', 'ReactRouter', 'view/public', 'action/news', 'common/util'], fu
             return (
                 <div className="container">
                     <div className="row">
-                        <TitleLine/>
+                        <TitleLine id={this.state.id} type={this.state.newsType}/>
                     </div>
                     <div className="row">
                         <div className="col-sm-3 hidden-xs">

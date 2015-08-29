@@ -245,17 +245,73 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
 
     // 标题栏
     var TitleLine = React.createClass({
+        mixins: [actionNews, commonUtil],
+        getData: function (id, type) {
+            this.OutlineCategory(function (err, data) {
+                var i, j, tempCategory, tempTitle = '';
+                if (err) {
+                    location.hash = '#notFound/' + err;
+                } else {
+                    switch (type) {
+                        case 'category':
+                            for (i in data) {
+                                if (this.HasOwnProperty(data, i)) {
+                                    tempCategory = data[i].category;
+                                    for (j in tempCategory) {
+                                        if (this.HasOwnProperty(tempCategory, j)) {
+                                            if (id === tempCategory[j]) {
+                                                tempTitle = j;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case 'outline':
+                            for (i in data) {
+                                if (this.HasOwnProperty(data, i)) {
+                                    if (id === data[i].id) {
+                                        tempTitle = i;
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            tempTitle = this.state.title;
+                            break;
+                    }
+                    console.log(tempTitle);
+                    this.setState({
+                        title: tempTitle
+                    });
+                }
+            }.bind(this));
+        },
         getInitialState: function () {
             return {
-                title: ''
+                id: this.props.id,
+                type: this.props.type,
+                title: this.props.type
             }
         },
         componentWillReceiveProps: function (nextProps) {
             this.setState({
+                id: nextProps.id,
+                type: nextProps.type,
                 title: nextProps.title
+            }, function () {
+                if (this.state.type && 'text' !== this.state.type) {
+                    this.getData(this.state.id, this.state.type);
+                }
             });
         },
+        componentWillMount: function () {
+            if (this.state.type && 'text' !== this.state.type) {
+                this.getData(this.state.id, this.state.type);
+            }
+        },
         render: function () {
+            console.log(this.state);
             return (
                 <header>{this.state.title}</header>
             );
