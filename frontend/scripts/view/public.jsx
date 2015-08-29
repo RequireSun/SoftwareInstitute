@@ -114,7 +114,7 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
             }
             return (
                 <div className="navbar navbar-default">
-                    <div className="container-fluid">
+                    <div className="container">
                         <div className="navbar-header">
                             <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigator-collapse-all">
                                 <span className="icon-bar"></span>

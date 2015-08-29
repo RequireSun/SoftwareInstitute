@@ -1,4 +1,4 @@
-define(['react', 'ReactRouter', 'view/public', 'action/news'], function (React, Router, templatePublic, actionNews) {
+define(['react', 'ReactRouter', 'view/public', 'action/news', 'common/util'], function (React, Router, templatePublic, actionNews, commonUtil) {
     var Link = Router.Link;
     var TitleLine = templatePublic.TitleLine,
         Shortcut = templatePublic.Shortcut,
@@ -7,11 +7,12 @@ define(['react', 'ReactRouter', 'view/public', 'action/news'], function (React, 
     var newsLink = '#/browse/news/{#newsType}?id={#id}&pageSize=20&pageRequest={#page}';
 
     var NewsItem = React.createClass({
+        mixins: [commonUtil],
         getInitialState: function () {
             return {
-                id: this.props.item.id,
-                title: this.props.item.title,
-                updateTime: this.props.item.update_time
+                id: this.props.id,
+                title: this.props.title,
+                updateTime: this.props.update_time
             };
         },
         componentWillReceiveProps: function (nextProps) {
@@ -23,7 +24,7 @@ define(['react', 'ReactRouter', 'view/public', 'action/news'], function (React, 
         },
         render: function () {
             return (
-                <li><Link to="detail" params={{ newsId: this.state.id }}>{this.state.title} {this.state.updateTime}</Link></li>
+                <li><Link to="detail" params={{ newsId: this.state.id }}>{this.state.title}<span className="pull-right">{this.ConvertDateTimeToDate(this.state.updateTime)}</span></Link></li>
             );
         }
     });
@@ -65,18 +66,18 @@ define(['react', 'ReactRouter', 'view/public', 'action/news'], function (React, 
                 newsList: [],
                 newsCount: 0
             }, function () {
-                this.getData(this.state.id, this.state.newsType, this.state.pageSize, this.state.pageRequest)
+                this.getData(this.state.id, this.state.newsType, this.state.pageSize, this.state.pageRequest);
             }.bind(this));
         },
         componentWillMount: function () {
-            this.getData(this.state.id, this.state.newsType, this.state.pageSize, this.state.pageRequest)
+            this.getData(this.state.id, this.state.newsType, this.state.pageSize, this.state.pageRequest);
         },
         render: function () {
             var newsItems = [], tempNewsList = this.state.newsList;
             var tempNewsLink = newsLink.replace(/\{\#newsType\}/, this.state.newsType).replace(/\{\#id\}/, this.state.id);
             for (var i = 0, l = tempNewsList.length; i < l; ++i) {
                 newsItems.push(
-                    <NewsItem item={tempNewsList[i]}/>
+                    <NewsItem {...tempNewsList[i]}/>
                 );
             }
             return (

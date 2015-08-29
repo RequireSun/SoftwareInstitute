@@ -1,4 +1,4 @@
-define(['react', 'view/public', 'action/resource'], function (React, templatePublic, actionResource) {
+define(['react', 'view/public', 'action/resource', 'common/util'], function (React, templatePublic, actionResource, commonUtil) {
     var TitleLine = templatePublic.TitleLine,
         Shortcut = templatePublic.Shortcut,
         Pager = templatePublic.Pager;
@@ -6,12 +6,13 @@ define(['react', 'view/public', 'action/resource'], function (React, templatePub
     var resourceLink = '#/browse/resource?pageSize=20&pageRequest={#page}';
 
     var ResourceItem = React.createClass({
+        mixins: [commonUtil],
         getInitialState: function () {
             return {
-                id: this.props.item.id,
-                title: this.props.item.title,
-                path: this.props.item.path,
-                updateTime: this.props.item.update_time
+                id: this.props.id,
+                title: this.props.title,
+                path: this.props.path,
+                updateTime: this.props.update_time
             }
         },
         componentWillReceiveProps: function (nextProps) {
@@ -24,7 +25,7 @@ define(['react', 'view/public', 'action/resource'], function (React, templatePub
         },
         render: function () {
             return (
-                <li><a href={this.state.path}>{this.state.title} {this.state.updateTime}</a></li>
+                <li><a href={this.state.path}>{this.state.title}<span className="pull-right">{this.ConvertDateTimeToDate(this.state.updateTime)}</span></a></li>
             );
         }
     });
@@ -67,7 +68,7 @@ define(['react', 'view/public', 'action/resource'], function (React, templatePub
             var resourceItems = [], tempResourceList = this.state.resourceList;
             for (var i = 0, l = tempResourceList.length; i < l; ++i) {
                 resourceItems.push(
-                    <ResourceItem item={tempResourceList[i]}/>
+                    <ResourceItem {...tempResourceList[i]}/>
                 );
             }
             return (
