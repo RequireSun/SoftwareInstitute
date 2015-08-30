@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50543
 File Encoding         : 65001
 
-Date: 2015-08-27 01:10:45
+Date: 2015-08-30 17:28:12
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -119,7 +119,9 @@ DELIMITER ;
 DROP TRIGGER IF EXISTS `news_update`;
 DELIMITER ;;
 CREATE TRIGGER `news_update` BEFORE UPDATE ON `news` FOR EACH ROW BEGIN 
+IF OLD.page_view = NEW.page_view THEN
 SET NEW.update_time = NOW();
+END IF;
 END
 ;;
 DELIMITER ;

@@ -71,7 +71,7 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
             for (var i in tempCategory) {
                 category.push(
                     <li>
-                        <Link to="news" params={{ newsType: 'category' }} query={{ id: i, pageSize: 20, pageRequest: 1 }}>{tempCategory[i]}</Link>
+                        <Link to="news" params={{ newsType: 'category' }} query={{ id: i, pageSize: pageSize, pageRequest: pageRequest }}>{tempCategory[i]}</Link>
                     </li>
                 );
             }
@@ -108,7 +108,7 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
         render: function () {
             var navigatorCategory = [], tempCategory = this.state.navigatorCategory;
             for (var i in tempCategory) {
-                if (this.HasOwnProperty(tempCategory, i)) {
+                if (i !== 'null' && this.HasOwnProperty(tempCategory, i)) {
                     navigatorCategory.push(<NavigatorCategory title={i} category={tempCategory[i]}/>);
                 }
             }
@@ -135,11 +135,72 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
         }
     });
 
+    // 导航栏的单个选项列表
+    var FooterCategory = React.createClass({
+        getInitialState: function () {
+            return {
+                title: this.props.title,
+                category: this.props.category
+            };
+        },
+        componentWillReceiveProps: function (nextProps) {
+            this.setState({
+                title: nextProps.title,
+                category: nextProps.category
+            });
+        },
+        render: function () {
+            var category = [], tempCategory = this.state.category;
+            for (var i in tempCategory) {
+                category.push(
+                    <li>
+                        <Link to="news" params={{ newsType: 'category' }} query={{ id: i, pageSize: pageSize, pageRequest: pageRequest }}>{tempCategory[i]}</Link>
+                    </li>
+                );
+            }
+            return (
+                <ul>
+                    {this.state.title}
+                    {category}
+                </ul>
+            );
+        }
+    });
+
     // 页脚
     var Footer = React.createClass({
+        mixins: [actionNews, commonUtil],
+        getInitialState: function () {
+            return {
+                footerCategory: []
+            }
+        },
+        componentWillMount: function () {
+            this.StyleCategory('footer', function (err, data) {
+                if (err) {
+                    location.hash = '#notFound/' + err;
+                } else {
+                    this.setState({
+                        footerCategory: data
+                    });
+                }
+            }.bind(this));
+        },
         render: function () {
+            console.log(this.state.footerCategory);
+            var footerCategory = [], tempCategory = this.state.footerCategory;
+            for (var i in tempCategory) {
+                if (i !== 'null' && this.HasOwnProperty(tempCategory, i)) {
+                    footerCategory.push(<FooterCategory title={i} category={tempCategory[i]}/>);
+                }
+            }
+            footerCategory = footerCategory.slice(0, 2);
             return (
-                <div>Footer</div>
+                <div className="container-fluid">
+                    <div className="container">
+                        {footerCategory}
+                    </div>
+                </div>
             );
         }
     });
@@ -237,7 +298,7 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
                 <div className="list-group">
                     {outlineArray}
                     {categoryArray}
-                    <Link className="list-group-item" to="resource" query={{ pageSize: 20, pageRequest: 1 }}>资源下载</Link>
+                    <Link className="list-group-item" to="resource" query={{ pageSize: pageSize, pageRequest: pageRequest }}>资源下载</Link>
                 </div>
             );
         }
