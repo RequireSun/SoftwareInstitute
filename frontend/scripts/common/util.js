@@ -15,8 +15,18 @@ define([], function () {
         });
     }
 
+    function convertDateTimeFormat (inDateString) {
+        var tempDateObject = new Date(inDateString);
+        return tempDateObject.toLocaleDateString().replace(/\d+/g, function (part) {
+            return 1 < part.length ? part : '0' + part;
+        }).replace(/\//g, function (part) {
+            return '-';
+        }) + ' ' + tempDateObject.toTimeString().replace(/ .*/, '');
+    }
+
     return {
         HasOwnProperty: hasOwnProperty,
-        ConvertDateTimeToDate: convertDateTimeToDate
+        ConvertDateTimeToDate: convertDateTimeToDate,
+        ConvertDateTimeFormat: convertDateTimeFormat
     };
 });
