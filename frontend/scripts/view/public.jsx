@@ -159,7 +159,7 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
                 );
             }
             return (
-                <ul>
+                <ul className="nav nav-pills nav-stacked">
                     {this.state.title}
                     {category}
                 </ul>
@@ -196,7 +196,7 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
             }
             footerCategory = footerCategory.slice(0, 2);
             return (
-                <div className="container-fluid">
+                <div className="container-fluid" style={{ backgroundColor: 'black' }}>
                     <div className="container">
                         {footerCategory}
                     </div>
