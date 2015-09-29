@@ -1,0 +1,56 @@
+@import "../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/variables";
+
+$kelvin-font-family:    "Microsoft Yahei", STHeiti, Ubuntu, "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+
+body {
+  font-family: $kelvin-font-family;
+}
+
+@media (min-width: $screen-sm-min) {
+  html, body, #content, #content>.container-fluid {
+    height: 100%;
+  }
+
+  #content>.container-fluid>.row{
+    height: 100%;
+
+    &>div {
+      height: 100%;
+    }
+
+    &>div:first-of-type {
+      border-right: 1px solid $list-group-border;
+      box-sizing: border-box;
+
+      h5 {
+        line-height: 1.2;
+
+        small {
+          letter-spacing: .05rem;
+        }
+      }
+    }
+
+    &>div:last-of-type {
+      overflow-y: scroll;
+    }
+  }
+}
+
+.list-group-fluid {
+  margin: 0 -15px;
+
+  .list-group-item {
+    border-left: none;
+    border-right: none;
+
+    &:first-child {
+      border-top-right-radius: 0;
+      border-top-left-radius: 0;
+    }
+    &:last-child {
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+}
