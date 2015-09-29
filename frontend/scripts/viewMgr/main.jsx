@@ -31,8 +31,8 @@ define(['react', 'ReactRouter', 'react-bootstrap', 'root/configMgr'], function (
                 );
         }
     }
-    MgrNav.propTypes = { section: React.PropTypes.array };
-    MgrNav.defaultProps = { section: [] };
+    MgrNav.propTypes = { sections: React.PropTypes.array };
+    MgrNav.defaultProps = { sections: [] };
 
     class Main extends React.Component {
         constructor(props) {
@@ -47,16 +47,18 @@ define(['react', 'ReactRouter', 'react-bootstrap', 'root/configMgr'], function (
         render () {
             return (
                 <div className="container-fluid">
-                    <MgrNav/>
+                    <MgrNav sections={sections}/>
+
                     <div className="row" className="visible-xs-block" style={{ height: 50 }}></div>
+
                     <div className="row">
-                        <div className="col-sm-3 col-lg-2 hidden-xs" style={{ backgroundColor: 'red' }}>
-                            <ListGroup>
-                                {sections.map((item)=>(<li className="list-group-item" key={item.index}><Link to={item.index}>{item.name}</Link></li>))}
-                            </ListGroup>
+                        <div className="col-sm-3 col-lg-2 hidden-xs">
+                            <h5 className="text-right">哈尔滨工业大学(威海)<br/><small>软件学院</small></h5>
+                            <div className="list-group list-group-fluid">
+                                {sections.map((item)=>(<Link to={item.index} key={item.index} className="list-group-item">{item.name}</Link>))}
+                            </div>
                         </div>
-                        <div className="col-sm-9 col-md-10" style={{ backgroundColor: 'green' }}>
-                            321
+                        <div className="col-sm-9 col-lg-10">
                             <RouteHandler/>
                         </div>
                     </div>

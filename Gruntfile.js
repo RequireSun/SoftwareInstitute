@@ -61,7 +61,7 @@ module.exports = function (grunt) {
       },
       sass: {
         files: ['<%= config.app %>/styles/{,*/}*.{sass,scss}'],
-        tasks: ['sass:dist', 'autoprefixer']
+        tasks: ['newer:sass:dist', 'autoprefixer', 'cssmin']
       },
       styles: {
         files: ['<%= config.app %>/styles/{,*/}*.css'],
