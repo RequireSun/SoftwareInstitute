@@ -52,13 +52,13 @@ define(['react', 'ReactRouter', 'react-bootstrap', 'root/configMgr'], function (
                     <div className="row" className="visible-xs-block" style={{ height: 50 }}></div>
 
                     <div className="row">
-                        <div className="col-sm-3 col-lg-2 hidden-xs">
+                        <div className="col-sm-3 col-lg-2 hidden-xs sidebar-fluid">
                             <h5 className="text-right">哈尔滨工业大学(威海)<br/><small>软件学院</small></h5>
                             <div className="list-group list-group-fluid">
                                 {sections.map((item)=>(<Link to={item.index} key={item.index} className="list-group-item">{item.name}</Link>))}
                             </div>
                         </div>
-                        <div className="col-sm-9 col-lg-10">
+                        <div className="col-sm-9 col-lg-10 content-fluid">
                             <RouteHandler/>
                         </div>
                     </div>

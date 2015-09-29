@@ -11,29 +11,25 @@ body {
     height: 100%;
   }
 
-  #content>.container-fluid>.row{
+  #content>.container-fluid>.row, .sidebar-fluid, .content-fluid {
     height: 100%;
+  }
 
-    &>div {
-      height: 100%;
-    }
+  .sidebar-fluid {
+    border-right: 1px solid $list-group-border;
+    box-sizing: border-box;
 
-    &>div:first-of-type {
-      border-right: 1px solid $list-group-border;
-      box-sizing: border-box;
+    h5 {
+      line-height: 1.2;
 
-      h5 {
-        line-height: 1.2;
-
-        small {
-          letter-spacing: .05rem;
-        }
+      small {
+        letter-spacing: .05rem;
       }
     }
+  }
 
-    &>div:last-of-type {
-      overflow-y: scroll;
-    }
+  .content-fluid {
+    overflow-y: scroll;
   }
 }
 
