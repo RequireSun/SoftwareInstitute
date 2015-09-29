@@ -4,7 +4,8 @@
   "description": "A Node.js CMS using MySQL.",
   "main": "app.js",
   "scripts": {
-    "test": "make test"
+    "test": "make test",
+    "develop": "grunt nodeserve & supervisor --ignore log,.git -- app &"
   },
   "keywords": [
     "cms",

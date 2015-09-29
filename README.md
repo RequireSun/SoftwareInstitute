@@ -6,13 +6,18 @@ A Node.js CMS using MySQL.
 1. 安装 mysql
 2. 安装 redis (目前还没用)
 3. 安装 node.js
-4. npm install 安装 node 依赖
-5. bower install 安装 javascript 库依赖
-6. grunt nodeserve 开启监视
-7. node app (supervisor app 也可以)
+4. 安装 ruby (为了 sass)
+5. 安装 python (为了编译 node-sass)
+6. npm install 安装 node 依赖
+7. bower install 安装 javascript 库依赖
+8. linux 用户: npm run develop 开启监视
+9. windows 用户 (分别在两个终端中)
+   + node app (supervisor app 也可以)
+   + grunt nodeserve 开启监视
 
 TODO:
 
 - [ ] request_log 中间件的 ip 获取方式
 - [x] 把前端部分合并进来
 - [ ] 新闻阅读量防刷
+- [ ] 减少包的依赖数量 (必要的话从 sass 迁到 less, 因为 sass 的依赖实在太恶心了)
