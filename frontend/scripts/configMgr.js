@@ -12,6 +12,13 @@ define([], function () {
         }, {
             index: 'resource',
             name: '资源下载'
+        }],
+        sectionsNews: [{
+            index: 'newsContent',
+            name: '内容管理'
+        }, {
+            index:'newsStructure',
+            name: '结构管理'
         }]
     };
 });

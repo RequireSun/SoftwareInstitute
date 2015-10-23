@@ -1,8 +1,8 @@
-'use strict';
-
 define(['react', 'ReactRouter', 'react-bootstrap', 'root/configMgr'], function (React, Router, ReactBootstrap, configMgr) {
-    var RouteHandler = Router.RouteHandler;
-    var Link = Router.Link;
+    'use strict';
+
+    var RouteHandler = Router.RouteHandler,
+        Link = Router.Link;
     var Navbar = ReactBootstrap.Navbar,
         Nav = ReactBootstrap.Nav;
 
@@ -49,7 +49,7 @@ define(['react', 'ReactRouter', 'react-bootstrap', 'root/configMgr'], function (
                 <div className="container-fluid">
                     <MgrNav sections={sections}/>
 
-                    <div className="row" className="visible-xs-block" style={{ height: 50 }}></div>
+                    <div className="row visible-xs-block" style={{ height: 50 }}></div>
 
                     <div className="row">
                         <div className="col-sm-3 col-lg-2 hidden-xs sidebar-fluid">
