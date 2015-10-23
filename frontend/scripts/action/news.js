@@ -9,11 +9,11 @@ define(['jquery', 'root/config', 'common/network'], function ($, config, network
     });
     /**
      * 获取导航栏, 快捷入口, 页尾的样式数据
-     * @param categoryType  标明是哪个部位的样式
      * @param callback      传统的 callback, 成功的话, data 将会是样式对应的对象
+     * @param categoryType  标明是哪个部位的样式
      * @constructor
      */
-    function StyleCategory (categoryType, callback) {
+    function StyleCategory (callback, categoryType) {
         if (!categoryType || !callback) {
             return;
         }
@@ -31,11 +31,11 @@ define(['jquery', 'root/config', 'common/network'], function ($, config, network
     }
     /**
      * 获取导航栏, 快捷入口, 页尾的样式数据
-     * @param outlineType   标明是哪个部位的样式
      * @param callback      传统的 callback, 成功的话, data 将会是样式对应的对象
+     * @param outlineType   标明是哪个部位的样式
      * @constructor
      */
-    function StyleOutline (outlineType, callback) {
+    function StyleOutline (callback, outlineType) {
         if (!outlineType || !callback) {
             return;
         }

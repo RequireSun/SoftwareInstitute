@@ -95,7 +95,7 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
             };
         },
         componentWillMount: function () {
-            this.StyleCategory('navigator', function (err, data) {
+            this.StyleCategory(function (err, data) {
                 if (err) {
                     location.hash = '#notFound/' + err;
                 } else {
@@ -103,7 +103,7 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
                         navigatorCategory: data
                     });
                 }
-            }.bind(this));
+            }.bind(this), 'navigator');
         },
         render: function () {
             var navigatorCategory = [], tempCategory = this.state.navigatorCategory;
@@ -171,7 +171,7 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
     var Shortcut = React.createClass({
         mixins: [actionNews, commonUtil],
         getData: function () {
-            this.StyleCategory('shortcut', function (err, data) {
+            this.StyleCategory(function (err, data) {
                 if (err) {
                     location.hash = '#notFound/' + err;
                 } else {
@@ -179,8 +179,8 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
                         shortcutCategory: data
                     });
                 }
-            }.bind(this));
-            this.StyleOutline('shortcut', function (err, data) {
+            }.bind(this), 'shortcut');
+            this.StyleOutline(function (err, data) {
                 if (err) {
                     location.hash = '#notFound/' + err;
                 } else {
@@ -188,7 +188,7 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
                         shortcutOutline: data
                     });
                 }
-            }.bind(this));
+            }.bind(this), 'shortcut');
         },
         getInitialState: function () {
             return {
