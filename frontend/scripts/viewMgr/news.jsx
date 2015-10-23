@@ -1,4 +1,4 @@
-define(['react', 'ReactRouter', 'root/configMgr'], function (React, Router, configMgr) {
+define(['react', 'ReactRouter', 'root/configMgr', 'common/event'], function (React, Router, configMgr, Event) {
     'use strict';
     var RouteHandler = Router.RouteHandler,
         Link = Router.Link;
@@ -43,6 +43,7 @@ define(['react', 'ReactRouter', 'root/configMgr'], function (React, Router, conf
         constructor (props) {
             super(props);
             this.state = props;
+            Event.emit('abc', 123, 666, 'yes');
         }
 
         componentWillReceiveProps (nextProps) {
@@ -64,6 +65,9 @@ define(['react', 'ReactRouter', 'root/configMgr'], function (React, Router, conf
         constructor (props) {
             super(props);
             this.state = props;
+            Event.on('abc', function () {
+                console.log(arguments);
+            });
         }
 
         componentWillReceiveProps (nextProps) {
