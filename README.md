@@ -1,6 +1,8 @@
 # SoftwareInstitute
 A Node.js CMS using MySQL.
 
+__正在 gulp 化__
+
 开发环境:
 
 1. 安装 mysql
