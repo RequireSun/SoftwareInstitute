@@ -1,38 +1,57 @@
 /**
  * Created by kelvinsun on 2015/10/23.
  */
+'use strict';
+
 define(['jquery'], function ($) {
-    var EventDom = $('<script>');
+    // äº‹ä»¶é˜Ÿåˆ—
+    var _events = {};
     /**
-     * ÊÂ¼ş°ó¶¨
-     * @param events    ÊÂ¼şÃû
-     * @param handler   ÊÂ¼ş´¦Àíº¯Êı
-     * @param namespace ÃüÃû¿Õ¼ä, ·ÀÖ¹ÎóÉ¾ÓÃ
+     * äº‹ä»¶ç»‘å®š
+     * @param type      äº‹ä»¶å
+     * @param callback  äº‹ä»¶å¤„ç†å‡½æ•°
+     * @param context   å¤„ç†æ—¶çš„ä¸Šä¸‹æ–‡
+     * @param namespace å‘½åç©ºé—´, é˜²æ­¢è¯¯åˆ ç”¨
      */
-    function on (events, handler, namespace) {
-        EventDom.on(events, function () {
-            var args = Array.prototype.slice.call(arguments),
-                eventType = args.shift();
-            args.push(eventType);
-            handler && handler.apply(null, args);
+    function on (type, callback, context = null, namespace = Date.now()) {
+        '[object Array]' !== Object.prototype.toString.call(_events[type]) && (_events[type] = []);
+        _events[type].push({
+            namespace: namespace,
+            fn: callback,
+            context: context
         });
     }
     /**
-     * ÊÂ¼ş´¥·¢
-     * @param events    ÊÂ¼şÃû
+     * äº‹ä»¶è§£ç»‘
+     * @param type      äº‹ä»¶å
+     * @param namespace å‘½åç©ºé—´, é˜²æ­¢è¯¯åˆ ç”¨
      */
-    function emit (events) {
-        var args = Array.prototype.slice.call(arguments);
-        args.shift();
-        EventDom.trigger(events, args);
+    // TODO: æ·»åŠ åˆ é™¤æ‰€æœ‰åŒ¿åäº‹ä»¶åŠŸèƒ½
+    function off (type, namespace) {
+        if (namespace) {
+            var e = _events[type] || [];
+            for (var i = e.length; -1 < i; --i) {
+                if (namespace === e[i]['namespace']) {
+                    e.splice(i, 1);
+                }
+            }
+        } if (!namespace) {
+            delete _events[type];
+        }
     }
     /**
-     * ÊÂ¼ş½â°ó
-     * @param events    ÊÂ¼şÃû
-     * @param namespace ÃüÃû¿Õ¼ä, ·ÀÖ¹ÎóÉ¾ÓÃ
+     * äº‹ä»¶è§¦å‘
+     * @param type      äº‹ä»¶å
      */
-    function off (events, namespace) {
-        EventDom.off(events);
+    function emit (type) {
+        var args = Array.prototype.slice.call(arguments, 1),
+            e = _events[type] || [],
+            returnValues = [];
+        for (var i = 0, l = e.length; i < l; ++i) {
+            var callback = e[i];
+            '[object Function]' === Object.prototype.toString.call(callback.fn) ? returnValues.push(callback.fn.apply(callback.context, args)) : returnValues.push(callback.fn);
+        }
+        return returnValues;
     }
 
     return {
