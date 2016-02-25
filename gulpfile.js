@@ -1,25 +1,28 @@
 'use strict';
 
-var path = require('path');
-var gulp = require('gulp');
+let path = require('path');
+let gulp = require('gulp');
 
-var htmlmin = require('gulp-htmlmin');
+let htmlmin = require('gulp-htmlmin');
 
-var sass = require('gulp-sass'),
+let sass = require('gulp-sass'),
     minifyCss = require('gulp-minify-css'),
     autoprefixer = require('gulp-autoprefixer');
 
-var react = require('gulp-react'),
+let react = require('gulp-react'),
     babel = require('gulp-babel'),
     uglify = require('gulp-uglify');
 
-var app = function (inPath) {
+let livereload = require('gulp-livereload'),
+    liveServer = require('gulp-live-server');
+
+let app = function (inPath) {
     return path.resolve('./frontend', inPath);
 }, dist = function (inPath) {
     return path.resolve('./public', inPath);
 }, bower = function (inPath) {
     return path.resolve('./bower_components', inPath);
-};
+}, nodeModule = inPath => path.resolve('./node_modules', inPath);
 
 gulp.task('html', function () {
     gulp.src(app('**/*.html'))
@@ -35,7 +38,8 @@ gulp.task('html', function () {
             minifyCSS: true,                    // 压缩 css
             minifyURLs: true,                   // 压缩 url
         }))
-        .pipe(gulp.dest(dist('')));
+        .pipe(gulp.dest(dist('')))
+        .pipe(livereload());
 });
 
 gulp.task('sass', function () {
@@ -43,14 +47,16 @@ gulp.task('sass', function () {
         .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer({ browsers: ['last 2 versions', 'ie >= 8'] }))
         .pipe(minifyCss(/*{compatibility: 'ie8'}*/))
-        .pipe(gulp.dest(dist('styles')));
+        .pipe(gulp.dest(dist('styles')))
+        .pipe(livereload());
 });
 
 gulp.task('react', function () {
     gulp.src(app('scripts/**/*.jsx'))
         .pipe(react({ harmony: true }))
         .pipe(uglify())
-        .pipe(gulp.dest(dist('scripts')));
+        .pipe(gulp.dest(dist('scripts')))
+        .pipe(livereload());
 });
 
 gulp.task('javascript', function () {
@@ -63,16 +69,28 @@ gulp.task('javascript', function () {
         bower('requirejs/require.js')
     ])
         .pipe(uglify())
-        .pipe(gulp.dest(dist('scripts/lib')));
+        .pipe(gulp.dest(dist('scripts/lib')))
+        .pipe(livereload());
+
+    gulp.src(nodeModule('global-event/dist/global-event.js'))
+        .pipe(gulp.dest(dist('scripts/lib')))
+        .pipe(livereload());
+
     gulp.src(app('scripts/**/*.js'))
         .pipe(babel({ presets: ['es2015'] }))
         .pipe(uglify())
-        .pipe(gulp.dest(dist('scripts')));
+        .pipe(gulp.dest(dist('scripts')))
+        .pipe(livereload());
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', ['html', 'react', 'javascript', 'sass'], function () {
+    livereload.listen();
+
     gulp.watch(app('**/*.html'), ['html']);
     gulp.watch(app('styles/**/*.scss'), ['sass']);
     gulp.watch(app('scripts/**/*.jsx'), ['react']);
     gulp.watch(app('scripts/**/*.js'), ['javascript']);
+
+    let server = liveServer.static('dist', 3000);
+    server.start();
 });
