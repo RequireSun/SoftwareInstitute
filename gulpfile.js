@@ -91,6 +91,6 @@ gulp.task('watch', ['html', 'react', 'javascript', 'sass'], function () {
     gulp.watch(app('scripts/**/*.jsx'), ['react']);
     gulp.watch(app('scripts/**/*.js'), ['javascript']);
 
-    let server = liveServer.static('dist', 3000);
-    server.start();
+    //let server = liveServer.static('dist', 3000);
+    //server.start();
 });

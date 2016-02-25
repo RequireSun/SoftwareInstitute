@@ -2,7 +2,7 @@
 ☆ 不同用户不同权限
 〇 对应用户
 
-# 新闻条目
+# 新闻条目 News
 
 1. get 获取指定新闻
   * id 对应 ID
@@ -20,7 +20,7 @@
 4. Δ delete 删除新闻
   * id 对应 ID
 
-# 小栏目结构
+# 小栏目结构 Category
 
 1. get 获取小栏目结构
   * id 对应 ID
@@ -34,7 +34,7 @@
 4. Δ delete 删除小栏目
   * id 对应 ID
 
-# 大栏目结构
+# 大栏目结构 Outline
 
 _思考: 数据库的对应结构怎么搞, 如何提高更新的效率_
 
@@ -50,23 +50,27 @@ _思考: 数据库的对应结构怎么搞, 如何提高更新的效率_
 4. Δ delete 删除大栏目
   * id 对应 ID
 
-# 栏目总结构
+# 栏目总结构 Struct
 
 1. get 获取
 2. Δ put 整体更新
    * outlines 栏目结构的 json 数组
 
-# 小栏目条目
+# 小栏目条目 NewsCategory
 
 1. get 获取
    * id 对应栏目 ID
+   * pageSize 页大小
+   * pageRequest 请求页
 
-# 大栏目条目
+# 大栏目条目 NewsOutline
 
 1. get 获取
    * id 对应栏目 ID
+   * pageSize 页大小
+   * pageRequest 请求页
 
-# 个人信息
+# 个人信息 User
 
 1. ☆ get 获取
    * id 对应用户 ID
@@ -80,9 +84,11 @@ _思考: 数据库的对应结构怎么搞, 如何提高更新的效率_
    * password 密码
    * nickname 昵称
 
-# 用户列表
+# 用户列表 UserList
 
 1. Δ get 获取
+   * pageSize 页大小
+   * pageRequest 请求页
 
 # 权限设置
 
@@ -103,9 +109,29 @@ _需要添加_
 # 评论
 
 1. 〇 post 添加
-   * article_id 文章 id
+   * articleId 文章 id
    * content 内容
    * _回复了谁?_
 2. 〇 put _修改?_
 3. 〇Δ delete
    * id 回复的 id
+
+# 资源 resource
+
+1. get 获取
+   * id 目标 ID
+2. post 新增
+   * title
+   * _想办法传个文件_
+3. put 修改
+   * id 目标 ID
+   * title
+   * _想办法传个文件_
+4. delete 删除
+   * id 目标 ID
+
+# 资源列表 resourceList
+
+1. get 获取
+   * pageSize 页大小
+   * pageRequest 请求页

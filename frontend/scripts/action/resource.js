@@ -8,7 +8,7 @@ define(['common/network', 'root/config'], function (network, config) {
         path: config.path
     });
 
-    // 资源列表获取
+    // 璧勬簮鍒楄〃鑾峰彇
     function ResourceList (callback, pageSize, pageRequest) {
         var url = server + '/ResourceList';
         $.ajax({

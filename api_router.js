@@ -5,16 +5,17 @@
 /**
  * Module dependencies.
  */
+'use strict';
 
-var express         = require('express');
+let express         = require('express');
 // 引入 api
-var resource        = require('./api/resource');
-var news            = require('./api/news');
+let resource        = require('./api/resource');
+let news            = require('./api/news');
 // 引入 middleware
-// var middlewareName = require('pathToMiddleware');
-var config          = require('./config');
+// let middlewareName = require('pathToMiddleware');
+let config          = require('./config');
 
-var router          = express.Router();
+let router          = express.Router();
 
 router.get('/ResourceList', resource.ResourceList);
 router.get('/NewsListCategory', news.NewsListCategory);
