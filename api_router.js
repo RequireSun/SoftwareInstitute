@@ -18,10 +18,10 @@ let config          = require('./config');
 let router          = express.Router();
 
 router.get('/ResourceList', resource.ResourceList);
-router.get('/NewsListCategory', news.NewsListCategory);
-router.get('/NewsListOutline', news.NewsListOutline);
-router.get('/NewsDetail', news.NewsDetail);
-router.get('/OutlineCategory', news.OutlineCategory);
+router.get('/NewsCategory', news.NewsListCategory);
+router.get('/NewsOutline', news.NewsListOutline);
+router.get('/News', news.NewsGet);
+router.get('/Struct', news.Struct);
 router.get('/StyleCategory', news.StyleCategory);
 router.get('/StyleOutline', news.StyleOutline);
 

@@ -65,7 +65,7 @@ exports.NewsListOutline = function (req, res, next) {
     News.getCountOutline(outlineId, ep.done('newsCount'));
 };
 // 获取新闻详情
-exports.NewsDetail = function (req, res, next) {
+exports.NewsGet = function (req, res, next) {
     var newsId = parseInt(req.query.id);
 
     if (isNaN(newsId)) {
@@ -95,7 +95,7 @@ exports.NewsDetail = function (req, res, next) {
     News.updateNewsPageView(newsId, ep.done('updatePageView'));
 };
 // 获取大小类间的关系
-exports.OutlineCategory = function (req, res, next) {
+exports.Struct = function (req, res, next) {
     News.getOutlineCategory(function (err, result) {
         if (err) {
             return next(err);

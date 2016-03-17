@@ -6,7 +6,10 @@ exports.ResourceList = function (req, res, next) {
     var pageRequest = parseInt(req.query.pageRequest);
 
     if (isNaN(pageSize) || isNaN(pageRequest)) {
-        return res.json({ error: '请选择正确的页码！' });
+        return res.json({
+            code: 100,
+            message: '页码格式错误！',
+        });
     }
 
     var events = [ 'resourceList', 'resourceCount' ];
@@ -14,7 +17,10 @@ exports.ResourceList = function (req, res, next) {
         var pageMax = Math.ceil(resourceCount / pageSize);
 
         if (!resourceList || !resourceList.length || pageMax < pageRequest) {
-            return res.json({ error: '请选择正确的页码！' });
+            return res.json({
+                code: 101,
+                message: '页码超出范围！',
+            });
         }
 
         res.json({

@@ -101,7 +101,7 @@ define(['react', 'ReactRouter', 'action/news', 'action/resource', 'common/util']
             };
         },
         componentWillMount: function () {
-            this.OutlineCategory(function (err, data) {
+            this.Struct(function (err, data) {
                 if (err) {
                     location.hash = '#notFound/' + err;
                     return ;

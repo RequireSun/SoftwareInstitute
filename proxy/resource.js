@@ -10,7 +10,7 @@ exports.getResources = function (pageSize, pageRequest, callback) {
 
     var queryString = 'SELECT * FROM resource ORDER BY update_time DESC LIMIT :pageLimit OFFSET :pageOffset';
     
-    database.query(queryString, { 
+    database.query(queryString, {
         pageLimit: pageSize, 
         pageOffset: (pageRequest - 1) * pageSize 
     }, function (err, rows) {
