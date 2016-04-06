@@ -1,4 +1,5 @@
-var config = require('../config');
+'use strict';
+let config = require('../config');
 
 exports.generatePageNumber = function (pageCurrent, pageMax, pageLink) {
     var numberList = [];
@@ -17,4 +18,20 @@ exports.generatePageNumber = function (pageCurrent, pageMax, pageLink) {
         numberItem.link = pageLink + value;
         return numberItem;
     });
-}
+};
+
+exports.promiseCallback = (resolve, reject) => {
+    return (err, data) => err ? reject(err) : resolve(data);
+};
+
+exports.promiseWrap = (func) => {
+    let args = Array.prototype.slice.call(arguments, 1);
+    return (resolve, reject) => {
+        //args = [(err, data) => err ? reject(err) : resolve(data)].concat(args);
+        args.unshift((err, data) => err ? reject(err) : resolve(data));
+        //console.log(args);
+        return func.apply(null, args);
+    };
+};
+// es6 type
+//exports.promiseWrap = (func, ...args) => (resolve, reject) => func(((err, data) => err ? reject(err) : resolve(data)), ...args);

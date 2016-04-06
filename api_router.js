@@ -18,7 +18,7 @@ let config          = require('./config');
 let router          = express.Router();
 
 // 单条新闻
-router.get('/news');
+router.get('/news', news.NewsGet);
 router.post('/news');
 router.put('/news');
 router.delete('/news');
@@ -36,7 +36,7 @@ router.delete('/outline');
 router.get('/struct');
 router.put('/struct');
 
-router.get('/newsCategory');
+router.get('/newsCategory', news.NewsCategory);
 
 router.get('/newsOutline');
 

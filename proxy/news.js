@@ -1,8 +1,9 @@
 'use strict';
 var database    = require('../common/database');
-let detail      = require('./newsDetail.js');
+let detail      = require('./newsDetail');
 let aggregate   = require('./newsAggregate');
 
+module.exports = aggregate;
 
 //exports.getNewsCategory = function (pageSize, pageRequest, categoryId, callback) {
 //    if ('number' !== typeof pageSize || 'number' !== typeof pageRequest || 'number' !== typeof categoryId) {

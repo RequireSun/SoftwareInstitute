@@ -40,7 +40,7 @@ var apiRouter   = require('./api_router');
 
 //var proxyMiddleware     = require('./middlewares/proxy');
 // redis session 管理
-var RedisStore          = require('connect-redis')(session);
+//var RedisStore          = require('connect-redis')(session);
 // lodash 常用函数库
 var _                   = require('lodash');
 // 用于解析请求体
@@ -118,18 +118,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(require('method-override')());
 app.use(require('cookie-parser')(config.session_secret));
 //app.use(compression());
-app.use(session({
-    secret: config.session_secret,
-    // 使用 redis 存储
-    store: new RedisStore({
-        port: config.redis_port,
-        host: config.redis_host
-    }),
-    // 就算 session 没有变化也要进行一次存储（因为仓储有时限）
-    resave: true,
-    // 存储没有修改过的 session （刚刚生成，但是没有修改过的情况就属于此种情况）
-    saveUninitialized: true,
-}));
+//app.use(session({
+//    secret: config.session_secret,
+//    // 使用 redis 存储
+//    store: new RedisStore({
+//        port: config.redis_port,
+//        host: config.redis_host
+//    }),
+//    // 就算 session 没有变化也要进行一次存储（因为仓储有时限）
+//    resave: true,
+//    // 存储没有修改过的 session （刚刚生成，但是没有修改过的情况就属于此种情况）
+//    saveUninitialized: true,
+//}));
 
 
 //app.use(passport.initiallize());
