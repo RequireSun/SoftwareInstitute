@@ -2,63 +2,62 @@
 
 let News = require('../proxy').News;
 let pmcbk = require('../common/tool').promiseCallback;
-let pmw = require('../common/tool').promiseWrap;
+let promiseWrap = require('../common/tool').promiseWrap;
 //let EventProxy = require('eventproxy');
 // 根据小类别获取新闻列表
 exports.NewsCategory = function (req, res, next) {
-    var pageSize    = parseInt(req.query.pageSize);
-    var pageRequest = parseInt(req.query.pageRequest);
-    var categoryId  = parseInt(req.query.categoryId);
+    let pageSize    = parseInt(req.query.pageSize);
+    let pageRequest = parseInt(req.query.pageRequest);
+    let categoryId  = parseInt(req.query.categoryId);
     
     if (isNaN(pageSize) || isNaN(pageRequest)) {
-        return res.json({ error: '请选择正确的页码或页面大小！' });
+        return res.json({ code: 1001, error: '请选择正确的页码或页面大小！' });
     } else if (isNaN(categoryId)) {
-        return res.json({ error: '请选择正确的新闻类型！' });
+        return res.json({ code: 1001, error: '请选择正确的新闻类型！' });
+    } else if (0 > pageSize || 0 > pageRequest) {
+        return res.json({ code: 1001, error: '页码和页面大小不能为负！' });
     }
 
-    //console.log(pageSize, pageRequest, categoryId);
-    //console.log(pmw(News.category, categoryId, pageSize, pageRequest).toString());
-
     Promise.all([
-        new Promise((resolve, reject) => {
-            News.category((err, data) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(data);
-                }
-            }, categoryId, pageSize, pageRequest);
-        }),
-        new Promise((resolve, reject) => {
-            News.categoryCount((err, data) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(data);
-                }
-            }, categoryId);
-        })
-        //new Promise(pmw(News.category, categoryId, pageSize, pageRequest)),
-        //new Promise(pmw(News.categoryCount, categoryId)),
+        new Promise(promiseWrap(News.category, categoryId, pageSize, pageRequest)),
+        new Promise(promiseWrap(News.categoryCount, categoryId)),
         // es6 type
     //]).then(([newsList, newsCount]) => {
     ]).then((result) => {
-        let newsList    = result[0],
+        let newsList    = result[0] || [],
             newsCount   = result[1];
         let pageMax     = Math.ceil(newsCount / pageSize);
 
-        if (!newsList || !newsList.length || pageMax < pageRequest) {
-            return res.json({ error: '请选择正确的页码和新闻类型！' });
-        }
+        //if (!newsList || !newsList.length || pageMax < pageRequest) {
+        //    return res.json({ code: 1002, error: '页码越界或新闻类型错误！' });
+        //}
 
         res.json({
             data    : newsList,
             count   : pageMax
         });
         next();
-    }).catch(next);
+    }).catch(function (err) {
+        return res.json({ code: 1001, error: err['message'] });
+    });
+};
+// 根据大类别获取新闻列表
+exports.NewsOutline = function (req, res, next) {
+    let pageSize    = parseInt(req.query.pageSize);
+    let pageRequest = parseInt(req.query.pageRequest);
+    let outlineId   = parseInt(req.query.outlineId);
 
-    //var events = ['newsList', 'newsCount'];
+    if (isNaN(pageSize) || isNaN(pageRequest)) {
+        return res.json({ code: 1001, error: '请选择正确的页码！' });
+    } else if (isNaN(outlineId)) {
+        return res.json({ code: 1001, error: '请选择正确的新闻类型！' });
+    } else if (0 > pageSize || 0 > pageRequest) {
+        return res.json({ code: 1001, error: '页码和页面大小不能为负！' });
+    }
+
+
+
+    //var events = [ 'newsList', 'newsCount'];
     //var ep = EventProxy.create(events, function (newsList, newsCount) {
     //    var pageMax = Math.ceil(newsCount / pageSize);
     //
@@ -75,40 +74,8 @@ exports.NewsCategory = function (req, res, next) {
     //
     //ep.fail(next);
     //
-    //News.getNewsCategory(pageSize, pageRequest, categoryId, ep.done('newsList'));
-    //News.getCountCategory(categoryId, ep.done('newsCount'));
-};
-// 根据大类别获取新闻列表
-exports.NewsOutline = function (req, res, next) {
-    var pageSize = parseInt(req.query.pageSize);
-    var pageRequest = parseInt(req.query.pageRequest);
-    var outlineId = parseInt(req.query.outlineId);
-
-    if (isNaN(pageSize) || isNaN(pageRequest)) {
-        return res.json({ error: '请选择正确的页码！' });
-    } else if (isNaN(outlineId)) {
-        return res.json({ error: '请选择正确的新闻类型！' });
-    }
-
-    var events = [ 'newsList', 'newsCount'];
-    var ep = EventProxy.create(events, function (newsList, newsCount) {
-        var pageMax = Math.ceil(newsCount / pageSize);
-
-        if (!newsList || !newsList.length || pageMax < pageRequest) {
-            return res.json({ error: '请选择正确的页码和新闻类型！' });
-        }
-
-        res.json({
-            data: newsList,
-            count: pageMax
-        });
-        next();
-    });
-
-    ep.fail(next);
-
-    News.getNewsOutline(pageSize, pageRequest, outlineId, ep.done('newsList'));
-    News.getCountOutline(outlineId, ep.done('newsCount'));
+    //News.getNewsOutline(pageSize, pageRequest, outlineId, ep.done('newsList'));
+    //News.getCountOutline(outlineId, ep.done('newsCount'));
 };
 // 获取新闻详情
 exports.NewsGet = function (req, res, next) {

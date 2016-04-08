@@ -7,7 +7,7 @@ let database            = require('../common/database');
 exports.category        = (callback, categoryId, pageSize, pageRequest) => {
     if ('number' !== typeof pageSize || 'number' !== typeof pageRequest || 'number' !== typeof categoryId) {
         return callback(new Error('Parameter: pageSize / pageRequest / categoryId must be number!'));
-    } else if ( 0 > pageSize || 0 > pageRequest) {
+    } else if (0 > pageSize || 0 > pageRequest) {
         return callback(new Error('Parameter: pageSize / pageRequest must be non-negative number!'));
     }
 

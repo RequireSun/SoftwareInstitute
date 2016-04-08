@@ -38,7 +38,7 @@ router.put('/struct');
 
 router.get('/newsCategory', news.NewsCategory);
 
-router.get('/newsOutline');
+router.get('/newsOutline', news.NewsOutline);
 
 //router.get('/ResourceList', resource.ResourceList);
 //router.get('/NewsCategory', news.NewsListCategory);
