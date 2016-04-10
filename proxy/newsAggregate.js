@@ -3,22 +3,29 @@
  */
 'use strict';
 let database            = require('../common/database');
-
-exports.category        = (callback, categoryId, pageSize, pageRequest) => {
-    if ('number' !== typeof pageSize || 'number' !== typeof pageRequest || 'number' !== typeof categoryId) {
-        return callback(new Error('Parameter: pageSize / pageRequest / categoryId must be number!'));
+/**
+ * 获取小类新闻列表
+ * @param callback
+ * @param id
+ * @param pageSize
+ * @param pageRequest
+ * @returns {*}
+ */
+exports.category        = (callback, id, pageSize, pageRequest) => {
+    if ('number' !== typeof pageSize || 'number' !== typeof pageRequest || 'number' !== typeof id) {
+        return callback(new Error('Parameter: pageSize / pageRequest / id must be number!'));
     } else if (0 > pageSize || 0 > pageRequest) {
         return callback(new Error('Parameter: pageSize / pageRequest must be non-negative number!'));
     }
 
     var queryString =
         'SELECT id, title, update_time FROM news ' +
-        'WHERE category_id = :categoryId ORDER BY update_time DESC LIMIT :pageLimit OFFSET :pageOffset';
+        'WHERE category_id = :id ORDER BY update_time DESC LIMIT :pageLimit OFFSET :pageOffset';
 
     database.query(queryString, {
-        categoryId,
-        pageLimit: pageSize,
-        pageOffset: pageRequest * pageSize,
+        id,
+        pageLimit   : pageSize,
+        pageOffset  : pageRequest * pageSize,
     }, (err, rows) => {
         if (err) {
             callback(err);
@@ -28,21 +35,23 @@ exports.category        = (callback, categoryId, pageSize, pageRequest) => {
     });
 };
 
-exports.outline         = (callback, outlineId, pageSize, pageRequest) => {
-    if ('number' !== typeof pageSize || 'number' !== typeof pageRequest || 'number' !== typeof outlineId) {
-        return callback(new Error('Parameter: pageSize / pageRequest / outlineId must be number!'));
+exports.outline         = (callback, id, pageSize, pageRequest) => {
+    if ('number' !== typeof pageSize || 'number' !== typeof pageRequest || 'number' !== typeof id) {
+        return callback(new Error('Parameter: pageSize / pageRequest / id must be number!'));
+    } else if (0 > pageSize || 0 > pageRequest) {
+        return callback(new Error('Parameter: pageSize / pageRequest must be non-negative number!'));
     }
 
     var queryString =
         'SELECT news.id AS id, title, update_time ' +
         'FROM news INNER JOIN category ON news.category_id = category.id ' +
-        'WHERE category.outline_id = :outlineId ' +
+        'WHERE category.outline_id = :id ' +
         'ORDER BY update_time DESC LIMIT :pageLimit OFFSET :pageOffset';
 
     database.query(queryString, {
-        outlineId,
-        pageLimit: pageSize,
-        pageOffset: (pageRequest - 1) * pageSize
+        id,
+        pageLimit   : pageSize,
+        pageOffset  : pageRequest * pageSize
     }, (err, rows) => {
         if (err) {
             callback(err);
@@ -52,16 +61,16 @@ exports.outline         = (callback, outlineId, pageSize, pageRequest) => {
     });
 };
 
-exports.categoryCount   = (callback, categoryId) => {
-    if ('number' !== typeof categoryId) {
-        return callback(new Error('Parameter: categoryId must be number!'));
+exports.categoryCount   = (callback, id) => {
+    if ('number' !== typeof id) {
+        return callback(new Error('Parameter: id must be number!'));
     }
 
-    var queryString = 'SELECT COUNT(*) as categoryCount FROM news WHERE category_id = :categoryId';
+    var queryString = 'SELECT COUNT(*) as categoryCount FROM news WHERE category_id = :id';
 
     database.query(
         queryString,
-        { categoryId },
+        { id },
         (err, result) => {
             if (err) {
                 callback(err);
@@ -74,19 +83,19 @@ exports.categoryCount   = (callback, categoryId) => {
     );
 };
 
-exports.outlineCount    = (callback, outlineId) => {
-    if ('number' !== typeof outlineId) {
-        return callback(new Error('Parameter: outlineId must be number!'));
+exports.outlineCount    = (callback, id) => {
+    if ('number' !== typeof id) {
+        return callback(new Error('Parameter: id must be number!'));
     }
 
     var queryString =
         'SELECT COUNT(*) as outlineCount ' +
         'FROM news INNER JOIN category ON news.category_id = category.id ' +
-        'WHERE category.outline_id = :outlineId';
+        'WHERE category.outline_id = :id';
 
     database.query(
         queryString,
-        { outlineId },
+        { id },
         (err, result) => {
             if (err) {
                 callback(err);

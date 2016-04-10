@@ -3,7 +3,7 @@ var database    = require('../common/database');
 let detail      = require('./newsDetail');
 let aggregate   = require('./newsAggregate');
 
-module.exports = aggregate;
+module.exports = Object.assign({}, aggregate, detail);
 
 //exports.getNewsCategory = function (pageSize, pageRequest, categoryId, callback) {
 //    if ('number' !== typeof pageSize || 'number' !== typeof pageRequest || 'number' !== typeof categoryId) {
@@ -43,24 +43,25 @@ module.exports = aggregate;
 //    });
 //};
 
-exports.getNameCategory = function (categoryId, callback) {
-    if ('number' !== typeof categoryId) {
-        return callback(new Error('Parameter: categoryId must be number!'));
-    }
+// exports.getNameCategory = function (categoryId, callback) {
+//     if ('number' !== typeof categoryId) {
+//         return callback(new Error('Parameter: categoryId must be number!'));
+//     }
+//
+//     var queryString = 'SELECT name FROM category WHERE id = :categoryId';
+//
+//     database.query(queryString, {
+//         categoryId: categoryId
+//     }, function (err, result) {
+//         if (err) {
+//             return callback(err);
+//         } else if (!result) {
+//             return callback(new Error('No data!'));
+//         }
+//         return callback(null, result[0].name);
+//     });
+// };
 
-    var queryString = 'SELECT name FROM category WHERE id = :categoryId';
-
-    database.query(queryString, {
-        categoryId: categoryId
-    }, function (err, result) {
-        if (err) {
-            return callback(err);
-        } else if (!result) {
-            return callback(new Error('No data!'));
-        }
-        return callback(null, result[0].name);
-    });
-};
 
 //exports.getNewsOutline = function (pageSize, pageRequest, outlineId, callback) {
 //    if ('number' !== typeof pageSize || 'number' !== typeof pageRequest || 'number' !== typeof outlineId) {
@@ -83,44 +84,45 @@ exports.getNameCategory = function (categoryId, callback) {
 //    });
 //};
 
-exports.getCountOutline = function (outlineId, callback) {
-    if ('number' !== typeof outlineId) {
-        return callback(new Error('Parameter: outlineId must be number!'));
-    }
+// exports.getCountOutline = function (outlineId, callback) {
+//     if ('number' !== typeof outlineId) {
+//         return callback(new Error('Parameter: outlineId must be number!'));
+//     }
+//
+//     var queryString = 'SELECT COUNT(*) as outlineCount FROM news INNER JOIN category ON news.category_id = category.id ' +
+//                       'WHERE category.outline_id = :outlineId';
+//
+//     database.query(queryString, {
+//         outlineId: outlineId
+//     }, function (err, result) {
+//         if (err) {
+//             return callback(err);
+//         } else if (!result) {
+//             return callback(new Error('No data!'));
+//         }
+//         return callback(null, result[0].outlineCount);
+//     });
+// };
 
-    var queryString = 'SELECT COUNT(*) as outlineCount FROM news INNER JOIN category ON news.category_id = category.id ' +
-                      'WHERE category.outline_id = :outlineId';
 
-    database.query(queryString, {
-        outlineId: outlineId
-    }, function (err, result) {
-        if (err) {
-            return callback(err);
-        } else if (!result) {
-            return callback(new Error('No data!'));
-        }
-        return callback(null, result[0].outlineCount);
-    });
-};
-
-exports.getNameOutline = function (outlineId, callback) {
-    if ('number' !== typeof outlineId) {
-        return callback(new Error('Parameter: outlineId must be number!'));
-    }
-
-    var queryString = 'SELECT name FROM outline WHERE id = :outlineId';
-
-    database.query(queryString, {
-        outlineId: outlineId
-    }, function (err, result) {
-        if (err) {
-            return callback(err);
-        } else if (!result) {
-            return callback(new Error('No data!'));
-        }
-        return callback(null, result[0].name);
-    });
-};
+// exports.getNameOutline = function (outlineId, callback) {
+//     if ('number' !== typeof outlineId) {
+//         return callback(new Error('Parameter: outlineId must be number!'));
+//     }
+//
+//     var queryString = 'SELECT name FROM outline WHERE id = :outlineId';
+//
+//     database.query(queryString, {
+//         outlineId: outlineId
+//     }, function (err, result) {
+//         if (err) {
+//             return callback(err);
+//         } else if (!result) {
+//             return callback(new Error('No data!'));
+//         }
+//         return callback(null, result[0].name);
+//     });
+// };
 
 //exports.getNewsDetail = function (newsId, callback) {
 //    if ('number' !== typeof newsId) {
