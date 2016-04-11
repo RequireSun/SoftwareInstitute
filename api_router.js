@@ -29,7 +29,7 @@ router.post('/category');
 router.put('/category');
 router.delete('/category');
 
-router.get('/outline');
+router.get('/outline', struct.OutlineGet);
 router.post('/outline');
 router.put('/outline');
 router.delete('/outline');
