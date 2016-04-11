@@ -56,6 +56,12 @@ _思考: 数据库的对应结构怎么搞, 如何提高更新的效率_
 2. Δ put 整体更新
    * outlines 栏目结构的 json 数组
 
+# 栏目样式 Style
+
+1. get 获取
+2. Δ put 整体更新
+   * styles 样式结构 json 对象
+
 # 小栏目条目 NewsCategory
 
 1. get 获取

@@ -11,6 +11,7 @@ let express         = require('express');
 // 引入 api
 let resource        = require('./api/resource');
 let news            = require('./api/news');
+let struct          = require('./api/struct');
 // 引入 middleware
 // let middlewareName = require('pathToMiddleware');
 let config          = require('./config');
@@ -23,7 +24,7 @@ router.post('/news');
 router.put('/news');
 router.delete('/news');
 
-router.get('/category');
+router.get('/category', struct.CategoryGet);
 router.post('/category');
 router.put('/category');
 router.delete('/category');

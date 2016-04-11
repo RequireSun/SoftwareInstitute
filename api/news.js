@@ -120,68 +120,46 @@ exports.NewsGet = function (req, res, next) {
         res.json({ code: 1001, error: err['message'] });
         next();
     });
-
-    // var events = [ 'newsDetail', 'updatePageView'];
-    // var ep = EventProxy.create(events, function (newsDetail, updatePageView) {
-    //     if (!newsDetail) {
-    //         return res.json({ error: '请输入正确的新闻编号！' });
-    //     }
-    //
-    //     res.json({
-    //         id: id,
-    //         title: newsDetail.title,
-    //         supervisor_name: newsDetail.alias,
-    //         article: newsDetail.article,
-    //         update_time: newsDetail.update_time,
-    //         page_view: newsDetail.page_view
-    //     });
-    //     next();
-    // });
-    //
-    // ep.fail(next);
-    //
-    // // News.getNewsDetail(id, ep.done('newsDetail'));
-    // News.updateNewsPageView(id, ep.done('updatePageView'));
 };
 // 获取大小类间的关系
-exports.Struct = function (req, res, next) {
-    News.getOutlineCategory(function (err, result) {
-        if (err) {
-            return next(err);
-        }
-        res.json(result);
-        next();
-    });
-};
+// exports.Struct = function (req, res, next) {
+//     News.getOutlineCategory(function (err, result) {
+//         if (err) {
+//             return next(err);
+//         }
+//         res.json(result);
+//         next();
+//     });
+// };
 // 样式内填充数据 (导航栏, 快捷入口, 脚) 获取
-exports.StyleCategory = function (req, res, next) {
-    var categoryType = req.query.categoryType;
-
-    if ('string' !== typeof categoryType || 0 === categoryType.length) {
-        return res.json({ error: '请输入正确的样式类型！' });
-    }
-
-    News.getStyleCategory(categoryType, function (err, result) {
-        if (err) {
-            return next(err);
-        }
-        res.json(result);
-        next();
-    })
-};
+// exports.StyleCategory = function (req, res, next) {
+//     var categoryType = req.query.categoryType;
+//
+//     if ('string' !== typeof categoryType || 0 === categoryType.length) {
+//         return res.json({ error: '请输入正确的样式类型！' });
+//     }
+//
+//     News.getStyleCategory(categoryType, function (err, result) {
+//         if (err) {
+//             return next(err);
+//         }
+//         res.json(result);
+//         next();
+//     })
+// };
 // 样式内填充数据 (导航栏, 快捷入口, 脚) 获取
-exports.StyleOutline = function (req, res, next) {
-    var outlineType = req.query.outlineType;
-
-    if ('string' !== typeof outlineType || 0 === outlineType.length) {
-        return res.json({ error: '请输入正确的样式类型！' });
-    }
-
-    News.getStyleOutline(outlineType, function (err, result) {
-        if (err) {
-            return next(err);
-        }
-        res.json(result);
-        next();
-    })
-};
+// exports.StyleOutline = function (req, res, next) {
+//     var outlineType = req.query.outlineType;
+//
+//     if ('string' !== typeof outlineType || 0 === outlineType.length) {
+//         return res.json({ error: '请输入正确的样式类型！' });
+//     }
+//
+//     News.getStyleOutline(outlineType, function (err, result) {
+//         if (err) {
+//             return next(err);
+//         }
+//         res.json(result);
+//         next();
+//     })
+// };
