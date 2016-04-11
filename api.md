@@ -76,6 +76,26 @@ _思考: 数据库的对应结构怎么搞, 如何提高更新的效率_
    * pageSize 页大小
    * pageRequest 请求页
 
+# 资源 resource
+
+1. get 获取
+   * id 目标 ID
+2. post 新增
+   * title
+   * _想办法传个文件_
+3. put 修改
+   * id 目标 ID
+   * title
+   * _想办法传个文件_
+4. delete 删除
+   * id 目标 ID
+
+# 资源列表 resourceList
+
+1. get 获取
+   * pageSize 页大小
+   * pageRequest 请求页
+
 # 个人信息 User
 
 1. ☆ get 获取
@@ -89,6 +109,10 @@ _思考: 数据库的对应结构怎么搞, 如何提高更新的效率_
    * username 用户名
    * password 密码
    * nickname 昵称
+
+# 认证 Validate
+
+1. get 认证
 
 # 用户列表 UserList
 
@@ -121,23 +145,3 @@ _需要添加_
 2. 〇 put _修改?_
 3. 〇Δ delete
    * id 回复的 id
-
-# 资源 resource
-
-1. get 获取
-   * id 目标 ID
-2. post 新增
-   * title
-   * _想办法传个文件_
-3. put 修改
-   * id 目标 ID
-   * title
-   * _想办法传个文件_
-4. delete 删除
-   * id 目标 ID
-
-# 资源列表 resourceList
-
-1. get 获取
-   * pageSize 页大小
-   * pageRequest 请求页

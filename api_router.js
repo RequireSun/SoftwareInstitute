@@ -12,6 +12,7 @@ let express         = require('express');
 let resource        = require('./api/resource');
 let news            = require('./api/news');
 let struct          = require('./api/struct');
+let supervisor      = require('./api/supervisor');
 // 引入 middleware
 // let middlewareName = require('pathToMiddleware');
 let config          = require('./config');
@@ -42,6 +43,8 @@ router.get('/newsCategory', news.NewsCategory);
 router.get('/newsOutline', news.NewsOutline);
 
 router.get('/resourceList', resource.ListGet);
+
+router.get('/validate', supervisor.ValidateGet);
 
 //router.get('/ResourceList', resource.ResourceList);
 //router.get('/NewsCategory', news.NewsListCategory);
