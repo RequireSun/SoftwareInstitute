@@ -10,7 +10,7 @@ exports.CategoryGet = (req, res, next) => {
     let id = +req.query.id;
 
     if (isNaN(id)) {
-        res.json({ code: 1001, error: '请输入正确的类别编号！' });
+        res.jsonErrorParameterMissing('请输入正确的类别编号！');
         next();
         return;
     }
@@ -18,14 +18,14 @@ exports.CategoryGet = (req, res, next) => {
     new Promise(promiseWrap(Struct.categoryGet, id)).
     then(data => {
         if (!data) {
-            res.json({ code: 1001, error: '请输入正确的类别编号！' });
+            res.jsonErrorParameterWrong('请输入正确的类别编号！');
             next();
         } else {
-            res.json(data);
+            res.jsonSuccess(data);
             next();
         }
     }).catch(err => {
-        res.json({ code: 1001, error: err['message'] });
+        res.jsonErrorParameterWrong(err['message']);
         next();
     });
 };
@@ -34,7 +34,7 @@ exports.OutlineGet = (req, res, next) => {
     let id = +req.query.id;
 
     if (isNaN(id)) {
-        res.json({ code: 1001, error: '请输入正确的类别编号！' });
+        res.jsonErrorParameterMissing('请输入正确的类别编号！');
         next();
         return;
     }
@@ -42,14 +42,14 @@ exports.OutlineGet = (req, res, next) => {
     new Promise(promiseWrap(Struct.outlineGet, id)).
         then(data => {
             if (!data) {
-                res.json({ code: 1001, error: '请输入正确的类别编号！' });
+                res.jsonErrorParameterWrong('请输入正确的类别编号！');
                 next();
             } else {
-                res.json(data);
+                res.jsonSuccess(data);
                 next();
             }
         }).catch(err => {
-            res.json({ code: 1001, error: err['message'] });
+            res.jsonErrorParameterWrong(err['message']);
             next();
         });
 };
@@ -58,14 +58,14 @@ exports.StructGet = (req, res, next) => {
     new Promise(promiseWrap(Struct.get)).
         then(data => {
             if (!data) {
-                res.json({ code: 1001, error: '没有数据！' });
+                res.jsonErrorParameterWrong('没有数据！');
                 next();
             } else {
-                res.json(data);
+                res.jsonSuccess(data);
                 next();
             }
         }).catch(err => {
-            res.json({ code: 1001, error: err['message'] });
+            res.jsonErrorParameterWrong(err['message']);
             next();
         });
 };

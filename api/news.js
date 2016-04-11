@@ -81,7 +81,7 @@ exports.NewsOutline = function (req, res, next) {
         });
         next();
     }).catch(err => {
-        res.json({ code: 1001, error: err['message'] });
+        res.jsonErrorParameterWrong(err['message']);
         next();
     });
 };
@@ -90,7 +90,7 @@ exports.NewsGet = function (req, res, next) {
     let id = +req.query.id;
 
     if (isNaN(id)) {
-        res.json({ code: 1001, error: '请输入正确的新闻编号！' });
+        res.jsonErrorParameterMissing('请输入正确的新闻编号！');
         next();
         return;
     }
@@ -102,12 +102,12 @@ exports.NewsGet = function (req, res, next) {
         let newsDetail    = result[0];
 
         if (!newsDetail) {
-            res.json({ code: 1001, error: '请输入正确的新闻编号！' });
+            res.jsonErrorParameterWrong('请输入正确的新闻编号！');
             next();
             return;
         }
 
-        res.json({
+        res.jsonSuccess({
             id              : id,
             title           : newsDetail.title,
             supervisor_name : newsDetail.alias,
@@ -117,7 +117,7 @@ exports.NewsGet = function (req, res, next) {
         });
         next();
     }).catch(err => {
-        res.json({ code: 1001, error: err['message'] });
+        res.jsonErrorParameterWrong(err['message']);
         next();
     });
 };
