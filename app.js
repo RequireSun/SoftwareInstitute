@@ -46,7 +46,7 @@ let apiRouter   = require('./api_router');
 // 用于解析请求体
 let bodyParser          = require('body-parser');
 // 验证用的模块，必须在 session 模块之后引用
-//let csurf               = require('csurf');
+let csurf               = require('csurf');
 // http 压缩用的模块（deflate，gzip）
 //let compression         = require('compression');
 // 用于大文件上传
@@ -138,17 +138,17 @@ app.use(require('cookie-parser')(config.session_secret));
 // app.use(auth.blockUser());
 
 // 非 debug 模式下调用api是需要验证的
-// if (!config.debug) {
-//     app.use(function (req, res, next) {
-//         if (-1 === req.path.indexOf('/api')) {
-//             csurf()(req, res, next);
-//             return;
-//         }
-//         next();
-//     });
-//     // 启用模板预编译缓存
-//     app.set('view cache', true);
-// }
+ if (!config.debug) {
+     app.use(function (req, res, next) {
+         if (-1 === req.path.indexOf(/\/api\b/)) {
+             csurf()(req, res, next);
+             return;
+         }
+         next();
+     });
+     // 启用模板预编译缓存
+     app.set('view cache', true);
+ }
 
 // for debug
 app.get('/err', function (req, res, next) {
@@ -182,10 +182,10 @@ app.use('/outdated', webRouter);
 if (config.debug) {
     app.use(errorhandler());
 } else {
-    app.use(function (err, req, res, next) {
-        console.error('server 500 error: ', err);
-        return res.status(500).send('500 status');
-    });
+    //app.use(function (err, req, res, next) {
+    //    console.error('server 500 error: ', err);
+    //    return res.status(500).send('500 status');
+    //});
 }
 
 app.listen(config.port, function () {

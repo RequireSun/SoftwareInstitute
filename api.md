@@ -113,6 +113,14 @@ _思考: 数据库的对应结构怎么搞, 如何提高更新的效率_
 # 认证 Validate
 
 1. get 认证
+   * alias 账号
+   * cipher 密码
+
+# 登录 Login
+
+1. get 登录
+   * alias 账号
+   * cipher 密码
 
 # 用户列表 UserList
 
