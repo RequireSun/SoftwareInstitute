@@ -34,12 +34,14 @@ router.post('/outline');
 router.put('/outline');
 router.delete('/outline');
 
-router.get('/struct');
+router.get('/struct', struct.StructGet);
 router.put('/struct');
 
 router.get('/newsCategory', news.NewsCategory);
 
 router.get('/newsOutline', news.NewsOutline);
+
+router.get('/resourceList', resource.ListGet);
 
 //router.get('/ResourceList', resource.ResourceList);
 //router.get('/NewsCategory', news.NewsListCategory);
