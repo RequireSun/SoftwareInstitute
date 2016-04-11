@@ -20,14 +20,52 @@ exports.CategoryGet = (req, res, next) => {
         if (!data) {
             res.json({ code: 1001, error: '请输入正确的类别编号！' });
             next();
-            return;
+        } else {
+            res.json(data);
+            next();
         }
-
-        res.json(data);
-        next();
     }).catch(err => {
         res.json({ code: 1001, error: err['message'] });
         next();
     });
+};
 
+exports.OutlineGet = (req, res, next) => {
+    let id = +req.query.id;
+
+    if (isNaN(id)) {
+        res.json({ code: 1001, error: '请输入正确的类别编号！' });
+        next();
+        return;
+    }
+
+    new Promise(promiseWrap(Struct.outlineGet, id)).
+        then(data => {
+            if (!data) {
+                res.json({ code: 1001, error: '请输入正确的类别编号！' });
+                next();
+            } else {
+                res.json(data);
+                next();
+            }
+        }).catch(err => {
+            res.json({ code: 1001, error: err['message'] });
+            next();
+        });
+};
+
+exports.StructGet = (req, res, next) => {
+    new Promise(promiseWrap(Struct.get)).
+        then(data => {
+            if (!data) {
+                res.json({ code: 1001, error: '没有数据！' });
+                next();
+            } else {
+                res.json(data);
+                next();
+            }
+        }).catch(err => {
+            res.json({ code: 1001, error: err['message'] });
+            next();
+        });
 };
