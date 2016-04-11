@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9ddae643-1d63-456b-90e9-3c6eacd2688e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/proxy/struct.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/proxy/structCategory.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api.md" afterPath="$PROJECT_DIR$/api.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/news.js" afterPath="$PROJECT_DIR$/api/news.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/struct.js" afterPath="$PROJECT_DIR$/api/struct.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api_router.js" afterPath="$PROJECT_DIR$/api_router.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.default.js" afterPath="$PROJECT_DIR$/config.default.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/proxy/index.js" afterPath="$PROJECT_DIR$/proxy/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/proxy/news.js" afterPath="$PROJECT_DIR$/proxy/news.js" />
     </list>
     <ignored path="SoftwareInstitute.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -37,11 +27,12 @@
       <file leaf-file-name="news.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/api/news.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="24">
-              <caret line="121" column="7" selection-start-line="121" selection-start-column="7" selection-end-line="121" selection-end-column="7" />
+            <state relative-caret-position="240">
+              <caret line="88" column="44" selection-start-line="88" selection-start-column="44" selection-end-line="88" selection-end-column="44" />
               <folding>
                 <element signature="e#174#1457#0" expanded="false" />
                 <element signature="e#1522#2575#0" expanded="false" />
+                <element signature="e#2631#3535#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -649,12 +640,12 @@
       <workItem from="1460224454351" duration="1638000" />
       <workItem from="1460276902581" duration="5339000" />
       <workItem from="1460306856403" duration="5899000" />
-      <workItem from="1460346123921" duration="789000" />
+      <workItem from="1460346123921" duration="1488000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28312000" />
+    <option name="totallyTimeSpent" value="29011000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1050,11 +1041,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/api/news.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="24">
-          <caret line="121" column="7" selection-start-line="121" selection-start-column="7" selection-end-line="121" selection-end-column="7" />
+        <state relative-caret-position="240">
+          <caret line="88" column="44" selection-start-line="88" selection-start-column="44" selection-end-line="88" selection-end-column="44" />
           <folding>
             <element signature="e#174#1457#0" expanded="false" />
             <element signature="e#1522#2575#0" expanded="false" />
+            <element signature="e#2631#3535#0" expanded="false" />
           </folding>
         </state>
       </provider>
