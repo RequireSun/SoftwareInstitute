@@ -45,6 +45,7 @@ router.get('/newsOutline', news.NewsOutline);
 router.get('/resourceList', resource.ListGet);
 
 router.get('/validate', supervisor.ValidateGet);
+router.get('/login', supervisor.LoginGet);
 
 //router.get('/ResourceList', resource.ResourceList);
 //router.get('/NewsCategory', news.NewsListCategory);

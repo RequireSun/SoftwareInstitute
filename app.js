@@ -119,15 +119,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(require('method-override')());
 app.use(require('cookie-parser')(config.session_secret));
 //app.use(compression());
-//app.use(session({
-//    secret: config.session_secret,
-//    // 使用 redis 存储
-//    store: new RedisStore(Object.assign({}, config.redis, { db: redis_session_db })),
-//    // 就算 session 没有变化也要进行一次存储（因为仓储有时限）
-//    resave: true,
-//    // 存储没有修改过的 session （刚刚生成，但是没有修改过的情况就属于此种情况）
-//    saveUninitialized: true,
-//}));
+app.use(session({
+   secret: config.session_secret,
+   // 使用 redis 存储
+   // store: new RedisStore(Object.assign({}, config.redis, { db: redis_session_db })),
+   // 就算 session 没有变化也要进行一次存储（因为仓储有时限）
+   resave: true,
+   // 存储没有修改过的 session （刚刚生成，但是没有修改过的情况就属于此种情况）
+   saveUninitialized: true,
+}));
 
 
 //app.use(passport.initiallize());

@@ -3,10 +3,10 @@
  */
 'use strict';
 
-let database = require('../common/database');
-let crypto = require('crypto');
+const database = require('../common/database');
+const crypto = require('crypto');
 
-exports.validateGet = function (callback, alias, cipher) {
+exports.validateGet = (callback, alias, cipher) => {
     if (!alias || !cipher) {
         callback(new Error('Parameter: alias / cipher must be provided!'));
         next();
@@ -25,9 +25,25 @@ exports.validateGet = function (callback, alias, cipher) {
         } else {
             let shaHash = crypto.createHash('sha1');
             shaHash.update(cipher);
-            shaHash.update(result[0].salt);
+            shaHash.update(result[0]['salt']);
 
-            callback(null, shaHash.digest('hex') === result[0].cipher);
+            callback(null, shaHash.digest('hex') === result[0]['cipher'] && result[0]['id']);
         }
     });
+};
+
+exports.loginGet = (callback, alias, cipher) => {
+    this.validateGet((err, data) => {
+        if (err) {
+            callback(err);
+        } else {
+            if (!data) {
+                // session.destroy();
+                callback(null, false);
+            } else {
+                // session.id = data;
+                callback(null, data);
+            }
+        }
+    }, alias, cipher);
 };
