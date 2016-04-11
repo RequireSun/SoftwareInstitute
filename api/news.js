@@ -10,15 +10,15 @@ exports.NewsCategory = function (req, res, next) {
     let id          = +req.query.id;
     
     if (isNaN(pageSize) || isNaN(pageRequest)) {
-        res.json({ code: 1001, error: '请选择正确的页码或页面大小！' });
+        res.jsonErrorParameterMissing('请选择正确的页码或页面大小！');
         next();
         return;
     } else if (isNaN(id)) {
-        res.json({ code: 1001, error: '请选择正确的新闻类型！' });
+        res.jsonErrorParameterMissing('请选择正确的新闻类型！');
         next();
         return;
     } else if (0 > pageSize || 0 > pageRequest) {
-        res.json({ code: 1001, error: '页码和页面大小不能为负！' });
+        res.jsonErrorParameterWrong('页码和页面大小不能为负！');
         next();
         return;
     }
@@ -37,13 +37,13 @@ exports.NewsCategory = function (req, res, next) {
         //    return res.json({ code: 1002, error: '页码越界或新闻类型错误！' });
         //}
 
-        res.json({
+        res.jsonSuccess({
             data    : newsList,
             count   : pageMax,
         });
         next();
     }).catch(err => {
-        res.json({ code: 1001, error: err['message'] });
+        res.jsonErrorParameterWrong(err['message']);
         next();
     });
 };
@@ -54,15 +54,15 @@ exports.NewsOutline = function (req, res, next) {
     let id          = +req.query.id;
 
     if (isNaN(pageSize) || isNaN(pageRequest)) {
-        res.json({ code: 1001, error: '请选择正确的页码！' });
+        res.jsonErrorParameterMissing('请选择正确的页码！');
         next();
         return;
     } else if (isNaN(id)) {
-        res.json({ code: 1001, error: '请选择正确的新闻类型！' });
+        res.jsonErrorParameterMissing('请选择正确的新闻类型！');
         next();
         return;
     } else if (0 > pageSize || 0 > pageRequest) {
-        res.json({ code: 1001, error: '页码和页面大小不能为负！' });
+        res.jsonErrorParameterWrong('页码和页面大小不能为负！');
         next();
         return;
     }
@@ -75,7 +75,7 @@ exports.NewsOutline = function (req, res, next) {
             newsCount   = result[1];
         let pageMax     = Math.ceil(newsCount / pageSize);
 
-        res.json({
+        res.jsonSuccess({
             data    : newsList,
             count   : pageMax
         });

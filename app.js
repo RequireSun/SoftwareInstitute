@@ -1,12 +1,12 @@
 /*!
  * softwareinstitute - app.js
  */
-
 /*
  * Module dependencies.
  */
+'use strict';
 
-var config = require('./config');
+let config = require('./config');
 
 // sign 部署的时候记得用 newrelic 性能检测（配置文件里还有相应配置）
 // if (!config.debug) {
@@ -17,60 +17,61 @@ var config = require('./config');
 
 // 用于更改命令行显示的字色
 require('colors');
-var path        = require('path');
+let path        = require('path');
 // 一个用来压缩、加载 css 的插件
-var Loader      = require('loader');
-var express     = require('express');
-var session     = require('express-session');
+let Loader      = require('loader');
+let express     = require('express');
+let session     = require('express-session');
 // 用来验证登陆
-//var passport    = require('passport');
+//let passport    = require('passport');
 
 ////////// 引入类库 结束 //////////
 
 
 ////////// 引入自定 router 开始 //////////
 
-var webRouter   = require('./web_router');
-var apiRouter   = require('./api_router');
+let webRouter   = require('./web_router');
+let apiRouter   = require('./api_router');
 
 ////////// 引入自定 router 结束 //////////
 
 
 ////////// 引入中间件 开始 //////////
 
-//var proxyMiddleware     = require('./middlewares/proxy');
+//let proxyMiddleware     = require('./middlewares/proxy');
 // redis session 管理
-//var RedisStore          = require('connect-redis')(session);
+//let RedisStore          = require('connect-redis')(session);
 // lodash 常用函数库
-var _                   = require('lodash');
+// let _                   = require('lodash');
 // 用于解析请求体
-var bodyParser          = require('body-parser');
+let bodyParser          = require('body-parser');
 // 验证用的模块，必须在 session 模块之后引用
-//var csurf               = require('csurf');
+//let csurf               = require('csurf');
 // http 压缩用的模块（deflate，gzip）
-//var compression         = require('compression');
+//let compression         = require('compression');
 // 用于大文件上传
-//var busboy              = require('connect-busboy');
+//let busboy              = require('connect-busboy');
 // 用于在开发环境下打印错误信息
-var errorhandler        = require('errorhandler');
+let errorhandler        = require('errorhandler');
 // 用于支持 CORS 跨域
-var cors                = require('cors');
-var requestLog          = require('./middlewares/request_log');
-var errorPageMiddleware = require("./middlewares/error_page");
-//var renderMiddleware    = require('./middlewares/render');
-var logger              = require('./common/logger');
+let cors                = require('cors');
+let requestLog          = require('./middlewares/request_log');
+let renderPageMiddleware= require('./middlewares/render_page');
+let renderJsonMiddleware= require('./middlewares/render_json');
+//let renderMiddleware    = require('./middlewares/render');
+let logger              = require('./common/logger');
 
 // 引入的 ejs 模块并自定义了一些 filter， 引入顺序不能错
-var ejs                 = require('ejs');
+let ejs                 = require('ejs');
 require('./common/ejs_filter');
 
 ////////// 引入中间件 结束 //////////
 
 
 // 静态文件目录
-var staticDir   = path.join(__dirname, 'public');
+let staticDir   = path.join(__dirname, 'public');
 // assets
-var assets      = {};
+let assets      = {};
 
 // 非 debug 模式下开启压缩
 // if (config.mini_assets) {
@@ -82,10 +83,10 @@ var assets      = {};
 //     }
 // }
 
-var urlinfo     = require('url').parse(config.host);
+let urlinfo     = require('url').parse(config.host);
 config.hostname = urlinfo.hostname || config.host;
 
-var app         = express();
+let app         = express();
 
 // 配置环境变量
 // 视图/模板引擎相关
@@ -155,16 +156,17 @@ app.get('/err', function (req, res, next) {
 });
 
 // 设置辅助函数
-_.extend(app.locals, {
+Object.assign(app.locals, {
     config: config,
     Loader: Loader,
     assets: assets,
 });
 
 // 为 response 添加信息提示渲染方法的中间件
-app.use(errorPageMiddleware.errorPage);
+app.use(renderPageMiddleware.errorPage);
+app.use(renderJsonMiddleware);
 // 为当前作用域添加 lodash 方法（标识符为 _）和渲染相关方法
-_.extend(app.locals, require('./common/render_helper'));
+Object.assign(app.locals, require('./common/render_helper'));
 
 // 加载csrf模块，必须在 cookie-parser 之后加载
 app.use(function (req, res, next) {
