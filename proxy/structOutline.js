@@ -20,7 +20,7 @@ exports.get = (callback, id) => {
         (err, result) => {
             if (err) {
                 callback(err);
-            } else if (!result) {
+            } else if (!result || !result.length) {
                 callback(new Error('No Data!'));
             } else {
                 let processed = result.find((item) => undefined !== item['id'] && undefined !== item['name']);

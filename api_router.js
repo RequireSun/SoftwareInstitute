@@ -13,9 +13,11 @@ let resource        = require('./api/resource');
 let news            = require('./api/news');
 let struct          = require('./api/struct');
 let supervisor      = require('./api/supervisor');
+let power           = require('./api/power');
 // 引入 middleware
 // let middlewareName = require('pathToMiddleware');
 let config          = require('./config');
+let whiteList       = require('./whiteList');
 
 let router          = express.Router();
 
@@ -46,6 +48,8 @@ router.get('/resourceList', resource.ListGet);
 
 router.get('/validate', supervisor.ValidateGet);
 router.get('/login', supervisor.LoginGet);
+
+router.get('/pValidate', power.validate);
 
 //router.get('/ResourceList', resource.ResourceList);
 //router.get('/NewsCategory', news.NewsListCategory);

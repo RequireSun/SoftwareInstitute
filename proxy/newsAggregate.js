@@ -74,7 +74,7 @@ exports.categoryCount   = (callback, id) => {
         (err, result) => {
             if (err) {
                 callback(err);
-            } else if (!result) {
+            } else if (!result || !result.length) {
                 callback(new Error('No data!'));
             } else {
                 callback(null, result[0].categoryCount);
@@ -99,7 +99,7 @@ exports.outlineCount    = (callback, id) => {
         (err, result) => {
             if (err) {
                 callback(err);
-            } else if (!result) {
+            } else if (!result || !result.length) {
                 callback(new Error('No data!'));
             } else {
                 callback(null, result[0].outlineCount);

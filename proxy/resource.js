@@ -31,7 +31,7 @@ exports.listCount = function (callback) {
     database.query(queryString, (err, result) => {
         if (err) {
             callback(err);
-        } else if (!result) {
+        } else if (!result || !result.length) {
             callback(new Error('No data!'));
         } else {
             callback(null, result[0].resourceCount);

@@ -20,7 +20,7 @@ exports.validateGet = (callback, alias, cipher) => {
     }, (err, result) => {
         if (err) {
             callback(err);
-        } else if (!result) {
+        } else if (!result || !result.length) {
             callback(null, false);
         } else {
             let shaHash = crypto.createHash('sha1');

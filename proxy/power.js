@@ -1,28 +1,29 @@
 /**
- * Created by kelvinsun on 2016/4/11.
+ * Created by kelvinsun on 2016/4/13.
  */
 'use strict';
 
 let database = require('../common/database');
 
-exports.get = (callback, id) => {
-    if ('number' !== typeof id) {
+exports.validate = (callback, uid) => {
+    if ('number' !== typeof uid) {
         return callback(new Error('Parameter: id must be number!'));
     }
 
-    var queryString = 'SELECT id, name FROM category WHERE id = :id';
+    let queryString = 'SELECT power FROM supervisor WHERE id = :uid';
 
     database.query(
         queryString,
-        { id },
+        { uid },
         (err, result) => {
+            console.log(result);
             if (err) {
                 callback(err);
             } else if (!result || !result.length) {
-                callback(new Error('No Data!'));
+                callback(new Error('No such user!'));
             } else {
-                callback(null, result[0]);
+                callback(null, result[0]['power']);
             }
         }
-    );
+    )
 };

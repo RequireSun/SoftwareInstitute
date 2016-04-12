@@ -30,7 +30,7 @@ exports.get = callback => {
                         let args = slice.call(arguments, 1);
                         return Object.prototype.hasOwnProperty.apply(target, args);
                     };
-                for (let item of result) {
+                for (let i = 0, item; item = result[i]; ++i) {
                     if (undefined !== item['id']) {
                         if (!hasOwnProperty(processed, item['id'])) {
                             processed[item['id']] = { id: item['id'], name: item['name'], categories: [] };
