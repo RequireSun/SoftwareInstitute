@@ -6,6 +6,7 @@
 let category    = require('./structCategory');
 let outline     = require('./structOutline');
 let database    = require('../common/database');
+let hasOwnProperty = require('../common/tool').hasOwnProperty;
 
 exports.categoryGet = category.get;
 
@@ -24,12 +25,12 @@ exports.get = callback => {
             } else if (!result) {
                 callback(new Error('No Data!'));
             } else {
-                let processed = {},
-                    slice = Array.prototype.slice,
-                    hasOwnProperty = function (target) {
-                        let args = slice.call(arguments, 1);
-                        return Object.prototype.hasOwnProperty.apply(target, args);
-                    };
+                let processed = {};
+                    // slice = Array.prototype.slice,
+                    // hasOwnProperty = function (target) {
+                    //     let args = slice.call(arguments, 1);
+                    //     return Object.prototype.hasOwnProperty.apply(target, args);
+                    // };
                 for (let i = 0, item; item = result[i]; ++i) {
                     if (undefined !== item['id']) {
                         if (!hasOwnProperty(processed, item['id'])) {

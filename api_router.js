@@ -17,9 +17,20 @@ let power           = require('./api/power');
 // 引入 middleware
 // let middlewareName = require('pathToMiddleware');
 let config          = require('./config');
-let whiteList       = require('./whiteList');
+let whiteList       = require('./whiteList') || {};
+let hasOwnProperty  = require('./common/tool').hasOwnProperty;
 
 let router          = express.Router();
+
+for (let path in whiteList) {
+    if (hasOwnProperty(whiteList, path)) {
+        for (let method in whiteList[path]) {
+            if (hasOwnProperty(whiteList[path], method) && whiteList[path][method]) {
+                router[method](['/' + path], power.validate);
+            }
+        }
+    }
+}
 
 // 单条新闻
 router.get('/news', news.NewsGet);
@@ -49,7 +60,7 @@ router.get('/resourceList', resource.ListGet);
 router.get('/validate', supervisor.ValidateGet);
 router.get('/login', supervisor.LoginGet);
 
-router.get('/pValidate', power.validate);
+// router.get('/pValidate', power.validate);
 
 //router.get('/ResourceList', resource.ResourceList);
 //router.get('/NewsCategory', news.NewsListCategory);

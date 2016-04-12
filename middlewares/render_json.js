@@ -12,5 +12,8 @@ module.exports = (req, res, next) => {
     res.jsonErrorParameterWrong     = (message) => res.status(200).json({ code: 1002, message });
     // json no login
     res.jsonErrorNoLogin            = () => res.status(200).json({ code: 1900, message: false });
+    // json no power
+    res.jsonErrorNoPower            = () => res.status(200).json({ code: 1800, message: false });
+    
     next();
 };

@@ -16,7 +16,6 @@ exports.validate = (callback, uid) => {
         queryString,
         { uid },
         (err, result) => {
-            console.log(result);
             if (err) {
                 callback(err);
             } else if (!result || !result.length) {

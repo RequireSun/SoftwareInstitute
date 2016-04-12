@@ -4,9 +4,15 @@
 'use strict';
 
 let promiseWrap = require('../common/tool').promiseWrap;
+let PowerError = require('../common/error').PowerError;
 let Power = require('../proxy/power');
 
 exports.validate = (req, res, next) => {
-    new Promise(promiseWrap(Power.validate, +req.query.uid)).then(data => {res.write(data);next()});
-
+    if (!req.session || !req.session.uid) {
+        res.jsonErrorNoLogin();
+    } else {
+        new Promise(promiseWrap(Power.validate, +req.session.uid)).
+        then(power => power ? next() : res.jsonErrorNoPower()).
+        catch(err => res.jsonErrorNoPower());
+    }
 };

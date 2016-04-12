@@ -1,6 +1,11 @@
 'use strict';
 let config = require('../config');
 
+exports.hasOwnProperty = function (target) {
+    let args = Array.prototype.slice.call(arguments, 1);
+    return Object.prototype.hasOwnProperty.apply(target, args);
+};
+
 exports.generatePageNumber = function (pageCurrent, pageMax, pageLink) {
     var numberList = [];
     // 填充页码， 取剩余页面数量和页面跳转限额中较小的一个， 作为页码个数， 循环填充
@@ -20,9 +25,9 @@ exports.generatePageNumber = function (pageCurrent, pageMax, pageLink) {
     });
 };
 
-exports.promiseCallback = (resolve, reject) => {
-    return (err, data) => err ? reject(err) : resolve(data);
-};
+// exports.promiseCallback = (resolve, reject) => {
+//     return (err, data) => err ? reject(err) : resolve(data);
+// };
 // 我日了 node 的 es6 兼容, 给箭头函数不给 rest parameters, 我怎么获取参数
 exports.promiseWrap = function (func) {
     let args = Array.prototype.slice.call(arguments, 1);
