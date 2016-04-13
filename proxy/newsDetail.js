@@ -3,6 +3,7 @@
  */
 'use strict';
 let database = require('../common/database');
+let hasOwnProperty = require('../common/tool').hasOwnProperty;
 
 exports.get     = (callback, id) => {
     if ('number' !== typeof id) {
@@ -30,14 +31,13 @@ exports.get     = (callback, id) => {
 };
 
 exports.post    = (callback, detail) => {
-    // let { categoryId, supervisorId, title, article, } = detail;
     !detail && (detail = {});
-    detail = Object.assign({
-        categoryId  : 0,
-        supervisorId: 0,
-        title       : '',
-        article     : '',
-    }, detail);
+
+    if (isNaN(detail['category_id']) || isNaN(detail['supervisor_id'])) {
+        return callback(new Error('Parameter: category_id / supervisor_id must be number!'));
+    } else if (!detail['title'] || !detail['article']) {
+        return callback(new Error('Parameter: title / article should not be empty!'));
+    }
 
     let queryString =
         'INSERT INTO `news` (`category_id`, `supervisor_id`, `title`, `article`)' +
@@ -58,7 +58,51 @@ exports.post    = (callback, detail) => {
     );
 };
 
-exports.put     = () => {};
+exports.put     = (callback, id, detail) => {
+    !detail && (detail = {});
+
+    if (isNaN(id)) {
+        return callback(new Error('Parameter: id must be number!'));
+    } else if ('' === detail['title'] || '' === detail['article']) {
+        return callback(new Error('Parameter: title / article should not be empty string!'));
+    }
+
+    let nameMap     = {
+        categoryId  : 'category_id',
+        supervisorId: 'supervisor_id',
+        title       : 'title',
+        article     : 'article',
+    },
+        filterArray = ['categoryId', 'supervisorId', 'title', 'article'],
+        queryArray  = [];
+    for (let i in detail) {
+        if (hasOwnProperty(detail, i)) {
+            if (-1 === filterArray.indexOf(i) || !detail[i]) {
+                delete detail[i];
+            } else {
+                queryArray.push(nameMap[i] + ' = :' + i);
+            }
+        }
+    }
+
+    detail['id'] = id;
+
+    let queryString = 'UPDATE `news` SET ' + queryArray.join(',') + ' WHERE `id` = :id';
+
+    database.query(
+        queryString,
+        detail,
+        (err, result) => {
+            if (err) {
+                callback(err);
+            } else if (!result || !result['affectedRows']) {
+                callback(new Error('Edit failed!'));
+            } else {
+                callback(null, id);
+            }
+        }
+    )
+};
 
 exports.delete  = () => {};
 

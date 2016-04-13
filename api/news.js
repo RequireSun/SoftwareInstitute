@@ -124,7 +124,7 @@ exports.NewsGet = (req, res, next) => {
 
 exports.NewsPost = (req, res, next) => {
     let categoryId      = +req.body.categoryId,
-        supervisorId    = +req.body.supervisorId,
+        supervisorId    = +req.session.uid,
         title           = req.body.title,
         article         = req.body.article;
 
@@ -147,6 +147,40 @@ exports.NewsPost = (req, res, next) => {
             res.jsonErrorParameterWrong(err['message']);
             next();
         });
+};
+
+exports.NewsPut = (req, res, next) => {
+    let id              = +req.query.id,
+        categoryId      = +req.body.categoryId,
+        supervisorId    = +req.session.uid,
+        title           = req.body.title,
+        article         = req.body.article;
+
+    if (isNaN(id)) {
+        res.jsonErrorParameterMissing('id 不能为空！');
+        next();
+        return ;
+    } else if ('' === title || '' === article) {
+        res.jsonErrorParameterMissing('标题 / 内容不能为空字符串！');
+        next();
+        return ;
+    }
+
+    let detail = {};
+    categoryId      && (detail['categoryId']    = categoryId);
+    supervisorId    && (detail['supervisorId']  = supervisorId);
+    title           && (detail['title']         = title);
+    article         && (detail['article']       = article);
+
+    new Promise(promiseWrap(News.put, id, detail)).
+        then(result => {
+            res.jsonSuccess(result);
+            next();
+        }).
+        catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
+            next();
+        })
 };
 
 
