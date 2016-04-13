@@ -29,7 +29,34 @@ exports.get     = (callback, id) => {
     );
 };
 
-exports.post    = () => {};
+exports.post    = (callback, detail) => {
+    // let { categoryId, supervisorId, title, article, } = detail;
+    !detail && (detail = {});
+    detail = Object.assign({
+        categoryId  : 0,
+        supervisorId: 0,
+        title       : '',
+        article     : '',
+    }, detail);
+
+    let queryString =
+        'INSERT INTO `news` (`category_id`, `supervisor_id`, `title`, `article`)' +
+        'VALUES (:categoryId, :supervisorId, :title, :article)';
+
+    database.query(
+        queryString,
+        detail,
+        (err, result) => {
+            if (err) {
+                callback(err);
+            } else if (!result || !result['affectedRows']) {
+                callback(new Error('Insert failed!'));
+            } else {
+                callback(null, result['insertId']);
+            }
+        }
+    );
+};
 
 exports.put     = () => {};
 

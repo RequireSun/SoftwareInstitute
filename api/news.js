@@ -86,7 +86,7 @@ exports.NewsOutline = function (req, res, next) {
     });
 };
 // 获取新闻详情
-exports.NewsGet = function (req, res, next) {
+exports.NewsGet = (req, res, next) => {
     let id = +req.query.id;
 
     if (isNaN(id)) {
@@ -121,16 +121,35 @@ exports.NewsGet = function (req, res, next) {
         next();
     });
 };
-// 获取大小类间的关系
-// exports.Struct = function (req, res, next) {
-//     News.getOutlineCategory(function (err, result) {
-//         if (err) {
-//             return next(err);
-//         }
-//         res.json(result);
-//         next();
-//     });
-// };
+
+exports.NewsPost = (req, res, next) => {
+    let categoryId      = +req.body.categoryId,
+        supervisorId    = +req.body.supervisorId,
+        title           = req.body.title,
+        article         = req.body.article;
+
+    if (isNaN(categoryId) || isNaN(supervisorId)) {
+        res.jsonErrorParameterMissing('请输入正确的新闻类别或作者ID！');
+        next();
+        return ;
+    } else if (!title || !article) {
+        res.jsonErrorParameterMissing('标题 / 内容不能为空！');
+        next();
+        return ;
+    }
+
+    new Promise(promiseWrap(News.post, { categoryId, supervisorId, title, article })).
+        then(result => {
+            res.jsonSuccess(result);
+            next();
+        }).
+        catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
+            next();
+        });
+};
+
+
 // 样式内填充数据 (导航栏, 快捷入口, 脚) 获取
 // exports.StyleCategory = function (req, res, next) {
 //     var categoryType = req.query.categoryType;
