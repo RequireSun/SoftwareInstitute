@@ -180,9 +180,28 @@ exports.NewsPut = (req, res, next) => {
         catch(err => {
             res.jsonErrorParameterWrong(err['message']);
             next();
-        })
+        });
 };
 
+exports.NewsDelete = (req, res, next) => {
+    let id = +req.query.id;
+
+    if (isNaN(id)) {
+        res.jsonErrorParameterMissing('id 不能为空！');
+        next();
+        return ;
+    }
+
+    new Promise(promiseWrap(News.delete, id)).
+    then(result => {
+        res.jsonSuccess(result);
+        next();
+    }).
+    catch(err => {
+        res.jsonErrorParameterWrong(err['message']);
+        next();
+    });
+};
 
 // 样式内填充数据 (导航栏, 快捷入口, 脚) 获取
 // exports.StyleCategory = function (req, res, next) {

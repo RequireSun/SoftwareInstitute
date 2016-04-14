@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2016-04-12 19:02:33
+-- Generation Time: 2016-04-14 18:24:05
 -- 服务器版本： 10.1.10-MariaDB
 -- PHP Version: 5.6.19
 
@@ -31,53 +31,53 @@ USE `software_institute`;
 --
 
 DROP TABLE IF EXISTS `category`;
-CREATE TABLE `category` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `category` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
-  `outline_id` int(10) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- 表的关联 `category`:
---
+  `outline_id` int(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `outline_id` (`outline_id`) USING HASH
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- 转存表中的数据 `category`
 --
 
--- INSERT INTO `category` (`id`, `name`, `outline_id`) VALUES
--- (1, 'categoryname1', 1),
--- (4, 'categoryname1', 1);
+INSERT INTO `category` (`id`, `name`, `outline_id`) VALUES
+(1, 'categoryname1', 1),
+(4, 'categoryname1', 1);
 
 -- --------------------------------------------------------
 
 --
 -- 表的结构 `news`
 --
--- 创建时间： 2016-04-10 08:43:20
+-- 创建时间： 2016-04-14 16:21:24
 --
 
 DROP TABLE IF EXISTS `news`;
-CREATE TABLE `news` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `category_id` int(11) UNSIGNED NOT NULL,
-  `supervisor_id` int(11) UNSIGNED NOT NULL,
-  `title` varchar(50) CHARACTER SET utf8mb4 NOT NULL,
-  `article` varchar(4000) CHARACTER SET utf8mb4 NOT NULL,
+CREATE TABLE IF NOT EXISTS `news` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `category_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `supervisor_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `title` varchar(50) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
+  `article` varchar(4000) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
   `update_time` datetime DEFAULT NULL,
-  `page_view` int(10) UNSIGNED DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- 表的关联 `news`:
---
+  `page_view` int(10) UNSIGNED DEFAULT '0',
+  `deleted` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `category_update_date` (`category_id`,`update_time`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- 转存表中的数据 `news`
 --
 
--- INSERT INTO `news` (`id`, `category_id`, `supervisor_id`, `title`, `article`, `update_time`, `page_view`) VALUES
--- (1, 1, 1, 'title1', 'article1', '2016-04-11 01:43:11', 2);
+INSERT INTO `news` (`id`, `category_id`, `supervisor_id`, `title`, `article`, `update_time`, `page_view`, `deleted`) VALUES
+(1, 1, 1, 'title1', 'article1', '2016-04-14 02:24:13', 14, 0),
+(2, 4, 3, 'title22222', 'article2', '2016-04-14 02:08:33', 0, 0),
+(3, 4, 3, '333123231', '1123132', '2016-04-14 01:44:58', 0, 0),
+(4, 4, 3, '333123231', '66666632', '2016-04-14 02:24:40', 0, 0);
 
 --
 -- 触发器 `news`
@@ -106,42 +106,38 @@ DELIMITER ;
 --
 
 DROP TABLE IF EXISTS `outline`;
-CREATE TABLE `outline` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `name` varchar(20) CHARACTER SET utf8mb4 NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- 表的关联 `outline`:
---
+CREATE TABLE IF NOT EXISTS `outline` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- 转存表中的数据 `outline`
 --
 
--- INSERT INTO `outline` (`id`, `name`) VALUES
--- (1, 'outlinename1'),
--- (4, 'outlinename1');
+INSERT INTO `outline` (`id`, `name`) VALUES
+(1, 'outlinename1'),
+(4, 'outlinename1');
 
 -- --------------------------------------------------------
 
 --
 -- 表的结构 `resource`
 --
--- 创建时间： 2016-04-10 08:43:20
+-- 创建时间： 2016-04-14 16:22:37
 --
 
 DROP TABLE IF EXISTS `resource`;
-CREATE TABLE `resource` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `resource` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` varchar(50) CHARACTER SET utf8mb4 NOT NULL,
   `path` varchar(512) CHARACTER SET utf8mb4 NOT NULL,
-  `update_time` datetime DEFAULT NULL
+  `update_time` datetime DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `update_time` (`update_time`) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- 表的关联 `resource`:
---
 
 --
 -- 触发器 `resource`
@@ -170,92 +166,23 @@ DELIMITER ;
 --
 
 DROP TABLE IF EXISTS `supervisor`;
-CREATE TABLE `supervisor` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `supervisor` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `alias` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
   `cipher` char(40) CHARACTER SET utf8mb4 NOT NULL,
   `salt` char(10) CHARACTER SET utf8mb4 NOT NULL,
-  `power` int(10) UNSIGNED NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- 表的关联 `supervisor`:
---
+  `power` int(10) UNSIGNED NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_alias` (`alias`) USING HASH
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- 转存表中的数据 `supervisor`
 --
 
--- INSERT INTO `supervisor` (`id`, `alias`, `cipher`, `salt`, `power`) VALUES
--- (3, 'admin', 'dd94709528bb1c83d08f3088d4043f4742891f4f', 'admin', 1);
+INSERT INTO `supervisor` (`id`, `alias`, `cipher`, `salt`, `power`) VALUES
+(3, 'admin', 'dd94709528bb1c83d08f3088d4043f4742891f4f', 'admin', 1);
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `category`
---
-ALTER TABLE `category`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `outline_id` (`outline_id`) USING HASH;
-
---
--- Indexes for table `news`
---
-ALTER TABLE `news`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `category_update_date` (`category_id`,`update_time`) USING BTREE;
-
---
--- Indexes for table `outline`
---
-ALTER TABLE `outline`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `resource`
---
-ALTER TABLE `resource`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `update_time` (`update_time`) USING HASH;
-
---
--- Indexes for table `supervisor`
---
-ALTER TABLE `supervisor`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `unique_alias` (`alias`) USING HASH;
-
---
--- 在导出的表使用AUTO_INCREMENT
---
-
---
--- 使用表AUTO_INCREMENT `category`
---
-ALTER TABLE `category`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
---
--- 使用表AUTO_INCREMENT `news`
---
-ALTER TABLE `news`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- 使用表AUTO_INCREMENT `outline`
---
-ALTER TABLE `outline`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
---
--- 使用表AUTO_INCREMENT `resource`
---
-ALTER TABLE `resource`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `supervisor`
---
-ALTER TABLE `supervisor`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

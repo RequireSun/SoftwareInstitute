@@ -33,10 +33,10 @@ for (let path in whiteList) {
 }
 
 // 单条新闻
-router.get('/news', news.NewsGet);
-router.post('/news', news.NewsPost);
-router.put('/news', news.NewsPut);
-router.delete('/news');
+router.get   ('/news', news.NewsGet);
+router.post  ('/news', news.NewsPost);
+router.put   ('/news', news.NewsPut);
+router.delete('/news', news.NewsDelete);
 
 router.get('/category', struct.CategoryGet);
 router.post('/category');

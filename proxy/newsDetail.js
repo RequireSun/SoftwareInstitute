@@ -13,7 +13,7 @@ exports.get     = (callback, id) => {
     var queryString =
         'SELECT news.title, news.article, news.update_time, news.page_view, supervisor.alias ' +
         'FROM news LEFT JOIN supervisor ON news.supervisor_id = supervisor.id ' +
-        'WHERE news.id = :id';
+        'WHERE news.id = :id AND news.deleted <> TRUE';
 
     database.query(
         queryString,
@@ -104,7 +104,27 @@ exports.put     = (callback, id, detail) => {
     )
 };
 
-exports.delete  = () => {};
+exports.delete  = (callback, id) => {
+    if ('number' !== typeof id) {
+        return callback(new Error('Parameter: id must be number!'));
+    }
+
+    let queryString = 'UPDATE `news` SET deleted = TRUE WHERE id = :id';
+
+    database.query(
+        queryString,
+        { id },
+        (err, result) => {
+            if (err) {
+                callback(err);
+            } else if (!result || !result['affectedRows']) {
+                callback(new Error('Delete failed!'));
+            } else {
+                callback(null, id);
+            }
+        }
+    )
+};
 
 exports.view  = (callback, id) => {
     if ('number' !== typeof id) {
