@@ -8,7 +8,10 @@ let outline     = require('./structOutline');
 let database    = require('../common/database');
 let hasOwnProperty = require('../common/tool').hasOwnProperty;
 
-exports.categoryGet = category.get;
+exports.categoryGet     = category.get;
+exports.categoryPost    = category.post;
+exports.categoryPut     = category.put;
+exports.categoryDelete  = category.delete;
 
 exports.outlineGet = outline.get;
 

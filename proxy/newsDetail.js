@@ -63,7 +63,11 @@ exports.put     = (callback, id, detail) => {
 
     if (isNaN(id)) {
         return callback(new Error('Parameter: id must be number!'));
-    } else if ('' === detail['title'] || '' === detail['article']) {
+    } else if ((undefined !== detail['categoryId'] && isNaN(+detail['categoryId'])) ||
+               (undefined !== detail['supervisorId'] && isNaN(+detail['supervisorId']))) {
+        return callback(new Error('Parameter: categoryId / supervisorId should be number!'))
+    } else if ((undefined !== detail['title'] && !detail['title']) ||
+               (undefined !== detail['article'] && !detail['article'])) {
         return callback(new Error('Parameter: title / article should not be empty string!'));
     }
 
@@ -83,6 +87,10 @@ exports.put     = (callback, id, detail) => {
                 queryArray.push(nameMap[i] + ' = :' + i);
             }
         }
+    }
+
+    if (!queryArray.length) {
+        return callback(new Error('Nothing to update!'));
     }
 
     detail['id'] = id;

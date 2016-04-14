@@ -4,6 +4,7 @@
 'use strict';
 
 let database = require('../common/database');
+let formatUpdateParameters = require('../common/tool').formatUpdateParameters;
 
 exports.get = (callback, id) => {
     if ('number' !== typeof id) {
@@ -26,3 +27,74 @@ exports.get = (callback, id) => {
         }
     );
 };
+
+exports.post = (callback, detail) => {
+    !detail && (detail = {});
+    let name        = detail['name'],
+        outlineId   = +detail['outlineId'];
+
+    if (isNaN(outlineId)) {
+        return callback(new Error('Parameter: outlineId must be number!'));
+    } else if (!name) {
+        return callback(new Error('Parameter: name should not be empty!'));
+    }
+
+    let queryString = 'INSERT INTO `category` (`name`, `outline_id`) VALUES (:name, :outlineId)';
+
+    database.query(
+        queryString,
+        { name, outlineId },
+        (err, result) => {
+            if (err) {
+                callback(err);
+            } else if (!result || !result['affectedRows']) {
+                callback(new Error('Insert failed!'));
+            } else {
+                callback(null, result['insertId']);
+            }
+        }
+    );
+};
+
+exports.put = (callback, id, detail) => {
+    !detail && (detail = {});
+
+    if (isNaN(id)) {
+        return callback(new Error('Parameter: id must be number!'));
+    } else if (undefined !== detail['name'] && !detail['name']) {
+        return callback(new Error('Parameter: name should not be empty string!'));
+    } else if (undefined !== detail['outlineId'] && !detail['outlineId']) {
+        return callback(new Error('Parameter: outlineId should not be empty string!'));
+    }
+    
+    let retObj = formatUpdateParameters(detail, {
+        name        : 'name',
+        outlineId   : 'outline_id',
+    });
+    let queryArray  = retObj['queryArray'];
+    detail          = retObj['processedParams'];
+
+    if (!queryArray.length) {
+        return callback(new Error('Nothing to update!'));
+    }
+
+    detail['id'] = id;
+
+    let queryString = 'UPDATE `category` SET ' + queryArray.join(',') + ' WHERE `id` = :id';
+
+    database.query(
+        queryString,
+        detail,
+        (err, result) => {
+            if (err) {
+                callback(err);
+            } else if (!result || !result['affectedRows']) {
+                callback(new Error('Edit failed!'));
+            } else {
+                callback(null, id);
+            }
+        }
+    )
+};
+
+exports.delete = (callback, id) => {};

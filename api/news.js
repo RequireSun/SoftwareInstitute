@@ -159,11 +159,17 @@ exports.NewsPut = (req, res, next) => {
     if (isNaN(id)) {
         res.jsonErrorParameterMissing('id 不能为空！');
         next();
-        return ;
-    } else if ('' === title || '' === article) {
+        return;
+    } else if ((undefined !== req.body.categoryId && isNaN(categoryId)) ||
+               (undefined !== req.session.uid && isNaN(supervisorId))) {
+        res.jsonErrorParameterWrong('类别编号 / 用户 id 不能为空！');
+        next();
+        return;
+    } else if ((undefined !== title && !title) ||
+               (undefined !== article && !article)) {
         res.jsonErrorParameterMissing('标题 / 内容不能为空字符串！');
         next();
-        return ;
+        return;
     }
 
     let detail = {};

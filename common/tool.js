@@ -25,9 +25,19 @@ exports.generatePageNumber = function (pageCurrent, pageMax, pageLink) {
     });
 };
 
-// exports.promiseCallback = (resolve, reject) => {
-//     return (err, data) => err ? reject(err) : resolve(data);
-// };
+exports.formatUpdateParameters = (params, nameMap) => {
+    let queryArray = [],
+        processedParams = {};
+    for (let i in params) {
+        if (exports.hasOwnProperty(params, i) && exports.hasOwnProperty(nameMap, i)) {
+            queryArray.push(nameMap[i] + ' = :' + i);
+            processedParams[i] = params[i];
+        }
+    }
+
+    return { queryArray, processedParams };
+};
+
 // 我日了 node 的 es6 兼容, 给箭头函数不给 rest parameters, 我怎么获取参数
 exports.promiseWrap = function (func) {
     let args = Array.prototype.slice.call(arguments, 1);

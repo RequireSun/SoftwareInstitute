@@ -15,19 +15,78 @@ exports.CategoryGet = (req, res, next) => {
         return;
     }
 
-    new Promise(promiseWrap(Struct.categoryGet, id)).
-    then(data => {
-        if (!data) {
-            res.jsonErrorParameterWrong('请输入正确的类别编号！');
+    return new Promise(promiseWrap(Struct.categoryGet, id)).
+        then(data => {
+            if (!data) {
+                res.jsonErrorParameterWrong('请输入正确的类别编号！');
+                next();
+            } else {
+                res.jsonSuccess(data);
+                next();
+            }
+        }).catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
             next();
-        } else {
-            res.jsonSuccess(data);
-            next();
-        }
-    }).catch(err => {
-        res.jsonErrorParameterWrong(err['message']);
+        });
+};
+
+exports.CategoryPost = (req, res, next) => {
+    let name        = req.body.name,
+        outlineId   = +req.body.outlineId;
+
+    if (isNaN(outlineId)) {
+        res.jsonErrorParameterMissing('请输入正确的分类编号！');
         next();
-    });
+        return;
+    } else if (!name) {
+        res.jsonErrorParameterMissing('请输入正确的分类名称！');
+        next();
+        return;
+    }
+
+    return new Promise(promiseWrap(Struct.categoryPost, { name, outlineId })).
+        then(result => {
+            res.jsonSuccess(result);
+            next();
+        }).
+        catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
+            next();
+        });
+};
+
+exports.CategoryPut = (req, res, next) => {
+    let id          = +req.query.id,
+        name        = req.body.name,
+        outlineId   = +req.body.outlineId;
+
+    if (isNaN(id)) {
+        res.jsonErrorParameterMissing('请输入正确的小分类编号！');
+        next();
+        return;
+    } else if (undefined !== outlineId && isNaN(outlineId)) {
+        res.jsonErrorParameterMissing('请输入正确的分类编号！');
+        next();
+        return;
+    } else if (undefined !== name && !name) {
+        res.jsonErrorParameterMissing('请输入正确的分类名称！');
+        next();
+        return;
+    }
+
+    let detail = {};
+    name        && (detail['name']      = name);
+    outlineId   && (detail['outlineId'] = outlineId);
+
+    new Promise(promiseWrap(Struct.categoryPut, id, detail)).
+        then(result => {
+            res.jsonSuccess(result);
+            next();
+        }).
+        catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
+            next();
+        });
 };
 
 exports.OutlineGet = (req, res, next) => {

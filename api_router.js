@@ -38,9 +38,9 @@ router.post  ('/news', news.NewsPost);
 router.put   ('/news', news.NewsPut);
 router.delete('/news', news.NewsDelete);
 
-router.get('/category', struct.CategoryGet);
-router.post('/category');
-router.put('/category');
+router.get   ('/category', struct.CategoryGet);
+router.post  ('/category', struct.CategoryPost);
+router.put   ('/category', struct.CategoryPut);
 router.delete('/category');
 
 router.get('/outline', struct.OutlineGet);
