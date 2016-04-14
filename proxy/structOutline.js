@@ -80,4 +80,25 @@ exports.put = (callback, id, name) => {
     )
 };
 
-exports.delete = () => {};
+exports.delete = (callback, id) => {
+    if (isNaN(+id)) {
+        return callback(new Error('Parameter: id must be number!'));
+    }
+    id = +id;
+
+    let queryString = 'DELETE FROM `outline` WHERE id = :id';
+
+    database.query(
+        queryString,
+        { id },
+        (err, result) => {
+            if (err) {
+                callback(err);
+            } else if (!result || !result['affectedRows']) {
+                callback(new Error('Delete failed!'));
+            } else {
+                callback(null, id);
+            }
+        }
+    );
+};

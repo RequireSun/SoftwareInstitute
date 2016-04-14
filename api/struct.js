@@ -89,6 +89,26 @@ exports.CategoryPut = (req, res, next) => {
         });
 };
 
+exports.CategoryDelete = (req, res, next) => {
+    let id = +req.query.id;
+
+    if (isNaN(id)) {
+        res.jsonErrorParameterMissing('请输入数字 id！');
+        next();
+        return;
+    }
+
+    new Promise(promiseWrap(Struct.categoryDelete, id)).
+        then(result => {
+            res.jsonSuccess(result);
+            next();
+        }).
+        catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
+            next();
+        });
+};
+
 exports.OutlineGet = (req, res, next) => {
     let id = +req.query.id;
 
@@ -148,6 +168,26 @@ exports.OutlinePut = (req, res, next) => {
     }
 
     new Promise(promiseWrap(Struct.outlinePut, +id, name)).
+        then(result => {
+            res.jsonSuccess(result);
+            next();
+        }).
+        catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
+            next();
+        });
+};
+
+exports.OutlineDelete = (req, res, next) => {
+    let id = +req.query.id;
+
+    if (isNaN(id)) {
+        res.jsonErrorParameterMissing('请输入数字 id！');
+        next();
+        return;
+    }
+
+    new Promise(promiseWrap(Struct.outlineDelete, id)).
         then(result => {
             res.jsonSuccess(result);
             next();

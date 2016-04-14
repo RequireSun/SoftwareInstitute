@@ -41,7 +41,7 @@ router.delete('/news', news.NewsDelete);
 router.get   ('/category', struct.CategoryGet);
 router.post  ('/category', struct.CategoryPost);
 router.put   ('/category', struct.CategoryPut);
-router.delete('/category');
+router.delete('/category', struct.CategoryDelete);
 
 router.get   ('/outline', struct.OutlineGet);
 router.post  ('/outline', struct.OutlinePost);

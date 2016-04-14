@@ -199,14 +199,14 @@ exports.NewsDelete = (req, res, next) => {
     }
 
     new Promise(promiseWrap(News.delete, id)).
-    then(result => {
-        res.jsonSuccess(result);
-        next();
-    }).
-    catch(err => {
-        res.jsonErrorParameterWrong(err['message']);
-        next();
-    });
+        then(result => {
+            res.jsonSuccess(result);
+            next();
+        }).
+        catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
+            next();
+        });
 };
 
 // 样式内填充数据 (导航栏, 快捷入口, 脚) 获取

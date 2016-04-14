@@ -114,9 +114,10 @@ exports.put     = (callback, id, detail) => {
 };
 
 exports.delete  = (callback, id) => {
-    if ('number' !== typeof id) {
+    if (isNaN(id)) {
         return callback(new Error('Parameter: id must be number!'));
     }
+    id = +id;
 
     let queryString = 'UPDATE `news` SET deleted = TRUE WHERE id = :id';
 
