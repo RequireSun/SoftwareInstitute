@@ -43,9 +43,9 @@ router.post  ('/category', struct.CategoryPost);
 router.put   ('/category', struct.CategoryPut);
 router.delete('/category');
 
-router.get('/outline', struct.OutlineGet);
-router.post('/outline');
-router.put('/outline');
+router.get   ('/outline', struct.OutlineGet);
+router.post  ('/outline', struct.OutlinePost);
+router.put   ('/outline', struct.OutlinePut);
 router.delete('/outline');
 
 router.get('/struct', struct.StructGet);
@@ -62,11 +62,6 @@ router.get('/login', supervisor.LoginGet);
 
 // router.get('/pValidate', power.validate);
 
-//router.get('/ResourceList', resource.ResourceList);
-//router.get('/NewsCategory', news.NewsListCategory);
-//router.get('/NewsOutline', news.NewsListOutline);
-//router.get('/News', news.NewsGet);
-//router.get('/Struct', news.Struct);
 //router.get('/StyleCategory', news.StyleCategory);
 //router.get('/StyleOutline', news.StyleOutline);
 

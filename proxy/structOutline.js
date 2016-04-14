@@ -4,6 +4,7 @@
 'use strict';
 
 let database = require('../common/database');
+let formatUpdateParameters = require('../common/tool').formatUpdateParameters;
 
 exports.get = (callback, id) => {
     if ('number' !== typeof id) {
@@ -31,3 +32,52 @@ exports.get = (callback, id) => {
         }
     );
 };
+
+exports.post = (callback, name) => {
+    if ('string' !== typeof name || !name) {
+        return callback(new Error('Parameter: name must be string!'));
+    }
+
+    let queryString = 'INSERT INTO `outline` (`name`) VALUES (:name)';
+
+    database.query(
+        queryString,
+        { name },
+        (err, result) => {
+            if (err) {
+                callback(err);
+            } else if (!result || !result['affectedRows']) {
+                callback(new Error('Insert failed!'));
+            } else {
+                callback(null, result['insertId']);
+            }
+        }
+    );
+};
+
+exports.put = (callback, id, name) => {
+    if (isNaN(+id)) {
+        return callback(new Error('Parameter: id must be number!'));
+    } else if ('string' !== typeof name || !name) {
+        return callback(new Error('Parameter: name should not be empty string!'));
+    }
+    id = +id;
+
+    let queryString = 'UPDATE `outline` SET `name` = :name WHERE `id` = :id';
+
+    database.query(
+        queryString,
+        { id, name },
+        (err, result) => {
+            if (err) {
+                callback(err);
+            } else if (!result || !result['affectedRows']) {
+                callback(new Error('Edit failed!'));
+            } else {
+                callback(null, id);
+            }
+        }
+    )
+};
+
+exports.delete = () => {};

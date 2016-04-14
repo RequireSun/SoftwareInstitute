@@ -35,8 +35,8 @@ exports.post = (callback, detail) => {
 
     if (isNaN(outlineId)) {
         return callback(new Error('Parameter: outlineId must be number!'));
-    } else if (!name) {
-        return callback(new Error('Parameter: name should not be empty!'));
+    } else if ('string' !== typeof name || !name) {
+        return callback(new Error('Parameter: name must be string!'));
     }
 
     let queryString = 'INSERT INTO `category` (`name`, `outline_id`) VALUES (:name, :outlineId)';
@@ -59,14 +59,15 @@ exports.post = (callback, detail) => {
 exports.put = (callback, id, detail) => {
     !detail && (detail = {});
 
-    if (isNaN(id)) {
+    if (isNaN(+id)) {
         return callback(new Error('Parameter: id must be number!'));
-    } else if (undefined !== detail['name'] && !detail['name']) {
+    } else if (undefined !== detail['name'] && ('string' !== detail['name'] || !detail['name'])) {
         return callback(new Error('Parameter: name should not be empty string!'));
-    } else if (undefined !== detail['outlineId'] && !detail['outlineId']) {
+    } else if (undefined !== detail['outlineId'] && isNaN(+detail['outlineId'])) {
         return callback(new Error('Parameter: outlineId should not be empty string!'));
     }
-    
+    detail['outlineId'] = +detail['outlineId'];
+
     let retObj = formatUpdateParameters(detail, {
         name        : 'name',
         outlineId   : 'outline_id',
@@ -78,7 +79,7 @@ exports.put = (callback, id, detail) => {
         return callback(new Error('Nothing to update!'));
     }
 
-    detail['id'] = id;
+    detail['id'] = +id;
 
     let queryString = 'UPDATE `category` SET ' + queryArray.join(',') + ' WHERE `id` = :id';
 

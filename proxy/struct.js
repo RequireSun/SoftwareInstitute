@@ -13,7 +13,10 @@ exports.categoryPost    = category.post;
 exports.categoryPut     = category.put;
 exports.categoryDelete  = category.delete;
 
-exports.outlineGet = outline.get;
+exports.outlineGet      = outline.get;
+exports.outlinePost     = outline.post;
+exports.outlinePut      = outline.put;
+exports.outlineDelete   = outline.delete;
 
 exports.get = callback => {
     var queryString =

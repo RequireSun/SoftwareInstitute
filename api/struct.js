@@ -60,7 +60,7 @@ exports.CategoryPut = (req, res, next) => {
         name        = req.body.name,
         outlineId   = +req.body.outlineId;
 
-    if (isNaN(id)) {
+    if (isNaN(+id)) {
         res.jsonErrorParameterMissing('请输入正确的小分类编号！');
         next();
         return;
@@ -78,7 +78,7 @@ exports.CategoryPut = (req, res, next) => {
     name        && (detail['name']      = name);
     outlineId   && (detail['outlineId'] = outlineId);
 
-    new Promise(promiseWrap(Struct.categoryPut, id, detail)).
+    new Promise(promiseWrap(Struct.categoryPut, +id, detail)).
         then(result => {
             res.jsonSuccess(result);
             next();
@@ -108,6 +108,51 @@ exports.OutlineGet = (req, res, next) => {
                 next();
             }
         }).catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
+            next();
+        });
+};
+
+exports.OutlinePost = (req, res, next) => {
+    let name        = req.body.name;
+
+    if ('string' !== typeof name || !name) {
+        res.jsonErrorParameterMissing('请输入正确的分类名称！');
+        next();
+        return;
+    }
+
+    return new Promise(promiseWrap(Struct.outlinePost, name)).
+        then(result => {
+            res.jsonSuccess(result);
+            next();
+        }).
+        catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
+            next();
+        });
+};
+
+exports.OutlinePut = (req, res, next) => {
+    let id          = +req.query.id,
+        name        = req.body.name;
+
+    if (isNaN(+id)) {
+        res.jsonErrorParameterMissing('请输入正确的小分类编号！');
+        next();
+        return;
+    } else if ('string' !== typeof name || !name) {
+        res.jsonErrorParameterMissing('请输入正确的分类名称！');
+        next();
+        return;
+    }
+
+    new Promise(promiseWrap(Struct.outlinePut, +id, name)).
+        then(result => {
+            res.jsonSuccess(result);
+            next();
+        }).
+        catch(err => {
             res.jsonErrorParameterWrong(err['message']);
             next();
         });

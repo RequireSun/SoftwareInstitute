@@ -35,7 +35,8 @@ exports.post    = (callback, detail) => {
 
     if (isNaN(detail['category_id']) || isNaN(detail['supervisor_id'])) {
         return callback(new Error('Parameter: category_id / supervisor_id must be number!'));
-    } else if (!detail['title'] || !detail['article']) {
+    } else if (('string' !== typeof detail['title'] || !detail['title']) ||
+               ('string' !== typeof detail['article'] || !detail['article'])) {
         return callback(new Error('Parameter: title / article should not be empty!'));
     }
 
@@ -66,8 +67,8 @@ exports.put     = (callback, id, detail) => {
     } else if ((undefined !== detail['categoryId'] && isNaN(+detail['categoryId'])) ||
                (undefined !== detail['supervisorId'] && isNaN(+detail['supervisorId']))) {
         return callback(new Error('Parameter: categoryId / supervisorId should be number!'))
-    } else if ((undefined !== detail['title'] && !detail['title']) ||
-               (undefined !== detail['article'] && !detail['article'])) {
+    } else if ((undefined !== detail['title'] && ('string' !== typeof detail['title'] || !detail['title'])) ||
+               (undefined !== detail['article'] && ('string' !== typeof detail['article'] || !detail['article']))) {
         return callback(new Error('Parameter: title / article should not be empty string!'));
     }
 
