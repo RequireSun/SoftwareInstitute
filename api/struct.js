@@ -187,7 +187,7 @@ exports.OutlineDelete = (req, res, next) => {
         return;
     }
 
-    new Promise(promiseWrap(Struct.outlineDelete, id)).
+    return new Promise(promiseWrap(Struct.outlineDelete, id)).
         then(result => {
             res.jsonSuccess(result);
             next();
@@ -209,6 +209,28 @@ exports.StructGet = (req, res, next) => {
                 next();
             }
         }).catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
+            next();
+        });
+};
+
+exports.StructPut = (req, res, next) => {
+    let struct = req.body.struct;
+
+    try {
+        struct = JSON.parse(struct);
+    } catch (e) {
+        res.jsonErrorParameterWrong('Struct must be Object!');
+        next();
+        return;
+    }
+
+    return new Promise(promiseWrap(Struct.put, struct)).
+        then(result => {
+            res.jsonSuccess(result);
+            next();
+        }).
+        catch(err => {
             res.jsonErrorParameterWrong(err['message']);
             next();
         });

@@ -6,6 +6,8 @@ exports.hasOwnProperty = function (target) {
     return Object.prototype.hasOwnProperty.apply(target, args);
 };
 
+exports.toString = target => Object.prototype.toString.call(target);
+
 exports.generatePageNumber = function (pageCurrent, pageMax, pageLink) {
     var numberList = [];
     // 填充页码， 取剩余页面数量和页面跳转限额中较小的一个， 作为页码个数， 循环填充
@@ -25,6 +27,21 @@ exports.generatePageNumber = function (pageCurrent, pageMax, pageLink) {
     });
 };
 
+exports.formatInsertParameters = (params, nameMap) => {
+    let queryArrayDeclare = [],
+        queryArrayValue   = [],
+        processedParams   = {};
+    for (let i in params) {
+        if (exports.hasOwnProperty(params, i) && exports.hasOwnProperty(nameMap, i)) {
+            queryArrayDeclare.push(nameMap[i]);
+            queryArrayValue.push(i);
+            processedParams[i] = params[i];
+        }
+    }
+
+    return { queryArrayDeclare, queryArrayValue, processedParams };
+};
+
 exports.formatUpdateParameters = (params, nameMap) => {
     let queryArray = [],
         processedParams = {};
@@ -42,6 +59,10 @@ exports.formatUpdateParameters = (params, nameMap) => {
 exports.promiseWrap = function (func) {
     let args = Array.prototype.slice.call(arguments, 1);
     return (resolve, reject) => func((err, data) => err ? reject(err) : resolve(data), ...args);
+};
+exports.promiseWrapTail = function (func) {
+    let args = Array.prototype.slice.call(arguments, 1);
+    return (resolve, reject) => func(...args, (err, data) => err ? reject(err): resolve(data));
 };
 // es6 type
 //exports.promiseWrap = (func, ...args) => (resolve, reject) => func(((err, data) => err ? reject(err) : resolve(data)), ...args);

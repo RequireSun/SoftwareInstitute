@@ -3,10 +3,15 @@
  */
 'use strict';
 
+let async       = require('async');
 let category    = require('./structCategory');
 let outline     = require('./structOutline');
 let database    = require('../common/database');
+let toString    = require('../common/tool').toString;
 let hasOwnProperty = require('../common/tool').hasOwnProperty;
+let promiseWrap = require('../common/tool').promiseWrap;
+let promiseWrapTail = require('../common/tool').promiseWrapTail;
+let formatInsertParameters = require('../common/tool').formatInsertParameters;
 
 exports.categoryGet     = category.get;
 exports.categoryPost    = category.post;
@@ -32,11 +37,6 @@ exports.get = callback => {
                 callback(new Error('No Data!'));
             } else {
                 let processed = {};
-                    // slice = Array.prototype.slice,
-                    // hasOwnProperty = function (target) {
-                    //     let args = slice.call(arguments, 1);
-                    //     return Object.prototype.hasOwnProperty.apply(target, args);
-                    // };
                 for (let i = 0, item; item = result[i]; ++i) {
                     if (undefined !== item['id']) {
                         if (!hasOwnProperty(processed, item['id'])) {
@@ -50,3 +50,138 @@ exports.get = callback => {
         }
     );
 };
+
+exports.put = (callback, relation) => {
+    let processed = transformRelationObject(relation);
+
+    if (!processed) {
+        return callback(new Error('Input wrong struct!'));
+    }
+
+    let outlineArray  = processed['outlineArray'],
+        categoryArray = processed['categoryArray'];
+
+    let outlineMap = {
+        id  : 'id',
+        name: 'name',
+    }, categoryMap = {
+        id       : 'id',
+        name     : 'name',
+        outlineId: 'outline_id',
+    };
+
+    outlineArray = outlineArray.map(item => formatInsertParameters(item, outlineMap));
+    categoryArray = categoryArray.map(item => formatInsertParameters(item, categoryMap));
+
+    outlineArray = outlineArray.map(item => ({
+        queryArrayDeclare: item['queryArrayDeclare'].join(','),
+        queryArrayValue: item['queryArrayValue'].map(str => ':' + str).join(','),
+        processedParams: item['processedParams'],
+    }));
+
+    categoryArray = categoryArray.map(item => ({
+        queryArrayDeclare: item['queryArrayDeclare'].join(','),
+        queryArrayValue: item['queryArrayValue'].map(str => ':' + str).join(','),
+        processedParams: item['processedParams'],
+    }));
+
+    database.getConnection((err, connection) => {
+        if (err) {
+            return callback(new Error('Connection get failed!'));
+        }
+
+        connection.beginTransaction(err => {
+            if (err) {
+                return callback(new Error('Transaction start failed!'));
+            }
+            Promise.all([
+                new Promise(promiseWrapTail(connection.query, 'DELETE FROM `outline`')),
+                new Promise(promiseWrapTail(connection.query, 'DELETE FROM `category`')),
+            ]).then(new Promise(promiseWrap((cb) => {
+                async.everyLimit(outlineArray, 5, (item, cbk) => {
+                    connection.query(
+                        'INSERT INTO `outline` (' +
+                        item['queryArrayDeclare'] +
+                        ') VALUES (' +
+                        item['queryArrayValue'] +
+                        ')',
+                        item['processedParams'],
+                        (err, result) => {
+                            if (err) {
+                                cbk(err);
+                            } else if (!result || !result['affectedRows']) {
+                                cbk(null, false);
+                            } else {
+                                cbk(true);
+                            }
+                        }
+                    );
+                }, (err, result) => {
+                    if (err || !result) {
+                        cb(new Error('Outline error!'));
+                    } else {
+                        cb(null, true);
+                    }
+                });
+            }))).then(new Promise(promiseWrap(cb => {
+                async.everyLimit(categoryArray, 5, (item, cbk) => {
+                    connection.query(
+                        'INSERT INTO `category` (' +
+                        item['queryArrayDeclare'] +
+                        ') VALUES (' +
+                        item['queryArrayValue'] +
+                        ')',
+                        item['processedParams'],
+                        (err, result) => {
+                            if (err) {
+                                cbk(err);
+                            } else if (!result || !result['affectedRows']) {
+                                cbk(null, false);
+                            } else {
+                                cbk(true);
+                            }
+                        }
+                    );
+                }, (err, result) => {
+                    if (err || !result) {
+                        cb(new Error('Outline error!'));
+                    } else {
+                        cb(null, true);
+                    }
+                });
+            }))).then(new Promise(promiseWrap(cb => {
+                connection.commit(err => { if (err) { cb(err); } else { connection.release(); callback(null); } })
+            }))).catch(err => connection.rollback(err => { connection.release(); callback(err); }));
+        });
+    });
+
+    // callback(null, JSON.stringify(outlineArray) + JSON.stringify(categoryArray))
+};
+
+function transformRelationObject (relation) {
+    if ('[object Object]' !== toString(relation)) {
+        return;
+    }
+
+    let outlineArray = [], categoryArray = [];
+
+    for (let i in relation) {
+        if (hasOwnProperty(relation, i)) {
+            if (isNaN(+relation[i]['id']) || 0 === +relation[i]['id'] || !relation[i]['name']) {
+                return;
+            }
+            outlineArray.push({ id: +relation[i]['id'], name: relation[i]['name'] });
+            if ('[object Array]' === toString(relation[i]['categories'])) {
+                for (let j = 0, item; item = relation[i]['categories'][j]; ++j) {
+                    if (isNaN(+item['id']) || 0 === +item['id'] || !item['name']) {
+                        return;
+                    } else {
+                        categoryArray.push({ id: +item['id'], name: item['name'], outlineId: relation[i]['id'] });
+                    }
+                }
+            }
+        }
+    }
+
+    return { outlineArray, categoryArray };
+}

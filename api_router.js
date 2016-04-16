@@ -46,10 +46,10 @@ router.delete('/category', struct.CategoryDelete);
 router.get   ('/outline', struct.OutlineGet);
 router.post  ('/outline', struct.OutlinePost);
 router.put   ('/outline', struct.OutlinePut);
-router.delete('/outline');
+router.delete('/outline', struct.OutlineDelete);
 
 router.get('/struct', struct.StructGet);
-router.put('/struct');
+router.put('/struct', struct.StructPut);
 
 router.get('/newsCategory', news.NewsCategory);
 
