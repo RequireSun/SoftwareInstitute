@@ -59,6 +59,17 @@ _思考: 数据库的对应结构怎么搞, 如何提高更新的效率_
 # 栏目样式 Style
 
 1. get 获取
+2. Δ post 添加
+   * style 结构
+3. Δ put 更新
+   * id 目标 id
+   * style 结构
+4. Δ delete 删除
+   * id 目标 id
+
+# 栏目样式汇总 StyleAll
+
+1. get 获取
 2. Δ put 整体更新
    * styles 样式结构 json 对象
 

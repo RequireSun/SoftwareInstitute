@@ -14,6 +14,7 @@ let news            = require('./api/news');
 let struct          = require('./api/struct');
 let supervisor      = require('./api/supervisor');
 let power           = require('./api/power');
+let style           = require('./api/style');
 // 引入 middleware
 // let middlewareName = require('pathToMiddleware');
 let config          = require('./config');
@@ -52,17 +53,21 @@ router.get('/struct', struct.StructGet);
 router.put('/struct', struct.StructPut);
 
 router.get('/newsCategory', news.NewsCategory);
-
-router.get('/newsOutline', news.NewsOutline);
+router.get('/newsOutline',  news.NewsOutline);
 
 router.get('/resourceList', resource.ListGet);
 
 router.get('/validate', supervisor.ValidateGet);
 router.get('/login', supervisor.LoginGet);
 
-// router.get('/pValidate', power.validate);
+router.get   ('/style', style.get);
+router.post  ('/style', style.post);
+router.put   ('/style', style.put);
+router.delete('/style', style.delete);
 
-//router.get('/StyleCategory', news.StyleCategory);
-//router.get('/StyleOutline', news.StyleOutline);
+router.get('styleAll', style.getAll);
+router.put('styleAll', style.putAll);
+
+// router.get('/pValidate', power.validate);
 
 module.exports = router;

@@ -26,6 +26,16 @@ module.exports = {
         get     : 0,
         put     : 1,
     },
+    style: {
+        get     : 0,
+        post    : 1,
+        put     : 1,
+        delete  : 1,
+    },
+    styleAll: {
+        get     : 0,
+        put     : 1,
+    },
     newsCategory: {
         get     : 0,
     },

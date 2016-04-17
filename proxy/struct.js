@@ -84,20 +84,23 @@ exports.put = (callback, relation) => {
         queryArrayValue: item['queryArrayValue'].map(str => ':' + str).join(','),
         processedParams: item['processedParams'],
     }));
-
+    // 获取 connection
     database.getConnection((err, connection) => {
         if (err) {
             return callback(new Error('Connection get failed!'));
         }
-
+        // 开始事务
         connection.beginTransaction(err => {
             if (err) {
                 return callback(new Error('Transaction start failed!'));
             }
+            // 数据库操作
             Promise.all([
+                // 清空两个表
                 new Promise(promiseWrapTail(connection.query, 'DELETE FROM `outline`')),
                 new Promise(promiseWrapTail(connection.query, 'DELETE FROM `category`')),
             ]).then(new Promise(promiseWrap((cb) => {
+                // 插入 outline
                 async.everyLimit(outlineArray, 5, (item, cbk) => {
                     connection.query(
                         'INSERT INTO `outline` (' +
@@ -124,6 +127,7 @@ exports.put = (callback, relation) => {
                     }
                 });
             }))).then(new Promise(promiseWrap(cb => {
+                // 插入 category
                 async.everyLimit(categoryArray, 5, (item, cbk) => {
                     connection.query(
                         'INSERT INTO `category` (' +
@@ -150,12 +154,17 @@ exports.put = (callback, relation) => {
                     }
                 });
             }))).then(new Promise(promiseWrap(cb => {
+                // 提交事务
                 connection.commit(err => { if (err) { cb(err); } else { connection.release(); callback(null); } })
-            }))).catch(err => connection.rollback(err => { connection.release(); callback(err); }));
+            }))).catch(err =>
+                // 错误回滚
+                connection.rollback(err => {
+                    connection.release();
+                    callback(err);
+                })
+            );
         });
     });
-
-    // callback(null, JSON.stringify(outlineArray) + JSON.stringify(categoryArray))
 };
 
 function transformRelationObject (relation) {
