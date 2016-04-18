@@ -102,3 +102,20 @@ exports.delete = (callback, id) => {
         }
     );
 };
+
+exports.getAll = callback => {
+    const queryString = 'SELECT id, name FROM outline';
+
+    database.query(
+        queryString,
+        (err, result) => {
+            if (err) {
+                callback(err);
+            } else if (!result) {
+                callback(new Error('No Data!'));
+            } else {
+                callback(null, result);
+            }
+        }
+    );
+};

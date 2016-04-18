@@ -11,7 +11,7 @@ exports.get = (callback, id) => {
         return callback(new Error('Parameter: id must be number!'));
     }
 
-    var queryString = 'SELECT id, name FROM category WHERE id = :id';
+    const queryString = 'SELECT id, name FROM category WHERE id = :id';
 
     database.query(
         queryString,
@@ -30,8 +30,8 @@ exports.get = (callback, id) => {
 
 exports.post = (callback, detail) => {
     !detail && (detail = {});
-    let name        = detail['name'],
-        outlineId   = +detail['outlineId'];
+    const name        = detail['name'],
+          outlineId   = +detail['outlineId'];
 
     if (isNaN(outlineId)) {
         return callback(new Error('Parameter: outlineId must be number!'));
@@ -39,7 +39,7 @@ exports.post = (callback, detail) => {
         return callback(new Error('Parameter: name must be string!'));
     }
 
-    let queryString = 'INSERT INTO `category` (`name`, `outline_id`) VALUES (:name, :outlineId)';
+    const queryString = 'INSERT INTO `category` (`name`, `outline_id`) VALUES (:name, :outlineId)';
 
     database.query(
         queryString,
@@ -81,7 +81,7 @@ exports.put = (callback, id, detail) => {
 
     detail['id'] = +id;
 
-    let queryString = 'UPDATE `category` SET ' + queryArray.join(',') + ' WHERE `id` = :id';
+    const queryString = 'UPDATE `category` SET ' + queryArray.join(',') + ' WHERE `id` = :id';
 
     database.query(
         queryString,
@@ -104,7 +104,7 @@ exports.delete = (callback, id) => {
     }
     id = +id;
 
-    let queryString = 'DELETE FROM `category` WHERE id = :id';
+    const queryString = 'DELETE FROM `category` WHERE id = :id';
 
     database.query(
         queryString,
@@ -116,6 +116,23 @@ exports.delete = (callback, id) => {
                 callback(new Error('Delete failed!'));
             } else {
                 callback(null, id);
+            }
+        }
+    );
+};
+
+exports.getAll = callback => {
+    const queryString = 'SELECT id, name FROM category';
+
+    database.query(
+        queryString,
+        (err, result) => {
+            if (err) {
+                callback(err);
+            } else if (!result) {
+                callback(new Error('No Data!'));
+            } else {
+                callback(null, result);
             }
         }
     );

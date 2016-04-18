@@ -109,6 +109,21 @@ exports.CategoryDelete = (req, res, next) => {
         });
 };
 
+exports.CategoryGetAll = (req, res, next) =>
+    new Promise(promiseWrap(Struct.categoryGetAll)).
+        then(data => {
+            if (!data) {
+                res.jsonErrorParameterWrong('数据拉取错误！');
+                next();
+            } else {
+                res.jsonSuccess(data);
+                next();
+            }
+        }).catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
+            next();
+        });
+
 exports.OutlineGet = (req, res, next) => {
     let id = +req.query.id;
 
@@ -197,6 +212,21 @@ exports.OutlineDelete = (req, res, next) => {
             next();
         });
 };
+
+exports.OutlineGetAll = (req, res, next) =>
+    new Promise(promiseWrap(Struct.outlineGetAll)).
+    then(data => {
+        if (!data) {
+            res.jsonErrorParameterWrong('数据拉取错误！');
+            next();
+        } else {
+            res.jsonSuccess(data);
+            next();
+        }
+    }).catch(err => {
+        res.jsonErrorParameterWrong(err['message']);
+        next();
+    });
 
 exports.StructGet = (req, res, next) => {
     new Promise(promiseWrap(Struct.get)).

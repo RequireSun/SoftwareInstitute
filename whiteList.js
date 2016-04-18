@@ -10,6 +10,12 @@ module.exports = {
         put     : 1,
         delete  : 1,
     },
+    newsCategory: {
+        get     : 0,
+    },
+    newsOutline: {
+        get     : 0,
+    },
     category: {
         get     : 0,
         post    : 1,
@@ -21,6 +27,12 @@ module.exports = {
         post    : 1,
         put     : 1,
         delete  : 1,
+    },
+    categoryAll: {
+        get     : 0,
+    },
+    outlineAll: {
+        get     : 0,
     },
     struct: {
         get     : 0,
@@ -36,11 +48,11 @@ module.exports = {
         get     : 0,
         put     : 1,
     },
-    newsCategory: {
+    resource: {
         get     : 0,
-    },
-    newsOutline: {
-        get     : 0,
+        post    : 1,
+        put     : 1,
+        delete  : 1,
     },
     resourceList: {
         get     : 0,
