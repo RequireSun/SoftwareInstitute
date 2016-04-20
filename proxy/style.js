@@ -25,7 +25,7 @@ exports.get = (callback, name) => {
 };
 
 exports.post = (callback, name, style) => {
-    if (!!name || 'string' !== typeof name) {
+    if (!name || 'string' !== typeof name) {
         return callback(new Error('Parameter: name must be string!'));
     } else if (!Array.isArray(style)) {
         return callback(new Error('Parameter: style must be array!'));
