@@ -38,7 +38,6 @@ exports.post = (callback, name, style) => {
     }
 
     return readStyleObject().then(result => {
-        // console.log(result, name);
         if (hasOwnProperty(result, name)) {
             return Promise.reject(new Error('Parameter: duplicate style name!'));
         }
@@ -52,9 +51,45 @@ exports.post = (callback, name, style) => {
     ).catch(err => callback(err));
 };
 
-exports.put = (callback, name, style) => {};
+exports.put = (callback, name, style) => {
+    if (!name || 'string' !== typeof name) {
+        return callback(new Error('Parameter: name must be string!'));
+    } else if (!Array.isArray(style)) {
+        return callback(new Error('Parameter: style must be array!'));
+    }
 
-exports.delete = (callback, name) => {};
+    let childObject = transformChildObject(style);
+
+    if (!childObject) {
+        return callback(new Error('Parameter: style invalid!'));
+    }
+
+    return readStyleObject().then(result => {
+        result[name] = childObject;
+
+        return result;
+    }).then(result =>
+        writeStyleObject(result)
+    ).then(result =>
+        callback(null)
+    ).catch(err => callback(err));
+};
+
+exports.delete = (callback, name) => {
+    if (!name || 'string' !== typeof name) {
+        return callback(new Error('Parameter: name must be string!'));
+    }
+
+    return readStyleObject().then(result => {
+        delete result[name];
+        
+        return result;
+    }).then(result =>
+        writeStyleObject(result)
+    ).then(result =>
+        callback(null)
+    ).catch(err => callback(err));
+};
 
 exports.getAll = callback => {
     return readStyleObject().then(result =>

@@ -63,9 +63,62 @@ exports.post = (req, res, next) => {
         });
 };
 
-exports.put = (req, res, next) => {};
+exports.put = (req, res, next) => {
+    let name  = req.query.name,
+        style = req.body.style;
 
-exports.delete = (req, res, next) => {};
+    if (!name || 'string' !== typeof name || !style || ('object' !== typeof style && 'string' !== typeof style)) {
+        res.jsonErrorParameterMissing('请传入格式名和样式内容');
+        next();
+        return;
+    }
+
+    if ('string' === typeof style) {
+        try {
+            style = JSON.parse(style);
+        } catch (err) {
+            res.jsonErrorParameterWrong('传入的样式 json 格式错误！');
+            next();
+            return;
+        }
+    }
+
+    if (!Array.isArray(style)) {
+        res.jsonErrorParameterWrong('传入的样式 json 必须为数组！');
+        next();
+        return;
+    }
+
+    return new Promise(promiseWrap(Style.put, name, style)).
+        then(() => {
+            res.jsonSuccess(name);
+            next();
+        }).
+        catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
+            next();
+        });
+};
+
+exports.delete = (req, res, next) => {
+    let name  = req.query.name;
+
+    if (!name || 'string' !== typeof name) {
+        res.jsonErrorParameterMissing('请传入格式名和样式内容');
+        next();
+        return;
+    }
+
+    return new Promise(promiseWrap(Style.delete, name)).
+        then(() => {
+            res.jsonSuccess(name);
+            next();
+        }).
+        catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
+            next();
+        });
+};
 
 exports.getAll = (req, res, next) => {
     return new Promise(promiseWrap(Style.getAll)).
