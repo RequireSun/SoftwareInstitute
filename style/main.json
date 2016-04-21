@@ -1,9 +1,1 @@
-{
-  "navigator": [{
-    "id": 1,
-    "type": "category"
-  }, {
-    "id": 1,
-    "type": "outline"
-  }]
-}
+{"navigator":[{"id":1,"type":"category"},{"id":1,"type":"outline"}],"footer":[{"id":1,"type":"outline"}]}

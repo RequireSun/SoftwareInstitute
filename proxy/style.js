@@ -38,6 +38,7 @@ exports.post = (callback, name, style) => {
     }
 
     return readStyleObject().then(result => {
+        // console.log(result, name);
         if (hasOwnProperty(result, name)) {
             return Promise.reject(new Error('Parameter: duplicate style name!'));
         }
@@ -180,7 +181,7 @@ function transformStyleObject (relation) {
 }
 
 function transformChildObject (relation) {
-    if ('[object Object]' !== toString(relation)) {
+    if (!Array.isArray(relation)) {
         return;
     }
 

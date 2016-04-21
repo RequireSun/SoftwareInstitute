@@ -30,18 +30,20 @@ exports.post = (req, res, next) => {
     let name  = req.query.name,
         style = req.body.style;
 
-    if (!name || 'string' !== typeof name || !style || 'string' !== typeof style) {
+    if (!name || 'string' !== typeof name || !style || ('object' !== typeof style && 'string' !== typeof style)) {
         res.jsonErrorParameterMissing('请传入格式名和样式内容');
         next();
         return;
     }
 
-    try {
-        style = JSON.parse(style);
-    } catch (err) {
-        res.jsonErrorParameterWrong('传入的样式 json 格式错误！');
-        next();
-        return;
+    if ('string' === typeof style) {
+        try {
+            style = JSON.parse(style);
+        } catch (err) {
+            res.jsonErrorParameterWrong('传入的样式 json 格式错误！');
+            next();
+            return;
+        }
     }
 
     if (!Array.isArray(style)) {
