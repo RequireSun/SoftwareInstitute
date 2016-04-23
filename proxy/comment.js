@@ -59,6 +59,7 @@ exports.post    = (callback, detail) => {
         }
     );
 };
+
 exports.put     = (callback, id, detail) => {
     !detail && (detail = {});
 
@@ -105,5 +106,52 @@ exports.put     = (callback, id, detail) => {
         }
     );
 };
-exports.delete  = (callback, id) => {};
-exports.getAll  = (callback, newsId) => {};
+
+exports.delete  = (callback, id) => {
+    if (isNaN(id)) {
+        return callback(new Error('Parameter: id must be number!'));
+    }
+    id = +id;
+
+    let queryString = 'UPDATE `comment` SET deleted = TRUE WHERE id = :id';
+
+    database.query(
+        queryString,
+        { id },
+        (err, result) => {
+            if (err) {
+                callback(err);
+            } else if (!result || !result['affectedRows']) {
+                callback(new Error('Delete failed!'));
+            } else {
+                callback(null, id);
+            }
+        }
+    );
+};
+
+exports.getAll  = (callback, id, pageSize, pageRequest) => {
+    if (isNaN(+id) || isNaN(+pageSize) || isNaN(+pageRequest)) {
+        return callback(new Error('Parameter: pageSize / pageRequest / id must be number!'));
+    } else if (0 > pageSize || 0 > pageRequest) {
+        return callback(new Error('Parameter: pageSize / pageRequest must be non-negative number!'));
+    }
+
+    var queryString =
+        'SELECT comment.id, comment.content, supervisor.id AS supervisor_id, supervisor.alias, update_time ' +
+        'FROM comment LEFT JOIN supervisor ON supervisor.id = comment.supervisor_id' +
+        'WHERE comment.news_id = :id ORDER BY update_time DESC LIMIT :pageLimit OFFSET :pageOffset';
+
+    database.query(queryString, {
+        id,
+        pageLimit   : pageSize,
+        pageOffset  : pageRequest * pageSize,
+    }, (err, rows) => {
+        if (err) {
+            callback(err);
+        } else {
+            callback(null, rows);
+        }
+    });
+};
+// sign all count

@@ -128,7 +128,7 @@ exports.delete  = (callback, id) => {
                 callback(null, id);
             }
         }
-    )
+    );
 };
 
 exports.view  = (callback, id) => {

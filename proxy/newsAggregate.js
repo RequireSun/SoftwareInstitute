@@ -12,7 +12,7 @@ let database            = require('../common/database');
  * @returns {*}
  */
 exports.category        = (callback, id, pageSize, pageRequest) => {
-    if ('number' !== typeof pageSize || 'number' !== typeof pageRequest || 'number' !== typeof id) {
+    if (isNaN(+id) || isNaN(+pageSize) || isNaN(+pageRequest)) {
         return callback(new Error('Parameter: pageSize / pageRequest / id must be number!'));
     } else if (0 > pageSize || 0 > pageRequest) {
         return callback(new Error('Parameter: pageSize / pageRequest must be non-negative number!'));
