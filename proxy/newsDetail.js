@@ -38,6 +38,8 @@ exports.post    = (callback, detail) => {
     } else if (('string' !== typeof detail['title'] || !detail['title']) ||
                ('string' !== typeof detail['article'] || !detail['article'])) {
         return callback(new Error('Parameter: title / article should not be empty!'));
+    } else if (!(4000 > detail['article'].length)) {
+        return callback(new Error('Parameter: article max size is 4000!'))
     }
 
     let queryString =
@@ -70,6 +72,8 @@ exports.put     = (callback, id, detail) => {
     } else if ((undefined !== detail['title'] && ('string' !== typeof detail['title'] || !detail['title'])) ||
                (undefined !== detail['article'] && ('string' !== typeof detail['article'] || !detail['article']))) {
         return callback(new Error('Parameter: title / article should not be empty string!'));
+    } else if (undefined !== detail['article'] && ('string' !== typeof detail['article'] || !(4000 > detail['article'].length))) {
+        return callback(new Error('Parameter: article max size is 4000!'))
     }
 
     let nameMap     = {

@@ -76,14 +76,20 @@ exports.put = (callback, relation) => {
     categoryArray = categoryArray.map(item => formatInsertParameters(item, categoryMap));
 
     outlineArray = outlineArray.map(item => ({
+        // 参数
         queryArrayDeclare: item['queryArrayDeclare'].join(','),
+        // value 替换
         queryArrayValue: item['queryArrayValue'].map(str => ':' + str).join(','),
+        // 参数
         processedParams: item['processedParams'],
     }));
 
     categoryArray = categoryArray.map(item => ({
+        // 参数
         queryArrayDeclare: item['queryArrayDeclare'].join(','),
+        // value 替换
         queryArrayValue: item['queryArrayValue'].map(str => ':' + str).join(','),
+        // 参数
         processedParams: item['processedParams'],
     }));
     // 获取 connection
