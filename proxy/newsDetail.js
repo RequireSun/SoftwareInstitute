@@ -3,7 +3,7 @@
  */
 'use strict';
 let database = require('../common/database');
-let hasOwnProperty = require('../common/tool').hasOwnProperty;
+let formatUpdateParameters = require('../common/tool').formatUpdateParameters;
 
 exports.get     = (callback, id) => {
     if ('number' !== typeof id) {
@@ -75,32 +75,23 @@ exports.put     = (callback, id, detail) => {
     } else if (undefined !== detail['article'] && ('string' !== typeof detail['article'] || !(4000 > detail['article'].length))) {
         return callback(new Error('Parameter: article max size is 4000!'))
     }
-
-    let nameMap     = {
+    // 构建更新数组
+    let retObj = formatUpdateParameters(detail, {
         categoryId  : 'category_id',
         supervisorId: 'supervisor_id',
         title       : 'title',
         article     : 'article',
-    },
-        filterArray = ['categoryId', 'supervisorId', 'title', 'article'],
-        queryArray  = [];
-    for (let i in detail) {
-        if (hasOwnProperty(detail, i)) {
-            if (-1 === filterArray.indexOf(i) || !detail[i]) {
-                delete detail[i];
-            } else {
-                queryArray.push(nameMap[i] + ' = :' + i);
-            }
-        }
-    }
-
+    });
+    let queryArray  = retObj['queryArray'];
+    detail          = retObj['processedParams'];
+    // 空
     if (!queryArray.length) {
         return callback(new Error('Nothing to update!'));
     }
 
-    detail['id'] = id;
+    detail['id'] = +id;
 
-    let queryString = 'UPDATE `news` SET ' + queryArray.join(',') + ' WHERE `id` = :id';
+    const queryString = 'UPDATE `news` SET ' + queryArray.join(',') + ' WHERE `id` = :id';
 
     database.query(
         queryString,
