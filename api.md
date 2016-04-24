@@ -157,10 +157,12 @@ _需要添加_
 
 # 评论
 
-1. 〇 post 添加
+1. get 获取单条
+   * id 回复的 id
+2. 〇 post 添加
    * articleId 文章 id
    * content 内容
    * _回复了谁?_
-2. 〇 put _修改?_
-3. 〇Δ delete
+3. 〇 put _修改?_
+4. 〇Δ delete
    * id 回复的 id

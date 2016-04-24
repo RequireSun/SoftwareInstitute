@@ -4,6 +4,8 @@
 'use strict';
 const database = require('../common/database');
 const formatUpdateParameters = require('../common/tool').formatUpdateParameters;
+const formatDateTime = require('../common/tool').formatDateTime;
+const formatDateTimeArray = require('../common/tool').formatDateTimeArray;
 
 exports.get     = (callback, id) => {
     if ('number' !== typeof id) {
@@ -24,6 +26,7 @@ exports.get     = (callback, id) => {
             } else if (!result || !result.length) {
                 callback(new Error('No Data!'));
             } else {
+                result[0]['update_time'] = formatDateTime(result[0]['update_time']);
                 callback(null, result[0]);
             }
         }
@@ -150,8 +153,30 @@ exports.getAll  = (callback, id, pageSize, pageRequest) => {
         if (err) {
             callback(err);
         } else {
+            rows = formatDateTimeArray(rows, 'update_time');
             callback(null, rows);
         }
     });
 };
 // sign all count
+exports.getCount   = (callback, id) => {
+    if ('number' !== typeof id) {
+        return callback(new Error('Parameter: id must be number!'));
+    }
+
+    var queryString = 'SELECT COUNT(*) as commentCount FROM comment WHERE news_id = :id';
+
+    database.query(
+        queryString,
+        { id },
+        (err, result) => {
+            if (err) {
+                callback(err);
+            } else if (!result || !result.length) {
+                callback(new Error('No data!'));
+            } else {
+                callback(null, result[0].commentCount);
+            }
+        }
+    );
+};

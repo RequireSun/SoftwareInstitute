@@ -27,6 +27,13 @@ exports.generatePageNumber = function (pageCurrent, pageMax, pageLink) {
     });
 };
 
+exports.formatDateTime = (dateString) => +new Date(dateString);
+
+exports.formatDateTimeArray = (dataArray, keyName) =>
+    dataArray.map(item =>
+        Object.assign({}, item, { [keyName]: exports.formatDateTime(item[keyName]) })
+    );
+
 exports.formatInsertParameters = (params, nameMap) => {
     let queryArrayDeclare = [],
         queryArrayValue   = [],
@@ -54,12 +61,12 @@ exports.formatUpdateParameters = (params, nameMap) => {
 
     return { queryArray, processedParams };
 };
-
 // 我日了 node 的 es6 兼容, 给箭头函数不给 rest parameters, 我怎么获取参数
 exports.promiseWrap = function (func) {
     let args = Array.prototype.slice.call(arguments, 1);
     return (resolve, reject) => func((err, data) => err ? reject(err) : resolve(data), ...args);
 };
+
 exports.promiseWrapTail = function (func) {
     let args = Array.prototype.slice.call(arguments, 1);
     return (resolve, reject) => func(...args, (err, data) => err ? reject(err): resolve(data));

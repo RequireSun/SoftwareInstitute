@@ -4,6 +4,7 @@
 'use strict';
 let database = require('../common/database');
 let formatUpdateParameters = require('../common/tool').formatUpdateParameters;
+let formatDateTime = require('../common/tool').formatDateTime;
 
 exports.get     = (callback, id) => {
     if ('number' !== typeof id) {
@@ -24,6 +25,7 @@ exports.get     = (callback, id) => {
             } else if (!result || !result.length) {
                 callback(new Error('No Data!'));
             } else {
+                result[0]['update_time'] = formatDateTime(result[0]['update_time']);
                 callback(null, result[0]);
             }
         }

@@ -135,8 +135,15 @@ exports.getAll = (req, res, next) => {
         return;
     }
 
-    new Promise(promiseWrap(Comment.getAll, id, pageSize, pageRequest)).
-    then(commentList => {
+    return Promise.all([
+        new Promise(promiseWrap(Comment.getAll, id, pageSize, pageRequest)),
+        new Promise(promiseWrap(Comment.getCount, id)),
+    ]).
+    then(results => {
+        let commentList  = results[0] || [],
+            commentCount = results[1];
+        let pageMax     = Math.ceil(commentCount / pageSize);
+
         if (!commentList) {
             res.jsonErrorParameterWrong('请输入正确的评论编号！');
             next();
@@ -151,7 +158,10 @@ exports.getAll = (req, res, next) => {
             update_time     : item['update_time'],
         }));
 
-        res.jsonSuccess(commentList);
+        res.jsonSuccess({
+            list : commentList,
+            count: pageMax,
+        });
         next();
     }).catch(err => {
         res.jsonErrorParameterWrong(err['message']);

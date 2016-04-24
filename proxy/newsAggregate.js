@@ -2,7 +2,8 @@
  * Created by KelvinSen on 2016/3/18.
  */
 'use strict';
-let database            = require('../common/database');
+const database            = require('../common/database');
+const formatDateTimeArray = require('../common/tool').formatDateTimeArray;
 /**
  * 获取小类新闻列表
  * @param callback
@@ -30,6 +31,7 @@ exports.category        = (callback, id, pageSize, pageRequest) => {
         if (err) {
             callback(err);
         } else {
+            rows = formatDateTimeArray(rows, 'update_time');
             callback(null, rows);
         }
     });
@@ -56,6 +58,7 @@ exports.outline         = (callback, id, pageSize, pageRequest) => {
         if (err) {
             callback(err);
         } else {
+            rows = formatDateTimeArray(rows, 'update_time');
             callback(null, rows);
         }
     });

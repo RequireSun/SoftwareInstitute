@@ -38,7 +38,7 @@ exports.NewsCategory = function (req, res, next) {
         //}
 
         res.jsonSuccess({
-            data    : newsList,
+            list    : newsList,
             count   : pageMax,
         });
         next();
@@ -76,7 +76,7 @@ exports.NewsOutline = function (req, res, next) {
         let pageMax     = Math.ceil(newsCount / pageSize);
 
         res.jsonSuccess({
-            data    : newsList,
+            list    : newsList,
             count   : pageMax
         });
         next();
