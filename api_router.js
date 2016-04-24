@@ -15,6 +15,7 @@ let struct          = require('./api/struct');
 let supervisor      = require('./api/supervisor');
 let power           = require('./api/power');
 let style           = require('./api/style');
+let comment         = require('./api/comment');
 // 引入 middleware
 // let middlewareName = require('pathToMiddleware');
 let config          = require('./config');
@@ -67,6 +68,13 @@ router.get('/styleAll', style.getAll);
 router.put('/styleAll', style.putAll);
 // 资源列表
 router.get('/resourceList', resource.ListGet);
+
+router.get   ('/comment', comment.get);
+router.post  ('/comment', comment.post);
+router.put   ('/comment', comment.put);
+router.delete('/comment', comment.delete);
+
+router.get('/commentAll', comment.getAll);
 
 router.get('/validate', supervisor.ValidateGet);
 router.get('/login', supervisor.LoginGet);

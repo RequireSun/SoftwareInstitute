@@ -106,7 +106,7 @@ exports.put     = (callback, id, detail) => {
         }
     );
 };
-
+// sign 删除个人权限
 exports.delete  = (callback, id) => {
     if (isNaN(id)) {
         return callback(new Error('Parameter: id must be number!'));
@@ -139,7 +139,7 @@ exports.getAll  = (callback, id, pageSize, pageRequest) => {
 
     var queryString =
         'SELECT comment.id, comment.content, supervisor.id AS supervisor_id, supervisor.alias, update_time ' +
-        'FROM comment LEFT JOIN supervisor ON supervisor.id = comment.supervisor_id' +
+        'FROM comment LEFT JOIN supervisor ON supervisor.id = comment.supervisor_id ' +
         'WHERE comment.news_id = :id ORDER BY update_time DESC LIMIT :pageLimit OFFSET :pageOffset';
 
     database.query(queryString, {

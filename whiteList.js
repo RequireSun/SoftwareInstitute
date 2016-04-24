@@ -57,6 +57,12 @@ module.exports = {
     resourceList: {
         get     : 0,
     },
+    comment     : {
+        get     : 0,
+        post    : 1,
+        put     : 1,
+        delete  : 1,
+    },
     validate: {
         get     : 0,
     },

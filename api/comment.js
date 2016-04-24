@@ -1,6 +1,8 @@
 /**
  * Created by kelvinsun on 2016/4/23.
  */
+'use strict';
+
 const Comment = require('../proxy/comment');
 const promiseWrap = require('../common/tool').promiseWrap;
 
@@ -8,7 +10,7 @@ exports.get = (req, res, next) => {
     let id = +req.query.id;
 
     if (isNaN(id)) {
-        res.jsonErrorParameterMissing('请输入正确的新闻编号！');
+        res.jsonErrorParameterMissing('请输入正确的评论编号！');
         next();
         return;
     }
@@ -113,6 +115,45 @@ exports.delete = (req, res, next) => {
         next();
     }).
     catch(err => {
+        res.jsonErrorParameterWrong(err['message']);
+        next();
+    });
+};
+// sign update_time 格式
+exports.getAll = (req, res, next) => {
+    let id          = +req.query.id,
+        pageSize    = +req.query.pageSize,
+        pageRequest = +req.query.pageRequest;
+
+    if (isNaN(id)) {
+        res.jsonErrorParameterMissing('请输入正确的评论编号！');
+        next();
+        return;
+    } else if (isNaN(pageSize) || isNaN(pageRequest)) {
+        res.jsonErrorParameterMissing('请输入正确的页面大小和页码！');
+        next();
+        return;
+    }
+
+    new Promise(promiseWrap(Comment.getAll, id, pageSize, pageRequest)).
+    then(commentList => {
+        if (!commentList) {
+            res.jsonErrorParameterWrong('请输入正确的评论编号！');
+            next();
+            return;
+        }
+
+        commentList = commentList.map(item => ({
+            id              : item['id'],
+            supervisor_id   : item['supervisor_id'],
+            supervisor_name : item['alias'],
+            content         : item['content'],
+            update_time     : item['update_time'],
+        }));
+
+        res.jsonSuccess(commentList);
+        next();
+    }).catch(err => {
         res.jsonErrorParameterWrong(err['message']);
         next();
     });
