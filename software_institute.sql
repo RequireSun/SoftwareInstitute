@@ -12,6 +12,17 @@ USE `software_institute`;
 -- 创建时间： 2016-04-10 08:43:20
 --
 
+<<<<<<< HEAD
+=======
+Date: 2015-08-30 17:28:12
+*/
+
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for category
+-- ----------------------------
+>>>>>>> acc742fbc970135d0a4f6731224205787ab2b646
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE IF NOT EXISTS `category` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -169,9 +180,50 @@ CREATE TABLE IF NOT EXISTS `resource` (
   KEY `update_time` (`update_time`) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+<<<<<<< HEAD
 --
 -- 触发器 `resource`
 --
+=======
+-- ----------------------------
+-- Table structure for style_type
+-- ----------------------------
+DROP TABLE IF EXISTS `style_type`;
+CREATE TABLE `style_type` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Table structure for supervisor
+-- ----------------------------
+DROP TABLE IF EXISTS `supervisor`;
+CREATE TABLE `supervisor` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `alias` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
+  `cipher` char(40) CHARACTER SET utf8mb4 NOT NULL,
+  `salt` char(10) CHARACTER SET utf8mb4 NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_alias` (`alias`) USING HASH
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+DROP TRIGGER IF EXISTS `news_insert`;
+DELIMITER ;;
+CREATE TRIGGER `news_insert` BEFORE INSERT ON `news` FOR EACH ROW BEGIN 
+SET NEW.update_time = NOW();
+END
+;;
+DELIMITER ;
+DROP TRIGGER IF EXISTS `news_update`;
+DELIMITER ;;
+CREATE TRIGGER `news_update` BEFORE UPDATE ON `news` FOR EACH ROW BEGIN 
+IF OLD.page_view = NEW.page_view THEN
+SET NEW.update_time = NOW();
+END IF;
+END
+;;
+DELIMITER ;
+>>>>>>> acc742fbc970135d0a4f6731224205787ab2b646
 DROP TRIGGER IF EXISTS `resource_insert`;
 DELIMITER $$
 CREATE TRIGGER `resource_insert` BEFORE INSERT ON `resource` FOR EACH ROW BEGIN
