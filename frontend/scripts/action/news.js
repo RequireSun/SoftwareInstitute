@@ -52,9 +52,9 @@ define(['jquery', 'root/config', 'common/network'], function ($, config, network
         });
     }
 
-    function OutlineCategory (callback) {
+    function Struct (callback) {
         $.ajax({
-            url: server + '/OutlineCategory',
+            url: server + '/Struct',
             type: 'GET',
             dataType: 'json'
         }).success(function (data, status, xhr) {
@@ -76,7 +76,7 @@ define(['jquery', 'root/config', 'common/network'], function ($, config, network
         if (!id || !callback) {
             return;
         }
-        var data, url = server + ('outline' === newsType ? '/NewsListOutline' : '/NewsListCategory');
+        var data, url = server + ('outline' === newsType ? '/NewsOutline' : '/NewsCategory');
         data = {
             pageSize : pageSize || config.pageSize,
             pageRequest: pageRequest || config.pageRequest
@@ -94,11 +94,11 @@ define(['jquery', 'root/config', 'common/network'], function ($, config, network
         });
     }
 
-    function NewsDetail (callback, newsId) {
+    function NewsGet (callback, newsId) {
         if (!newsId) {
             return ;
         }
-        var url = server + '/NewsDetail';
+        var url = server + '/News';
         $.ajax({
             url: url,
             type: 'GET',
@@ -116,8 +116,8 @@ define(['jquery', 'root/config', 'common/network'], function ($, config, network
     return {
         StyleCategory: StyleCategory,
         StyleOutline: StyleOutline,
-        OutlineCategory: OutlineCategory,
+        Struct: Struct,
         NewsList: NewsList,
-        NewsDetail: NewsDetail
+        NewsGet: NewsGet
     };
 });

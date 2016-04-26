@@ -30,7 +30,7 @@ define(['jquery'], function ($) {
     function off (type, namespace) {
         if (namespace) {
             var e = _events[type] || [];
-            for (var i = e.length; -1 < i; --i) {
+            for (var i = e.length - 1; -1 < i; --i) {
                 if (namespace === e[i]['namespace']) {
                     e.splice(i, 1);
                 }

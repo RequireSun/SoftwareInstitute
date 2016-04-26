@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "make test",
-    "develop": "grunt nodeserve & supervisor --ignore log,.git -- app &",
+    "develop": "gulp watch & supervisor --ignore log,.git -- app &",
+    "supervisor": "supervisor --ignore log,.git,.idea -- app",
     "stopdev": "kill -9 $(ps -ef|egrep 'grunt|supervisor|node'|gawk '$0 !~/egrep/ {print $2}'|tr -s '\n' ' ')"
   },
   "keywords": [
@@ -17,11 +18,13 @@
   "author": "kelvinsen@outlook.com",
   "license": "MIT",
   "dependencies": {
+    "async": "^2.0.0-rc.3",
     "body-parser": "^1.13.1",
     "colors": "^1.1.2",
     "connect-redis": "^2.3.0",
     "cookie-parser": "^1.3.5",
     "cors": "^2.7.1",
+    "csurf": "^1.8.3",
     "ejs": "git+https://github.com/tj/ejs.git",
     "eventproxy": "^0.3.4",
     "express": "^4.13.0",
@@ -33,35 +36,20 @@
     "validator": "^3.41.2"
   },
   "devDependencies": {
-    "bower": "^1.4.1",
-    "connect-livereload": "^0.5.3",
+    "babel-preset-es2015": "^6.5.0",
     "errorhandler": "^1.4.0",
-    "grunt": "^0.4.5",
-    "grunt-autoprefixer": "^1.0.0",
-    "grunt-concurrent": "^0.5.0",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-connect": "^0.8.0",
-    "grunt-contrib-copy": "^0.5.0",
-    "grunt-contrib-cssmin": "^0.10.0",
-    "grunt-contrib-htmlmin": "^0.4.0",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-contrib-requirejs": "^0.4.4",
-    "grunt-contrib-uglify": "^0.5.1",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-modernizr": "^0.5.2",
-    "grunt-newer": "^0.7.0",
-    "grunt-react": "^0.12.2",
-    "grunt-sass": "^1.0.0",
+    "global-event": "^0.1.2",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-babel": "^6.1.0",
     "gulp-htmlmin": "^1.2.0",
+    "gulp-live-server": "0.0.29",
+    "gulp-livereload": "^3.8.1",
     "gulp-minify-css": "^1.2.1",
     "gulp-react": "^3.1.0",
     "gulp-sass": "^2.1.0",
     "gulp-uglify": "^1.5.1",
     "jshint-stylish": "^0.4.0",
-    "load-grunt-tasks": "^0.4.0",
-    "time-grunt": "^0.4.0"
+    "supervisor": "^0.10.0"
   }
 }

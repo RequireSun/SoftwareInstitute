@@ -9,12 +9,12 @@ define(['jquery'], function ($) {
      */
     function joinUrl(inConfig) {
         var config = {
-            protocol: location.protocol || 'http:',
+            protocol: location.protocol || 'http',
             host: location.host,
             path: ''
         };
         $.extend(config, inConfig);
-        return config.protocol + '//' + config.host + config.path;
+        return config.protocol + '://' + config.host + config.path;
     }
 
     /**

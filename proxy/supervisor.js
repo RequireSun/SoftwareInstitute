@@ -1,30 +1,49 @@
 /**
  * Created by kelvin on 15-8-2.
  */
+'use strict';
 
-var database = require('../common/database');
-var crypto = require('crypto');
+const database = require('../common/database');
+const crypto = require('crypto');
 
-exports.validateSupervisor = function (alias, cipher, callback) {
+exports.validateGet = (callback, alias, cipher) => {
     if (!alias || !cipher) {
-        return callback(new Error('Parameter: pageSize / pageRequest must be number!'));
+        callback(new Error('Parameter: alias / cipher must be provided!'));
+        next();
+        return;
     }
 
-    var queryString = 'SELECT * FROM supervisor WHERE alias = :alias';
+    let queryString = 'SELECT * FROM supervisor WHERE alias = :alias';
 
     database.query(queryString, {
-        alias: alias
-    }, function (err, result) {
+        alias,
+    }, (err, result) => {
         if (err) {
-            return callback(err);
-        } else if (!result) {
-            return callback(new Error('No data!'));
+            callback(err);
+        } else if (!result || !result.length) {
+            callback(null, false);
+        } else {
+            let shaHash = crypto.createHash('sha1');
+            shaHash.update(cipher);
+            shaHash.update(result[0]['salt']);
+
+            callback(null, shaHash.digest('hex') === result[0]['cipher'] && result[0]['id']);
         }
-
-        var shaHash = crypto.createHash('sha1');
-        shaHash.update(cipher);
-        shaHash.update(result[0].salt);
-
-        return callback(null, shaHash.digest('hex') === result[0].cipher);
     });
+};
+
+exports.loginGet = (callback, alias, cipher) => {
+    this.validateGet((err, data) => {
+        if (err) {
+            callback(err);
+        } else {
+            if (!data) {
+                // session.destroy();
+                callback(null, false);
+            } else {
+                // session.id = data;
+                callback(null, data);
+            }
+        }
+    }, alias, cipher);
 };

@@ -247,7 +247,7 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
     var TitleLine = React.createClass({
         mixins: [actionNews, commonUtil],
         getData: function (id, type) {
-            this.OutlineCategory(function (err, data) {
+            this.Struct(function (err, data) {
                 var i, j, tempCategory, tempTitle = '';
                 if (err) {
                     location.hash = '#notFound/' + err;

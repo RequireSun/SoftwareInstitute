@@ -11,7 +11,7 @@ module.exports = function (req, res, next) {
         return;
     }
 
-    // sign 获取 ip
+    // TODO 获取 ip
     // 判断是否使用代理， 并获取真实的客户地址
     // var reqIp = app.enabled('trust proxy')? req.ips[0]: req.ip;
     var reqIp = req.ip;

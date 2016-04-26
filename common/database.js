@@ -1,15 +1,17 @@
-var mysql = require('mysql');
-var config = require('../config');
-var pool = mysql.createPool(config.db);
+'use strict';
+
+let mysql = require('mysql');
+let config = require('../config');
+let pool = mysql.createPool(config.db);
 
 pool.config.connectionConfig.queryFormat = function (query, values) {
   if (!values) return query;
-  return query.replace(/\:(\w+)/g, function (txt, key) {
+  return query.replace(/\:(\w+)/g, (txt, key) => {
     if (values.hasOwnProperty(key)) {
       return this.escape(values[key]);
     }
     return txt;
-  }.bind(this));
+  });
 };
 
 module.exports = pool;

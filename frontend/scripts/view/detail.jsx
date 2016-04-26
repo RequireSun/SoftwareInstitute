@@ -10,7 +10,7 @@ define(['react', 'view/public', 'action/news', 'common/util'], function (React, 
                 location.hash = '#notFound/请输入正确的新闻 ID！';
                 return ;
             }
-            this.NewsDetail(function (err, data) {
+            this.NewsGet(function (err, data) {
                 if (err) {
                     location.hash = '#notFound/' + err;
                     return ;

@@ -3,7 +3,7 @@
 var _ = require('lodash');
 var config = require('../config');
 
-// sign 还有 markdown 相关的部分没有加入进来
+// TODO 还有 markdown 相关的部分没有加入进来
 
 // 将换行转换为 <br />
 exports.escapeWrap = function (content) {
@@ -17,7 +17,7 @@ exports.staticFile = function (filePath) {
     if (0 === filePath.indexOf('http') || 0 === filePath.indexOf('//')) {
         return filePath;
     }
-    // sign 如果以后用云存储的话，需要把这里换成注释掉的内容， 并在设置中设置运存储地址
+    // TODO 如果以后用云存储的话，需要把这里换成注释掉的内容， 并在设置中设置运存储地址
     // return config.site_static_host + filePath;
     return filePath;
 };
@@ -33,7 +33,7 @@ exports.tabName = function (tab) {
 };
 
 // 一个代理访问网站用的方法
-// sign 还没做
+// TODO 还没做
 exports.proxy = function (url) {
   return '"/agent?&url=' + encodeURIComponent(url) + '"';
 };
