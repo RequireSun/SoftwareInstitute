@@ -1,7 +1,7 @@
 var fs      = require('fs');
 var config  = require('../config');
 
-// sign 记得做日志分片
+// TODO 记得做日志分片
 // 若无日志目录，则创建日志目录
 if (!fs.existsSync('./log')) {
     fs.mkdirSync('./log');

@@ -32,7 +32,7 @@ exports.get     = (callback, id) => {
         }
     );
 };
-// sign 限制 200 字
+
 exports.post    = (callback, detail) => {
     !detail && (detail = {});
 
@@ -109,7 +109,7 @@ exports.put     = (callback, id, detail) => {
         }
     );
 };
-// sign 删除个人权限
+// TODO 删除个人权限
 exports.delete  = (callback, id) => {
     if (isNaN(id)) {
         return callback(new Error('Parameter: id must be number!'));
@@ -158,7 +158,7 @@ exports.getAll  = (callback, id, pageSize, pageRequest) => {
         }
     });
 };
-// sign all count
+
 exports.getCount   = (callback, id) => {
     if ('number' !== typeof id) {
         return callback(new Error('Parameter: id must be number!'));

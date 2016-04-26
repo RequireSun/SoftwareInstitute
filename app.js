@@ -8,7 +8,7 @@
 
 let config = require('./config');
 
-// sign 部署的时候记得用 newrelic 性能检测（配置文件里还有相应配置）
+// TODO 部署的时候记得用 newrelic 性能检测（配置文件里还有相应配置）
 // if (!config.debug) {
 //     require('newrelic');
 // }
@@ -105,7 +105,7 @@ app.use(requestLog);
 // }
 
 // 静态资源
-// sign 会用之后找个 sass 的
+// TODO 会用之后找个 sass 的
 app.use(Loader.less(__dirname));
 app.use('/public', express.static(staticDir));
 //app.use('/agent', proxyMiddleware.proxy);

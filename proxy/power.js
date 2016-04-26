@@ -10,7 +10,7 @@ exports.validate = (callback, uid) => {
         return callback(new Error('Parameter: id must be number!'));
     }
 
-    let queryString = 'SELECT power FROM supervisor WHERE id = :uid';
+    let queryString = 'SELECT power FROM supervisor WHERE id = :uid AND power = 1';
 
     database.query(
         queryString,

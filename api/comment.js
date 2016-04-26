@@ -119,7 +119,7 @@ exports.delete = (req, res, next) => {
         next();
     });
 };
-// sign update_time 格式
+
 exports.getAll = (req, res, next) => {
     let id          = +req.query.id,
         pageSize    = +req.query.pageSize,
