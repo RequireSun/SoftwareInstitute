@@ -1,7 +1,17 @@
 'use strict';
 
-define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], function (React, Router, actionNews, commonUtil, config) {
+define([
+    'react',
+    'ReactRouter',
+    'react-redux',
+    'common/util',
+    'common/redux_helper',
+    'root/config',
+    'root/store',
+    'action/news'
+], (React, Router, ReactRedux, commonUtil, reduxHelper, config, store, actionNews) => {
     const { Link } = Router;
+    const { Provider } = ReactRedux;
     const pagerSize   = config.pagerSize   || 2,
           pageSize    = config.pageSize    || 20,
           pageRequest = config.pageRequest || 1;
@@ -164,17 +174,26 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
     class Navigation extends React.Component {
         constructor (props) {
             super(props);
-            this.state = {
-                navigatorCategory: {},
-            };
+            this.state = this.getState(props);
+        }
+        componentWillReceiveProps (nextProps) {
+            this.setState(getState(nextProps));
+        }
+        getState (state) {
+            const list = !state || !state['style'] ||
+                         !state['style']['navigator'] ||
+                         !Array.isArray(state['style']['navigator']) ?
+                             [] :
+                             state['style']['navigator'];
+            return { list };
         }
         render () {
-            var navigatorCategory = [], tempCategory = this.state.navigatorCategory;
-            for (let i in tempCategory) {
-                if (i !== 'null' && commonUtil.hasOwnProperty(tempCategory, i)) {
-                    navigatorCategory.push(<NavigatorCategory title={i} category={tempCategory[i]}/>);
-                }
-            }
+            // var navigatorCategory = [], tempCategory = this.state.navigatorCategory;
+            // for (let i in tempCategory) {
+            //     if (i !== 'null' && commonUtil.hasOwnProperty(tempCategory, i)) {
+            //         navigatorCategory.push(<NavigatorCategory title={i} category={tempCategory[i]}/>);
+            //     }
+            // }
             return (
                 <div className="navbar navbar-default">
                     <div className="container">
@@ -199,53 +218,53 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
     }
 
     // 导航栏
-    var Navigation = React.createClass({
-        mixins: [actionNews, commonUtil],
-        getInitialState: function () {
-            return {
-                navigatorCategory: {}
-            };
-        },
-        componentWillMount: function () {
-            this.StyleCategory(function (err, data) {
-                if (err) {
-                    location.hash = '#notFound/' + err;
-                } else {
-                    this.setState({
-                        navigatorCategory: data
-                    });
-                }
-            }.bind(this), 'navigator');
-        },
-        render: function () {
-            var navigatorCategory = [], tempCategory = this.state.navigatorCategory;
-            for (var i in tempCategory) {
-                if (i !== 'null' && this.HasOwnProperty(tempCategory, i)) {
-                    navigatorCategory.push(<NavigatorCategory title={i} category={tempCategory[i]}/>);
-                }
-            }
-            return (
-                <div className="navbar navbar-default">
-                    <div className="container">
-                        <div className="navbar-header">
-                            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigator-collapse-all">
-                                <span className="icon-bar"></span>
-                                <span className="icon-bar"></span>
-                                <span className="icon-bar"></span>
-                            </button>
-                            <a className="navbar-brand" href="#">Brand</a>
-                        </div>
-                        <div className="collapse navbar-collapse" id="navigator-collapse-all">
-                            <ul className="nav navbar-nav">
-                                <li><Link to="index">首页</Link></li>
-                                {navigatorCategory}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-    });
+    // var Navigation = React.createClass({
+    //     mixins: [actionNews, commonUtil],
+    //     getInitialState: function () {
+    //         return {
+    //             navigatorCategory: {}
+    //         };
+    //     },
+    //     componentWillMount: function () {
+    //         this.StyleCategory(function (err, data) {
+    //             if (err) {
+    //                 location.hash = '#notFound/' + err;
+    //             } else {
+    //                 this.setState({
+    //                     navigatorCategory: data
+    //                 });
+    //             }
+    //         }.bind(this), 'navigator');
+    //     },
+    //     render: function () {
+    //         var navigatorCategory = [], tempCategory = this.state.navigatorCategory;
+    //         for (var i in tempCategory) {
+    //             if (i !== 'null' && this.HasOwnProperty(tempCategory, i)) {
+    //                 navigatorCategory.push(<NavigatorCategory title={i} category={tempCategory[i]}/>);
+    //             }
+    //         }
+    //         return (
+    //             <div className="navbar navbar-default">
+    //                 <div className="container">
+    //                     <div className="navbar-header">
+    //                         <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigator-collapse-all">
+    //                             <span className="icon-bar"></span>
+    //                             <span className="icon-bar"></span>
+    //                             <span className="icon-bar"></span>
+    //                         </button>
+    //                         <a className="navbar-brand" href="#">Brand</a>
+    //                     </div>
+    //                     <div className="collapse navbar-collapse" id="navigator-collapse-all">
+    //                         <ul className="nav navbar-nav">
+    //                             <li><Link to="index">首页</Link></li>
+    //                             {navigatorCategory}
+    //                         </ul>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         );
+    //     }
+    // });
 
     // 导航栏的单个选项列表
     var FooterCategory = React.createClass({
@@ -491,8 +510,13 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
         }
     });
 
+    const ConnectNavigation = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(Navigation);
+
     return {
-        Navigation,
+        Navigation: () =>
+            (<Provider store={store}>
+                <ConnectNavigation/>
+            </Provider>),
         Footer,
         Shortcut,
         TitleLine,

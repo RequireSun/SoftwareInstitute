@@ -4,19 +4,21 @@
 requirejs.config({
     baseUrl: '/public/scripts/lib',
     paths: {
-        action: '../action',
-        common: '../common',
-        view: '../view',
-        root: '..'
+        action : '../action',
+        reducer: '../reducer',
+        view   : '../view',
+        common : '../common',
+        root   : '..'
     },
     shim: {
         bootstrap: ['jquery']
     }
 });
 
-requirejs(['react', 'react-dom', 'ReactRouter', 'jquery', 'root/web_router', 'bootstrap'], function (React, ReactDOM, Router, jquery, routes) {
-    ReactDOM.render(routes, document.getElementById('content'));
-    // Router.run(routes, Router.HashLocation, function (Handler) {
-    //     React.render(React.createElement(Handler), jquery('#content')[0]);
-    // });
+requirejs([
+    'react-dom',
+    'root/web_router',
+    'bootstrap'
+], (ReactDOM, routes) => {
+    ReactDOM.render(routes, document.getElementById('content') || document.body);
 });

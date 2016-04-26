@@ -166,3 +166,21 @@ _需要添加_
 3. 〇 put _修改?_
 4. 〇Δ delete
    * id 回复的 id
+
+# Style 格式
+
+```javascript
+{
+    "navigator": [{
+        "id": 1,
+        "type": "category"
+    }, {
+        "name": "ABC",
+        "link": "http://sina.com.cn",
+        "list": [{
+            "id": 2,
+            "type": "outline"
+        }]
+    }]
+}
+```

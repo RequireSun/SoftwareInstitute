@@ -72,6 +72,8 @@ gulp.task('javascript', function () {
         nodeModule('react/dist/react.js'),
         nodeModule('react-dom/dist/react-dom.js'),
         nodeModule('react-router/umd/ReactRouter.js'),
+        nodeModule('redux/dist/redux.js'),
+        nodeModule('react-redux/dist/react-redux.js'),
         // nodeModule('react-bootstrap/react-bootstrap.js'),
         nodeModule('requirejs/require.js'),
     ])
