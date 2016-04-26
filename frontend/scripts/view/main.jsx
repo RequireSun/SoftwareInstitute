@@ -1,19 +1,26 @@
-define(['react', 'ReactRouter', 'view/public'], function (React, Router, templatePublic) {
-    var Navigation = templatePublic.Navigation,
-        Footer = templatePublic.Footer;
-    var RouteHandler = Router.RouteHandler;
+'use strict';
 
-    var Main = React.createClass({
-        render: function () {
-            return (
-                <div>
-                    <Navigation/>
-                    <RouteHandler/>
-                    <Footer/>
-                </div>
-            );
-        }
-    });
+define(['react', 'view/public'], (React, templatePublic) => {
+    const Navigation = templatePublic.Navigation,
+          Footer     = templatePublic.Footer;
 
-    return Main;
+    // class Main extends React.Component {
+    //     render () {
+    //         return (
+    //             <div>
+    //                 <Navigation/>
+    //                 {this.props.children}
+    //                 <Footer/>
+    //             </div>
+    //         );
+    //     }
+    // }
+
+    return ({children}) => (
+        <div>
+            <Navigation/>
+            {children}
+            <Footer/>
+        </div>
+    );
 });

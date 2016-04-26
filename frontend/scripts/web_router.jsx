@@ -1,33 +1,44 @@
 /**
-            callback()
  * Created by kelvinsun on 2015/8/5.
  */
-define(
-    ['react', 'ReactRouter', 'view/main', 'view/browse', 'view/index', 'view/news', 'view/resource', 'view/detail', 'view/error'],
-    function (React, Router, main, browse, index, news, resource, detail, error) {
-    var Route = Router.Route,
-        DefaultRoute = Router.DefaultRoute,
-        NotFoundRoute = Router.NotFoundRoute;
-    var routes = (
-        <Route name="main" path="/" handler={main}>
-            <Route name="index" path="index" handler={index}/>
-            <Route name="browse" path="browse">
-                <Route path="news">
-                    <Route name="news" path=":newsType" handler={news}/>
-                    <DefaultRoute handler={error}/>
+'use strict';
+
+define([
+    'react',
+    'ReactRouter',
+    'view/main',
+    'view/browse',
+    'view/index',
+    'view/news',
+    'view/resource',
+    'view/detail',
+    'view/error'
+],
+(React, ReactRouter, main, browse, index, news, resource, detail, error) => {
+    const Router     = ReactRouter.Router,
+          Route      = ReactRouter.Route,
+          IndexRoute = ReactRouter.IndexRoute;
+
+    return (
+        <Router>
+            <Route name="main" path="/" component={main}>
+                <Route name="index" path="index" component={index}/>
+                <Route name="browse" path="browse">
+                    <Route path="news">
+                        <Route name="news" path=":newsType" component={news}/>
+                        <IndexRoute component={error}/>
+                    </Route>
+                    <Route name="resource" path="resource" component={resource}/>
+                    <Route path="detail">
+                        <Route name="detail" path=":newsId" component={detail}/>
+                        <IndexRoute component={error}/>
+                    </Route>
+                    <IndexRoute component={error}/>
                 </Route>
-                <Route name="resource" path="resource" handler={resource}/>
-                <Route path="detail">
-                    <Route name="detail" path=":newsId" handler={detail}/>
-                    <DefaultRoute handler={error}/>
-                </Route>
-                <NotFoundRoute handler={error}/>
+                <Route path=":test" component={news}/>
+                <Route path="notFound/:error?" component={error}/>
+                <IndexRoute component={index}/>
             </Route>
-            <Route path=":test" handler={news}/>
-            <Route path="notFound/:error?" handler={error}/>
-            <DefaultRoute handler={index}/>
-            <NotFoundRoute handler={error}/>
-        </Route>
+        </Router>
     );
-    return routes;
 });

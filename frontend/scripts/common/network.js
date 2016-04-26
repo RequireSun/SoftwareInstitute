@@ -1,6 +1,8 @@
 /**
  * Created by kelvin on 15-8-8.
  */
+'use strict';
+
 define(['jquery'], function ($) {
     /**
      * 将给定的网址对象转化为字符串

@@ -60,7 +60,7 @@ gulp.task('sass', function () {
 gulp.task('react', function () {
     gulp.src(app('scripts/**/*.jsx'))
         .pipe(react({ harmony: true }))
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(gulp.dest(dist('scripts')))
         .pipe(livereload());
 });
@@ -69,12 +69,13 @@ gulp.task('javascript', function () {
     gulp.src([
         nodeModule('bootstrap-sass/assets/javascripts/bootstrap.js'),
         nodeModule('jquery/dist/jquery.js'),
-        nodeModule('react/react.js'),
-        nodeModule('react-router/build/umd/ReactRouter.js'),
+        nodeModule('react/dist/react.js'),
+        nodeModule('react-dom/dist/react-dom.js'),
+        nodeModule('react-router/umd/ReactRouter.js'),
         // nodeModule('react-bootstrap/react-bootstrap.js'),
         nodeModule('requirejs/require.js'),
     ])
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(gulp.dest(dist('scripts/lib')))
         .pipe(livereload());
 
@@ -100,5 +101,5 @@ gulp.task('watch', ['html', 'react', 'javascript', 'font', 'sass'], function () 
     //let server = liveServer.static('dist', 3000);
     //server.start();
 });
-// TODO bootstrap css
+
 gulp.task('dist', ['react', 'javascript', 'font', 'sass']);
