@@ -101,34 +101,28 @@ exports.getAll = callback => {
         )
     ).then(results => {
         const category = results['category'],
-            outline  = results['outline'];
+              outline  = results['outline'];
 
         let style      = results['style'],
             categories = {},
             outlines   = {};
 
         for (let i = 0, item; item = category[i]; ++i) {
-            if (isNaN(category[i]['id']) || !category[i]['name']) {
+            if (isNaN(item['id']) || !item['name']) {
                 continue;
             }
-            categories[category[i]['id']] = category[i]['name'];
+            categories[item['id']] = item['name'];
         }
         for (let i = 0, item; item = outline[i]; ++i) {
-            if (isNaN(outline[i]['id']) || !outline[i]['name']) {
+            if (isNaN(item['id']) || !item['name']) {
                 continue;
             }
-            outlines[outline[i]['id']] = outline[i]['name'];
+            outlines[item['id']] = item['name'];
         }
 
         for (let i in style) {
             if (hasOwnProperty(style, i)) {
-                for (let j = 0, item; item = style[i][j]; ++j) {
-                    let name = 'outline' === style[i][j]['type'] ?
-                        outlines[style[i][j]['id']] :
-                        categories[style[i][j]['id']];
-                    !!name ? (style[i][j]['name'] = name) : (delete style[i][j]);
-                }
-                style[i] = style[i].filter(item => item);
+                style[i] = combineChildWithName(style[i], outlines, categories);
             }
         }
 
@@ -215,7 +209,7 @@ function transformStyleObject (relation) {
     return relationObject;
 }
 
-function transformChildObject (relation) {
+function transformChildObject (relation, isChild) {
     if (!Array.isArray(relation)) {
         return;
     }
@@ -223,11 +217,58 @@ function transformChildObject (relation) {
     let childArray = [];
 
     for (let i = 0, item; item = relation[i]; ++i) {
-        if (isNaN(+relation[i]['id']) || 0 === +relation[i]['id'] || !relation[i]['type']) {
+        let itemObj = {};
+
+        if (!isNaN(+item['id']) && 0 !== +item['id'] && !!item['type']) {
+            itemObj['id']   = +item['id'];
+            itemObj['type'] = '' + item['type'];
+        } else if (!!item['name']) {
+            itemObj['name'] = '' + item['name'];
+            !!itemObj['link'] && (itemObj['link'] = '' + item['link']);
+        } else {
             return;
         }
-        childArray.push({ id: +relation[i]['id'], type: relation[i]['type'] });
+        if (!isChild && Array.isArray(item['list'])) {
+            itemObj['list'] = transformChildObject(item['list'], true);
+        }
+
+        childArray.push(itemObj);
     }
 
     return childArray;
+}
+
+function combineChildWithName (relation, outlines, categories, isChild) {
+    let namedArray = [];
+
+    for (let i = 0, item; item = relation[i]; ++i) {
+        let relationObj = {};
+
+        if (item['name']) {
+            relationObj['name'] = item['name'];
+            !!item['link'] && (relationObj['link'] = '' + item['link']);
+        } else if (
+            !isNaN(item['id']) &&
+            0 !== +item['id'] &&
+            !!item['type']) {
+            let name = 'outline' === item['type'] ?
+                outlines[item['id']] :
+                categories[item['id']];
+            if (!name){
+                continue;
+            }
+            relationObj['id']   = item['id'];
+            relationObj['name'] = name;
+            relationObj['type'] = item['type'];
+        } else {
+            continue;
+        }
+        if (!isChild && Array.isArray(item['list'])) {
+            relationObj['list'] = combineChildWithName(item['list'], outlines, categories, true);
+        }
+
+        namedArray.push(relationObj);
+    }
+
+    return namedArray;
 }

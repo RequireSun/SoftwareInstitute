@@ -175,6 +175,9 @@ _需要添加_
         "id": 1,
         "type": "category"
     }, {
+        "name": "Yo!",
+        "link": "I am your father"
+    }, {
         "name": "ABC",
         "link": "http://sina.com.cn",
         "list": [{

@@ -35,7 +35,7 @@ exports.post = (req, res, next) => {
         next();
         return;
     }
-
+    
     if ('string' === typeof style) {
         try {
             style = JSON.parse(style);
