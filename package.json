@@ -5,11 +5,11 @@
   "main": "app.js",
   "scripts": {
     "test": "make test",
-    "develop": "gulp watch & supervisor --ignore log,.git,.idea -- app &",
+    "develop": "gulp watch & nodemon app --ignore public/ --ignore frontend/ --ignore log/ --ignore .git --ignore .idea &",
     "gulp": "gulp watch",
     "supervisor": "supervisor --ignore log,.git,.idea -- app",
     "nodemon": "nodemon app --ignore public/ --ignore frontend/ --ignore log/ --ignore .git --ignore .idea",
-    "stopdev": "kill -9 $(ps -ef|egrep 'grunt|supervisor|node'|gawk '$0 !~/egrep/ {print $2}'|tr -s '\n' ' ')"
+    "stopdev": "kill -9 $(ps -ef|egrep 'gulp|nodemon|node'|gawk '$0 !~/egrep/ {print $2}'|tr -s '\n' ' ')"
   },
   "keywords": [
     "cms",
@@ -38,7 +38,9 @@
     "mysql": "^2.7.0",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",
+    "react-redux": "^4.4.5",
     "react-router": "^2.3.0",
+    "redux": "^3.5.2",
     "requirejs": "^2.2.0",
     "response-time": "^2.3.1",
     "validator": "^3.41.2"

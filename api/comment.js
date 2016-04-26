@@ -3,7 +3,7 @@
  */
 'use strict';
 
-const Comment = require('../proxy/comment');
+const Comment = require('../proxy').Comment;
 const promiseWrap = require('../common/tool').promiseWrap;
 
 exports.get = (req, res, next) => {

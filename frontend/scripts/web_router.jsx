@@ -15,12 +15,10 @@ define([
     'view/error'
 ],
 (React, ReactRouter, main, browse, index, news, resource, detail, error) => {
-    const Router     = ReactRouter.Router,
-          Route      = ReactRouter.Route,
-          IndexRoute = ReactRouter.IndexRoute;
+    const { Router, Route, IndexRoute, hashHistory } = ReactRouter;
 
     return (
-        <Router>
+        <Router history={hashHistory}>
             <Route name="main" path="/" component={main}>
                 <Route name="index" path="index" component={index}/>
                 <Route name="browse" path="browse">
@@ -36,8 +34,8 @@ define([
                     <IndexRoute component={error}/>
                 </Route>
                 <Route path=":test" component={news}/>
-                <Route path="notFound/:error?" component={error}/>
                 <IndexRoute component={index}/>
+                <Route path="notFound/:error?" component={error}/>
             </Route>
         </Router>
     );

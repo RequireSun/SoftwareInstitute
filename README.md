@@ -11,14 +11,14 @@ __正在 gulp 化__
 4. 安装 ruby (为了 sass)
 5. 安装 python (为了编译 node-sass)
 6. `npm install` 安装 node 依赖
-7. `bower install` 安装 javascript 库依赖
-8. `npm install -g supervisor grunt grunt-cli` 安装 supervisor 和 grunt
+7. ~~`bower install` 安装 javascript 库依赖~~
+8. ~~`npm install -g supervisor grunt grunt-cli` 安装 supervisor 和 grunt~~
 9. linux 用户
    + `npm run develop` 开启监视
    + `npm run stopdev` 结束任务
 10. windows 用户 (分别在两个终端中)
-   + `node app` (最好是 `supervisor app`) 开启后端业务
-   + `grunt nodeserve` 开启前端监视
+   + `node app` (最好是 `nodemon app --ignore public/ --ignore frontend/ --ignore log/ --ignore .git --ignore .idea`) 开启后端业务
+   + `gulp watch` 开启前端监视
    + 直接结束进程就可以结束任务
 
 TODO:

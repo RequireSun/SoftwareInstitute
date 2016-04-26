@@ -1,9 +1,10 @@
-define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], function (React, Router, actionNews, commonUtil, config) {
-    var Link = Router.Link;
-    var pagerSize = config.pagerSize || 2,
-        pageSize = config.pageSize || 20,
-        pageRequest = config.pageRequest || 1;
+'use strict';
 
+define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], function (React, Router, actionNews, commonUtil, config) {
+    const { Link } = Router;
+    const pagerSize   = config.pagerSize   || 2,
+          pageSize    = config.pageSize    || 20,
+          pageRequest = config.pageRequest || 1;
 
     /**
      * 页码生成组件
@@ -11,63 +12,103 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
      * @param   max     总页码数
      * @param   link    页码链接, 字符串, 其中需要有 {#page} 标记, 用于将此处替换为请求的页码
      */
-    var Pager = React.createClass({
-        getInitialState: function () {
-            return {
-                current: this.props.current,
-                max: this.props.max,
-                link: this.props.link
-            };
-        },
-        componentWillReceiveProps: function (nextProps) {
-            this.setState({
-                current: nextProps.current,
-                max: nextProps.max,
-                link: nextProps.link
-            });
-        },
-        render: function () {
-            var pagerArray = [];
-            var tempCurrent = this.state.current,
-                tempLink = this.state.link || '';
+    class Pager extends React.Component {
+        constructor (props) {
+            super(props);
+        }
+        render () {
+            let pagerArray  = [];
+            let tempCurrent = this.props.current,
+                tempMax     = this.props.max,
+                tempLink    = this.props.link || '';
             // 生成对应的前一页 / 后一页
-            var prevLink = tempCurrent <= 1 ? (<li className="disabled"><a href={tempLink.replace(/\{\#page\}/, tempCurrent)}>&laquo;</a></li>) : (<li><a href={tempLink.replace(/\{\#page\}/, tempCurrent - 1)}>&laquo;</a></li>),
-                nextLink = tempCurrent >= this.state.max ? (<li className="disabled"><a href={tempLink.replace(/\{\#page\}/, tempCurrent)}>&raquo;</a></li>) : (<li><a href={tempLink.replace(/\{\#page\}/, tempCurrent - 0 + 1)}>&raquo;</a></li>);
-            for (var i = Math.max(1, tempCurrent - pagerSize), l = Math.min(2 * pagerSize + i, this.state.max); i <= l; ++i) {
+            let prevLink = tempCurrent <= 1 ?
+                (<li className="disabled">
+                    <a href={tempLink.replace(/\{\#page\}/, tempCurrent)}>&laquo;</a>
+                </li>) :
+                (<li>
+                    <a href={tempLink.replace(/\{\#page\}/, tempCurrent - 1)}>&laquo;</a>
+                </li>);
+            let nextLink = tempCurrent >= tempMax ?
+                (<li className="disabled">
+                    <a href={tempLink.replace(/\{\#page\}/, tempCurrent)}>&raquo;</a>
+                </li>) :
+                (<li>
+                    <a href={tempLink.replace(/\{\#page\}/, tempCurrent - 0 + 1)}>&raquo;</a>
+                </li>);
+            for (
+                let i = Math.max(1, tempCurrent - pagerSize),
+                    l = Math.min(2 * pagerSize + i, tempMax);
+                i <= l;
+                ++i
+            ) {
                 pagerArray.push(i);
             }
             return (
                 <ul className="pagination">
                     {prevLink}
-                    {
-                        pagerArray.map(function (pager) {
-                            // pageCurrent 是字符串, pager 是数字
-                            var activeClass = pager == tempCurrent ? 'active' : '';
-                            return (<li className={activeClass}><a href={tempLink.replace(/\{\#page\}/, pager)}>{pager}</a></li>);
-                        })
-                    }
+                    {pagerArray.map((pager) =>
+                        // pageCurrent 是字符串, pager 是数字
+                        (<li className={pager == tempCurrent ? 'active' : ''}>
+                            <a href={tempLink.replace(/\{\#page\}/, pager)}>{pager}</a>
+                        </li>)
+                    )}
                     {nextLink}
                 </ul>
             );
         }
-    });
+    }
+    // var Pager = React.createClass({
+    //     getInitialState: function () {
+    //         return {
+    //             current: this.props.current,
+    //             max: this.props.max,
+    //             link: this.props.link
+    //         };
+    //     },
+    //     componentWillReceiveProps: function (nextProps) {
+    //         this.setState({
+    //             current: nextProps.current,
+    //             max: nextProps.max,
+    //             link: nextProps.link
+    //         });
+    //     },
+    //     render: function () {
+    //         var pagerArray = [];
+    //         var tempCurrent = this.state.current,
+    //             tempLink = this.state.link || '';
+    //         // 生成对应的前一页 / 后一页
+    //         var prevLink = tempCurrent <= 1 ? (<li className="disabled"><a href={tempLink.replace(/\{\#page\}/, tempCurrent)}>&laquo;</a></li>) : (<li><a href={tempLink.replace(/\{\#page\}/, tempCurrent - 1)}>&laquo;</a></li>),
+    //             nextLink = tempCurrent >= this.state.max ? (<li className="disabled"><a href={tempLink.replace(/\{\#page\}/, tempCurrent)}>&raquo;</a></li>) : (<li><a href={tempLink.replace(/\{\#page\}/, tempCurrent - 0 + 1)}>&raquo;</a></li>);
+    //         for (var i = Math.max(1, tempCurrent - pagerSize), l = Math.min(2 * pagerSize + i, this.state.max); i <= l; ++i) {
+    //             pagerArray.push(i);
+    //         }
+    //         return (
+    //             <ul className="pagination">
+    //                 {prevLink}
+    //                 {
+    //                     pagerArray.map(function (pager) {
+    //                         // pageCurrent 是字符串, pager 是数字
+    //                         var activeClass = pager == tempCurrent ? 'active' : '';
+    //                         return (<li className={activeClass}><a href={tempLink.replace(/\{\#page\}/, pager)}>{pager}</a></li>);
+    //                     })
+    //                 }
+    //                 {nextLink}
+    //             </ul>
+    //         );
+    //     }
+    // });
 
-    // 导航栏的单个选项列表
-    var NavigatorCategory = React.createClass({
-        getInitialState: function () {
-            return {
+    class NavigatorCategory extends React.Component {
+        constructor (props) {
+            super(props);
+            this.state = {
                 title: this.props.title,
                 category: this.props.category
             };
-        },
-        componentWillReceiveProps: function (nextProps) {
-            this.setState({
-                title: nextProps.title,
-                category: nextProps.category
-            });
-        },
-        render: function () {
-            var category = [], tempCategory = this.state.category;
+        }
+        render () {
+            var category = [], tempCategory = this.props.category;
             for (var i in tempCategory) {
                 category.push(
                     <li>
@@ -77,14 +118,85 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
             }
             return (
                 <li className="dropdown">
-                    <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button">{this.state.title}<span className="caret"></span></a>
+                    <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button">{this.props.title}<span className="caret"></span></a>
                     <ul className="dropdown-menu">
                         {category}
                     </ul>
                 </li>
             );
         }
-    });
+    }
+
+    // 导航栏的单个选项列表
+    // var NavigatorCategory = React.createClass({
+    //     getInitialState: function () {
+    //         return {
+    //             title: this.props.title,
+    //             category: this.props.category
+    //         };
+    //     },
+    //     componentWillReceiveProps: function (nextProps) {
+    //         this.setState({
+    //             title: nextProps.title,
+    //             category: nextProps.category
+    //         });
+    //     },
+    //     render: function () {
+    //         var category = [], tempCategory = this.state.category;
+    //         for (var i in tempCategory) {
+    //             category.push(
+    //                 <li>
+    //                     <Link to="news" params={{ newsType: 'category' }} query={{ id: i, pageSize: pageSize, pageRequest: pageRequest }}>{tempCategory[i]}</Link>
+    //                 </li>
+    //             );
+    //         }
+    //         return (
+    //             <li className="dropdown">
+    //                 <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button">{this.state.title}<span className="caret"></span></a>
+    //                 <ul className="dropdown-menu">
+    //                     {category}
+    //                 </ul>
+    //             </li>
+    //         );
+    //     }
+    // });
+
+    class Navigation extends React.Component {
+        constructor (props) {
+            super(props);
+            this.state = {
+                navigatorCategory: {},
+            };
+        }
+        render () {
+            var navigatorCategory = [], tempCategory = this.state.navigatorCategory;
+            for (let i in tempCategory) {
+                if (i !== 'null' && commonUtil.hasOwnProperty(tempCategory, i)) {
+                    navigatorCategory.push(<NavigatorCategory title={i} category={tempCategory[i]}/>);
+                }
+            }
+            return (
+                <div className="navbar navbar-default">
+                    <div className="container">
+                        <div className="navbar-header">
+                            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigator-collapse-all">
+                                <span className="icon-bar"></span>
+                                <span className="icon-bar"></span>
+                                <span className="icon-bar"></span>
+                            </button>
+                            <a className="navbar-brand" href="#">Brand</a>
+                        </div>
+                        <div className="collapse navbar-collapse" id="navigator-collapse-all">
+                            <ul className="nav navbar-nav">
+                                <li><Link to="index">首页</Link></li>
+                                {navigatorCategory}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+    }
 
     // 导航栏
     var Navigation = React.createClass({
@@ -380,10 +492,10 @@ define(['react', 'ReactRouter', 'action/news', 'common/util', 'root/config'], fu
     });
 
     return {
-        Navigation: Navigation,
-        Footer: Footer,
-        Shortcut: Shortcut,
-        TitleLine: TitleLine,
-        Pager: Pager
+        Navigation,
+        Footer,
+        Shortcut,
+        TitleLine,
+        Pager,
     };
 });
