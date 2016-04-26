@@ -177,7 +177,7 @@ app.use(function (req, res, next) {
 
 // 引用 router
 app.use('/api', cors(config.cors_sites), apiRouter);
-app.use('/outdated', webRouter);
+app.use('/page', webRouter);
 
 if (config.debug) {
     app.use(errorhandler());

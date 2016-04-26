@@ -5,27 +5,31 @@
 /**
  * Module dependencies.
  */
+'use strict';
 
-var express         = require('express');
-//var passport        = require('passport');
+const express         = require('express');
+//let passport        = require('passport');
 // 引入各个 controller
-var resource        = require('./controllers/resource');
-var news            = require('./controllers/news');
-var supervisor      = require('./controllers/supervisor');
+// let resource        = require('./controllers/resource');
+// let news            = require('./controllers/news');
+// let supervisor      = require('./controllers/supervisor');
+const singlePage = require('./controllers/singlePage');
 // 引入各个 middleware
-// var middlewareName  = require('pathToMiddleware');
+// let middlewareName  = require('pathToMiddleware');
 // 引入 middleware 配置
-// var configMiddleware = require('pathToConfigOfMiddleware');
-var config          = require('./config');
+// let configMiddleware = require('pathToConfigOfMiddleware');
+let config          = require('./config');
 
-var router          = express.Router();
+let router          = express.Router();
 
-router.get('/resource', resource.index);
-router.get('/category', news.category);
-router.get('/outline', news.outline);
-router.get('/newsDetail', news.newsDetail);
+// router.get('/resource', resource.index);
+// router.get('/category', news.category);
+// router.get('/outline', news.outline);
+// router.get('/newsDetail', news.newsDetail);
+//
+// router.get('/login', supervisor.login);
+// router.post('/validate', supervisor.validate);
 
-router.get('/login', supervisor.login);
-router.post('/validate', supervisor.validate);
+router.get('/index', singlePage);
 
 module.exports = router;

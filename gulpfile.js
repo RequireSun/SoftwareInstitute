@@ -42,6 +42,12 @@ gulp.task('html', function () {
         .pipe(livereload());
 });
 
+gulp.task('font', () => {
+    gulp.src(nodeModule('bootstrap-sass/assets/fonts/bootstrap/**'))
+        .pipe(gulp.dest(dist('fonts/bootstrap')))
+        .pipe(livereload());
+});
+
 gulp.task('sass', function () {
     gulp.src(app('styles/**/*.scss'))
         .pipe(sass().on('error', sass.logError))
@@ -61,12 +67,12 @@ gulp.task('react', function () {
 
 gulp.task('javascript', function () {
     gulp.src([
-        bower('bootstrap-sass/assets/javascripts/bootstrap.js'),
-        bower('jquery/dist/jquery.js'),
-        bower('react/react.js'),
-        bower('react-router/build/umd/ReactRouter.js'),
-        bower('react-bootstrap/react-bootstrap.js'),
-        bower('requirejs/require.js')
+        nodeModule('bootstrap-sass/assets/javascripts/bootstrap.js'),
+        nodeModule('jquery/dist/jquery.js'),
+        nodeModule('react/react.js'),
+        nodeModule('react-router/build/umd/ReactRouter.js'),
+        // nodeModule('react-bootstrap/react-bootstrap.js'),
+        nodeModule('requirejs/require.js'),
     ])
         .pipe(uglify())
         .pipe(gulp.dest(dist('scripts/lib')))
@@ -83,7 +89,7 @@ gulp.task('javascript', function () {
         .pipe(livereload());
 });
 
-gulp.task('watch', ['html', 'react', 'javascript', 'sass'], function () {
+gulp.task('watch', ['html', 'react', 'javascript', 'font', 'sass'], function () {
     livereload.listen();
 
     gulp.watch(app('**/*.html'), ['html']);
@@ -94,3 +100,5 @@ gulp.task('watch', ['html', 'react', 'javascript', 'sass'], function () {
     //let server = liveServer.static('dist', 3000);
     //server.start();
 });
+// TODO bootstrap css
+gulp.task('dist', ['react', 'javascript', 'font', 'sass']);
