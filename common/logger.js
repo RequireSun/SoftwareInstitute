@@ -1,5 +1,7 @@
-var fs      = require('fs');
-var config  = require('../config');
+'use strict';
+
+const fs     = require('fs');
+const config = require('../config');
 
 // TODO 记得做日志分片
 // 若无日志目录，则创建日志目录
@@ -8,34 +10,29 @@ if (!fs.existsSync('./log')) {
 }
 
 // 分别为： 普通/ 信息/ debug/ 警告/ 错误
-exports.log = function () {
-    writeLog(' log:   ', 'info', arguments);
-};
+exports.log = (...args) =>
+    writeLog(' log:   ', 'info', args);
 
-exports.info = function () {
-    writeLog(' info:  ', 'info', arguments);
-};
+exports.info = (...args) =>
+    writeLog(' info:  ', 'info', args);
 
-exports.debug = function () {
-    writeLog(' debug: ', 'debug', arguments);
-};
+exports.debug = (...args) =>
+    writeLog(' debug: ', 'debug', args);
 
-exports.warn = function () {
-    writeLog(' warn:  ', 'warn', arguments);
-};
+exports.warn = (...args) =>
+    writeLog(' warn:  ', 'warn', args);
 
-exports.error = function () {
-    writeLog(' error: ', 'error', arguments);
-}
+exports.error = (...args) =>
+    writeLog(' error: ', 'error', args);
 
 // 获取环境变量， 默认为开发环境
 // debug 开启且非 test 环境下进行终端打印
-var env = process.env.NODE_ENV || 'development';
-var consolePrint = config.debug && env !== 'test';
+const env          = process.env.NODE_ENV || 'development';
+const consolePrint = config.debug && env !== 'test';
 
-var writeLog = function (prefix, logType, args) {
+const writeLog = (prefix, logType, args) => {
     // debug 信息不需要记录日志
-    var filePrint = logType !== 'debug';
+    let filePrint = logType !== 'debug';
 
     // 如果既不需要日志也不需要终端打印， 那就直接结束
     // 综上条件， 就是在非 test 环境下开启 debug 模式且输出的信息类型不是 debug 时
@@ -44,8 +41,8 @@ var writeLog = function (prefix, logType, args) {
     }
 
     // 取传入的参数， 并连接起来
-    var infos = Array.prototype.slice.call(args);
-    var logStr = infos.join(' ');
+    // let infos = Array.prototype.slice.call(args);
+    let logStr = args.join(' ');
 
     // 根据信息类型着色
     switch (logType) {
@@ -65,7 +62,7 @@ var writeLog = function (prefix, logType, args) {
 
     // 获取时间， 并连接到输出字符串中
     // prefix = (new Date()).toUTCString() + prefix;
-    var line = prefix + logStr;
+    let line = prefix + logStr;
     // 根据配置分别输出
     if (filePrint) {
         fs.appendFile('./log/' + env + '.log', line + '\n');
