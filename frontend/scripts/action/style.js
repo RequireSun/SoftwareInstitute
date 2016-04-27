@@ -4,7 +4,8 @@
 'use strict';
 
 define({
-    init: () => ({
+    init: (style) => ({
         type: 'STYLE_INIT',
+        style,
     }),
 });

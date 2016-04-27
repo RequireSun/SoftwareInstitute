@@ -19,3 +19,5 @@ public/*.html
 *.sublime-project
 *.sublime-workspace
 *.swp
+
+npm-debug.log

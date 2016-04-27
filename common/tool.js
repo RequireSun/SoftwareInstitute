@@ -6,10 +6,6 @@ let config = require('../config');
 //     return Object.prototype.hasOwnProperty.apply(target, args);
 // };
 
-const hasOwnProperty = (target, ...args) => Object.prototype.hasOwnProperty.apply(target, args);
-
-const toString = target => Object.prototype.toString.call(target);
-
 const generatePageNumber = function (pageCurrent, pageMax, pageLink) {
     var numberList = [];
     // 填充页码， 取剩余页面数量和页面跳转限额中较小的一个， 作为页码个数， 循环填充
@@ -63,6 +59,10 @@ const formatUpdateParameters = (params, nameMap) => {
 
     return { queryArray, processedParams };
 };
+
+const hasOwnProperty = (target, ...args) => Object.prototype.hasOwnProperty.apply(target, args);
+
+const toString = target => Object.prototype.toString.call(target);
 // es6 type
 const promiseWrap = (func, ...args) =>
     (resolve, reject) =>
@@ -83,13 +83,13 @@ const promiseWrapTail = (func, ...args) =>
                     resolve(data)));
 
 module.exports = {
-    hasOwnProperty,
-    toString,
     generatePageNumber,
     formatDateTime,
     formatDateTimeArray,
     formatInsertParameters,
     formatUpdateParameters,
+    hasOwnProperty,
+    toString,
     promiseWrap,
     promiseWrapTail,
 };

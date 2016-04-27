@@ -6,7 +6,7 @@
 define([], () => (state = {}, action) => {
     switch (action.type) {
         case 'STYLE_INIT':
-            return Object.assign({}, window['_styleConfig_']);
+            return Object.assign({}, action.style);
         default:
             return state;
     }
