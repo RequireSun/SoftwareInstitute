@@ -1,14 +1,16 @@
 'use strict';
 let config = require('../config');
 
-exports.hasOwnProperty = function (target) {
-    let args = Array.prototype.slice.call(arguments, 1);
-    return Object.prototype.hasOwnProperty.apply(target, args);
-};
+// exports.hasOwnProperty = function (target) {
+//     let args = Array.prototype.slice.call(arguments, 1);
+//     return Object.prototype.hasOwnProperty.apply(target, args);
+// };
 
-exports.toString = target => Object.prototype.toString.call(target);
+const hasOwnProperty = (target, ...args) => Object.prototype.hasOwnProperty.apply(target, args);
 
-exports.generatePageNumber = function (pageCurrent, pageMax, pageLink) {
+const toString = target => Object.prototype.toString.call(target);
+
+const generatePageNumber = function (pageCurrent, pageMax, pageLink) {
     var numberList = [];
     // 填充页码， 取剩余页面数量和页面跳转限额中较小的一个， 作为页码个数， 循环填充
     for (let i = Math.min(pageCurrent - 1, config.page_jump_size); i > 0; --i) {
@@ -27,14 +29,14 @@ exports.generatePageNumber = function (pageCurrent, pageMax, pageLink) {
     });
 };
 
-exports.formatDateTime = (dateString) => +new Date(dateString);
+const formatDateTime = (dateString) => +new Date(dateString);
 
-exports.formatDateTimeArray = (dataArray, keyName) =>
+const formatDateTimeArray = (dataArray, keyName) =>
     dataArray.map(item =>
         Object.assign({}, item, { [keyName]: exports.formatDateTime(item[keyName]) })
     );
 
-exports.formatInsertParameters = (params, nameMap) => {
+const formatInsertParameters = (params, nameMap) => {
     let queryArrayDeclare = [],
         queryArrayValue   = [],
         processedParams   = {};
@@ -49,7 +51,7 @@ exports.formatInsertParameters = (params, nameMap) => {
     return { queryArrayDeclare, queryArrayValue, processedParams };
 };
 
-exports.formatUpdateParameters = (params, nameMap) => {
+const formatUpdateParameters = (params, nameMap) => {
     let queryArray = [],
         processedParams = {};
     for (let i in params) {
@@ -61,15 +63,44 @@ exports.formatUpdateParameters = (params, nameMap) => {
 
     return { queryArray, processedParams };
 };
-// 我日了 node 的 es6 兼容, 给箭头函数不给 rest parameters, 我怎么获取参数
-exports.promiseWrap = function (func) {
-    let args = Array.prototype.slice.call(arguments, 1);
-    return (resolve, reject) => func((err, data) => err ? reject(err) : resolve(data), ...args);
+// es6 type
+const promiseWrap = (func, ...args) =>
+    (resolve, reject) =>
+        func(
+            ((err, data) =>
+                err ?
+                    reject(err) :
+                    resolve(data)),
+            ...args);
+
+const promiseWrapTail = (func, ...args) =>
+    (resolve, reject) =>
+        func(
+            ...args,
+            ((err, data) =>
+                err ?
+                    reject(err) :
+                    resolve(data)));
+
+module.exports = {
+    hasOwnProperty,
+    toString,
+    generatePageNumber,
+    formatDateTime,
+    formatDateTimeArray,
+    formatInsertParameters,
+    formatUpdateParameters,
+    promiseWrap,
+    promiseWrapTail,
 };
 
-exports.promiseWrapTail = function (func) {
-    let args = Array.prototype.slice.call(arguments, 1);
-    return (resolve, reject) => func(...args, (err, data) => err ? reject(err): resolve(data));
-};
-// es6 type
-//exports.promiseWrap = (func, ...args) => (resolve, reject) => func(((err, data) => err ? reject(err) : resolve(data)), ...args);
+// 我日了 node 的 es6 兼容, 给箭头函数不给 rest parameters, 我怎么获取参数
+// exports.promiseWrap = function (func) {
+//     let args = Array.prototype.slice.call(arguments, 1);
+//     return (resolve, reject) => func((err, data) => err ? reject(err) : resolve(data), ...args);
+// };
+
+// exports.promiseWrapTail = function (func) {
+//     let args = Array.prototype.slice.call(arguments, 1);
+//     return (resolve, reject) => func(...args, (err, data) => err ? reject(err): resolve(data));
+// };

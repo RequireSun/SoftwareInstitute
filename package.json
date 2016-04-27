@@ -1,6 +1,6 @@
 {
   "name": "softwareinstitute",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A Node.js CMS using MySQL.",
   "main": "app.js",
   "scripts": {
@@ -19,6 +19,11 @@
   ],
   "author": "kelvinsen@outlook.com",
   "license": "MIT",
+  "engineStrict": true,
+  "engines": {
+    "node": ">=6.0.0",
+    "npm": ">=3.0.0"
+  },
   "dependencies": {
     "async": "^2.0.0-rc.3",
     "body-parser": "^1.13.1",

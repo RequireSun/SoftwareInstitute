@@ -1,18 +1,18 @@
 'use strict';
 
-let mysql = require('mysql');
-let config = require('../config');
-let pool = mysql.createPool(config.db);
+const mysql  = require('mysql');
+const config = require('../config');
+const hasOwnProperty = require('./tool').hasOwnProperty;
+const pool   = mysql.createPool(config.db);
 
-pool.config.connectionConfig.queryFormat = function (query, values) {
-  if (!values) return query;
-  return query.replace(/\:(\w+)/g, (txt, key) => {
-    if (values.hasOwnProperty(key)) {
-      return this.escape(values[key]);
-    }
-    return txt;
-  });
-};
+pool.config.connectionConfig.queryFormat = (query, values) =>
+    !values || !(values instanceof Object) ?
+        query :
+        query.replace(/\:(\w+)/g, (txt, key) =>
+            hasOwnProperty(values, key) ?
+                mysql.escape(values[key]) :
+                txt
+        );
 
 module.exports = pool;
 // connection.query("UPDATE posts SET title = :title", { title: "Hello MySQL" });
