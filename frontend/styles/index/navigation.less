@@ -3,17 +3,95 @@
 .navigation {
   background-color: #f5f5f5;
 
-  @media (min-width: @screen-sm-min) {
-    .container, .navbar-collapse {
-      padding: 0;
+  .navbar-toggle {
+    background-color: #0066cc;
+
+    .icon-bar {
+      background-color: #e8e8e8;
+    }
+    &.collapsed {
+      background-color: #e8e8e8;
+
+      .icon-bar {
+        background-color: #004185;
+      }
+    }
+  }
+  // 修正缩起时字体颜色
+  .dropdown:hover {
+    .dropdown-menu>li>a {
+      color: #fff;
+
+      &:hover {
+        color: #004185;
+      }
     }
   }
 
-  .nav>li {
+  @media (min-width: @screen-sm-min) {
+    // 大窗体时隐藏 padding
+    .container, .navbar-collapse {
+      padding: 0;
+    }
+    // 大窗体时, 等分
+    .navbar-nav {
+      float: none;
+
+      &>li {
+        width: percentage(1 / 7);
+        // 大窗体时, 超出字体隐藏
+        &>a {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+    // 让菜单和按钮等宽
+    .dropdown-menu {
+      width: 100%;
+    }
+    // 修正颜色
+    .dropdown:hover {
+      .dropdown-menu>li>a {
+        color: #004185;
+
+        &:hover {
+          color: #0066bb;
+        }
+      }
+    }
+    // 改变 dropdown 的触发条件为 hover
+    .dropdown:hover .dropdown-menu {
+      display: block;
+      margin-top: 0; // remove the gap so it doesn't close
+    }
+  }
+
+  .navbar-nav>li {
+    box-sizing: border-box;
+
     border-left: 1px solid rgb(204, 204, 204);
 
+    &:last-of-type {
+      border-right: 1px solid rgb(204, 204, 204);
+    }
+
     &>a {
+      padding: 12px 15px 18px;
+
       color: #004185;
+
+      &~div {
+        position: absolute;
+
+        right: 5px;
+        bottom: 1px;
+
+        &>span {
+          color: #004185;
+        }
+      }
     }
 
     &:hover {
@@ -21,6 +99,10 @@
         color: #fff;
 
         background: none;
+
+        &~div>span {
+          color: #fff;
+        }
       }
 
       background-color: #004185;

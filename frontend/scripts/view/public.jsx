@@ -15,10 +15,10 @@ define([
     const pagerSize     = config['pagerSize']   || 2,
           pageSize      = config['pageSize']    || 20,
           pageRequest   = config['pageRequest'] || 0,
-          navigatorSize = config['style'] && config['style']['navigator'] ? config['style']['navigator'] : 0,
+          navigatorSize = config['style'] && config['style']['navigator'] ? config['style']['navigator'] : 7,
+          headerSize    = config['style'] && config['style']['header']    ? config['style']['header']    : 0,
           footerSize    = config['style'] && config['style']['footer']    ? config['style']['footer']    : 2,
-          shortcutSize  = config['style'] && config['style']['shortcut']  ? config['style']['shortcut']  : 0,
-          headerSize    = config['style'] && config['style']['header']    ? config['style']['header']    : 0;
+          shortcutSize  = config['style'] && config['style']['shortcut']  ? config['style']['shortcut']  : 0;
     // TODO page 的 prop state 逻辑明显不对
     /**
      * 页码生成组件
@@ -82,28 +82,33 @@ define([
     // 导航栏的单个选项列表
     const NavigatorItem = props => (
         <li className="dropdown">
-            {!!props.category && !!props.category.length ? [
-                <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button">
-                    {props.title}
-                    <span className="caret"></span>
+            {!!props.list && !!props.list.length ? [
+                <a href="javascript:;" className="dropdown-toggle" data-toggle="dropdown" role="button">
+                    {props.name}
                 </a>,
+                <div><span className="glyphicon glyphicon-chevron-down"></span></div>,
                 <ul className="dropdown-menu">
-                    {props.category.map(item =>
+                    {props.list.map(item =>
                         <li>
-                            <Link to="newsList" params={{ newsType: item['type'] }}
-                                  query={{ id: item['id'], pageSize, pageRequest }}>
-                                {item['name']}
-                            </Link>
+                            {!!item['id'] ?
+                                <Link to="newsList" params={{ newsType: item['type'] }}
+                                      query={{ id: item['id'], pageSize, pageRequest }}>
+                                    {item['name']}
+                                </Link> :
+                                <a href={item['link'] || 'javascript:;'}>{item['name']}</a>
+                            }
                         </li>
                     )}
                 </ul>
-            ] :
-                <Link to="newsList" params={{ newsType: props.type }}
-                      query={{ id: props.id, pageSize, pageRequest }}
-                      className="dropdown-toggle">
-                    {props.title}
-                </Link>
-            }
+            ] : (
+                !!props.id ?
+                    <Link to="newsList" params={{ newsType: props.type }}
+                        query={{ id: props.id, pageSize, pageRequest }}
+                        className="dropdown-toggle">
+                        {props.name}
+                    </Link> :
+                    <a href={props.link}>{props.name}</a>
+            )}
         </li>
     );
     NavigatorItem.defaultProps = { title: '', id: 0, type: 'category', category: [], };
@@ -141,8 +146,7 @@ define([
                             <ul className="nav navbar-nav">
                                 <li><Link to="index">首页</Link></li>
                                 {this.state.list.map(item =>
-                                    <NavigatorItem id={item['id']} type={item['type']}
-                                                       title={item['name']} category={item['list']}/>
+                                    <NavigatorItem {...item}/>
                                 )}
                             </ul>
                         </div>

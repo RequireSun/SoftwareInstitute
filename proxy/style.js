@@ -247,6 +247,8 @@ function combineChildWithName (relation, outlines, categories, isChild) {
         if (item['name']) {
             relationObj['name'] = item['name'];
             !!item['link'] && (relationObj['link'] = '' + item['link']);
+            !!item['type'] && (relationObj['type'] = +item['type']);
+            !!item['id']   && (relationObj['id']   = +item['id']);
         } else if (
             !isNaN(item['id']) &&
             0 !== +item['id'] &&
