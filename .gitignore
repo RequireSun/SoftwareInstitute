@@ -16,6 +16,7 @@ public/styles
 public/scripts
 public/fonts
 public/*.html
+public/*
 
 *.sublime-project
 *.sublime-workspace

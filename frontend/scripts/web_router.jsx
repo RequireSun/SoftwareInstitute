@@ -22,9 +22,9 @@ define([
             <Route name="main" path="/" component={main}>
                 <Route name="index" path="index" component={index}/>
                 <Route name="browse" path="browse">
-                    <Route path="newsList">
-                        <Route name="news" path=":newsType" component={news}/>
-                        <IndexRoute component={error}/>
+                    <Route name="news" path="newsList/:newsType" component={news}>
+                        {/*<Route name="news" path=":newsType" component={news}/>
+                        <IndexRoute component={error}/>*/}
                     </Route>
                     <Route name="resource" path="resource" component={resource}/>
                     <Route path="detail">

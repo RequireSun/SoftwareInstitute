@@ -49,7 +49,8 @@ gulp.task('font', () => {
 });
 
 gulp.task('less', function () {
-    gulp.src(app('styles/**/*.less'))
+    gulp.src(app('styles/*.less'))
+        .pipe(less())
         .pipe(autoprefixer({ browsers: ['last 2 versions', 'ie >= 8'] }))
         .pipe(minifyCss(/*{compatibility: 'ie8'}*/))
         .pipe(gulp.dest(dist('styles')))
@@ -60,6 +61,11 @@ gulp.task('css', function () {
     gulp.src(nodeModule('bootstrap/dist/css/bootstrap.css'))
         .pipe(gulp.dest(dist('styles')))
         .pipe(livereload());
+});
+
+gulp.task('images', () => {
+    gulp.src(app('images/**/*.*'))
+        .pipe(gulp.dest(dist('images')));
 });
 
 // gulp.task('sass', function () {
@@ -106,7 +112,7 @@ gulp.task('javascript', function () {
         .pipe(livereload());
 });
 
-gulp.task('watch', ['html', 'react', 'javascript', 'font', 'css', 'less'], function () {
+gulp.task('watch', ['html', 'react', 'javascript', 'font', 'css', 'less', 'images'], function () {
     livereload.listen();
 
     gulp.watch(app('**/*.html'), ['html']);
@@ -118,4 +124,4 @@ gulp.task('watch', ['html', 'react', 'javascript', 'font', 'css', 'less'], funct
     //server.start();
 });
 
-gulp.task('dist', ['react', 'javascript', 'font', 'css', 'less']);
+gulp.task('dist', ['react', 'javascript', 'font', 'css', 'less', 'images']);

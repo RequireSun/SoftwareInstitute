@@ -2,6 +2,7 @@
 
 define(['react', 'root/store', 'action/style', 'view/public'], (React, store, style, templatePublic) => {
     const Navigation = templatePublic.Navigation,
+          Header     = templatePublic.Header,
           Footer     = templatePublic.Footer;
 
     class Main extends React.Component {
@@ -12,6 +13,7 @@ define(['react', 'root/store', 'action/style', 'view/public'], (React, store, st
         render () {
             return (
                 <div>
+                    <Header/>
                     <Navigation/>
                     {this.props.children}
                     <Footer/>

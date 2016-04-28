@@ -17,7 +17,8 @@ define([
           pageRequest   = config['pageRequest'] || 0,
           navigatorSize = config['style'] && config['style']['navigator'] ? config['style']['navigator'] : 0,
           footerSize    = config['style'] && config['style']['footer']    ? config['style']['footer']    : 2,
-          shortcutSize  = config['style'] && config['style']['shortcut']  ? config['style']['shortcut']  : 0;
+          shortcutSize  = config['style'] && config['style']['shortcut']  ? config['style']['shortcut']  : 0,
+          headerSize    = config['style'] && config['style']['header']    ? config['style']['header']    : 0;
     // TODO page 的 prop state 逻辑明显不对
     /**
      * 页码生成组件
@@ -210,7 +211,7 @@ define([
                 !state || !state['style'] || !state['style']['shortcut'] ||
                 !Array.isArray(state['style']['shortcut']) ?
                     [] :
-                    state['style']['footer'];
+                    state['style']['shortcut'];
             list = list.slice(0, shortcutSize || list.length);
             return { list };
         }
@@ -234,6 +235,56 @@ define([
         <header>title</header>
     );
     TitleLine.defaultProps = { title: '' };
+
+    class HeaderLine extends React.Component {
+        constructor (props) {
+            super(props);
+            this.state = this.getState(props);
+        }
+        componentWillReceiveProps (nextProps) {
+            this.setState(getState(nextProps));
+        }
+        getState (state) {
+            let list =
+                !state || !state['style'] || !state['style']['header'] ||
+                !Array.isArray(state['style']['header']) ?
+                    [] :
+                    state['style']['header'];
+            list = list.slice(0, headerSize || list.length);
+            return { list };
+        }
+        render () {
+            return (
+                <div className="container header">
+                    <div className="row">
+                        <div className="col-sm-6">
+                            <a href="#" className="logo">
+                                <img src="/public/images/LogoTitle.png" alt="首页"/>
+                            </a>
+                        </div>
+                        <div className="col-sm-6 child-right">
+                            <div>
+                                <ul className="breadcrumb">
+                                    {this.state.list.map(item =>
+                                        <li>
+                                            <Link to="newsList" params={{ newsType: item['type'] }}
+                                                  query={{ id: item['id'], pageSize, pageRequest }}>{item['name']}</Link>
+                                        </li>
+                                    )}
+                                </ul>
+                            </div>
+                            <div>
+                                <form action="#">
+                                    <input type="search"/>
+                                    <button type="submit"><span className="glyphicon glyphicon-search"></span></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+    }
 
     // var Pager = React.createClass({
     //     getInitialState: function () {
@@ -603,6 +654,7 @@ define([
     const ConnectFooter     = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(Footer);
     const ConnectShortcut   = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(Shortcut);
     const ConnectTitleLine  = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(TitleLine);
+    const ConnectHeaderLine = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(HeaderLine);
 
     return {
         Navigation: () =>
@@ -620,6 +672,10 @@ define([
         TitleLine: () =>
             (<Provider store={store}>
                 <ConnectTitleLine/>
+            </Provider>),
+        Header: () =>
+            (<Provider store={store}>
+                <ConnectHeaderLine/>
             </Provider>),
         Pager,
     };
