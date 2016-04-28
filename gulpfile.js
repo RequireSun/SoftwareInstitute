@@ -5,7 +5,7 @@ let gulp = require('gulp');
 
 let htmlmin = require('gulp-htmlmin');
 
-let sass = require('gulp-sass'),
+let less = require('gulp-less'),
     minifyCss = require('gulp-minify-css'),
     autoprefixer = require('gulp-autoprefixer');
 
@@ -43,19 +43,33 @@ gulp.task('html', function () {
 });
 
 gulp.task('font', () => {
-    gulp.src(nodeModule('bootstrap-sass/assets/fonts/bootstrap/**'))
-        .pipe(gulp.dest(dist('fonts/bootstrap')))
+    gulp.src(nodeModule('bootstrap/dist/fonts/**'))
+        .pipe(gulp.dest(dist('fonts')))
         .pipe(livereload());
 });
 
-gulp.task('sass', function () {
-    gulp.src(app('styles/**/*.scss'))
-        .pipe(sass().on('error', sass.logError))
+gulp.task('less', function () {
+    gulp.src(app('styles/**/*.less'))
         .pipe(autoprefixer({ browsers: ['last 2 versions', 'ie >= 8'] }))
         .pipe(minifyCss(/*{compatibility: 'ie8'}*/))
         .pipe(gulp.dest(dist('styles')))
         .pipe(livereload());
 });
+
+gulp.task('css', function () {
+    gulp.src(nodeModule('bootstrap/dist/css/bootstrap.css'))
+        .pipe(gulp.dest(dist('styles')))
+        .pipe(livereload());
+});
+
+// gulp.task('sass', function () {
+//     gulp.src(app('styles/**/*.scss'))
+//         .pipe(sass().on('error', sass.logError))
+//         .pipe(autoprefixer({ browsers: ['last 2 versions', 'ie >= 8'] }))
+//         .pipe(minifyCss(/*{compatibility: 'ie8'}*/))
+//         .pipe(gulp.dest(dist('styles')))
+//         .pipe(livereload());
+// });
 
 gulp.task('react', function () {
     gulp.src(app('scripts/**/*.jsx'))
@@ -67,7 +81,7 @@ gulp.task('react', function () {
 
 gulp.task('javascript', function () {
     gulp.src([
-        nodeModule('bootstrap-sass/assets/javascripts/bootstrap.js'),
+        nodeModule('bootstrap/dist/js/bootstrap.js'),
         nodeModule('jquery/dist/jquery.js'),
         nodeModule('react/dist/react.js'),
         nodeModule('react-dom/dist/react-dom.js'),
@@ -92,11 +106,11 @@ gulp.task('javascript', function () {
         .pipe(livereload());
 });
 
-gulp.task('watch', ['html', 'react', 'javascript', 'font', 'sass'], function () {
+gulp.task('watch', ['html', 'react', 'javascript', 'font', 'css', 'less'], function () {
     livereload.listen();
 
     gulp.watch(app('**/*.html'), ['html']);
-    gulp.watch(app('styles/**/*.scss'), ['sass']);
+    gulp.watch(app('styles/**/*.less'), ['less']);
     gulp.watch(app('scripts/**/*.jsx'), ['react']);
     gulp.watch(app('scripts/**/*.js'), ['javascript']);
 
@@ -104,4 +118,4 @@ gulp.task('watch', ['html', 'react', 'javascript', 'font', 'sass'], function () 
     //server.start();
 });
 
-gulp.task('dist', ['react', 'javascript', 'font', 'sass']);
+gulp.task('dist', ['react', 'javascript', 'font', 'css', 'less']);

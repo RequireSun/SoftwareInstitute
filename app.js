@@ -19,7 +19,7 @@ let config = require('./config');
 require('colors');
 let path        = require('path');
 // 一个用来压缩、加载 css 的插件
-let Loader      = require('loader');
+// let Loader      = require('loader');
 let express     = require('express');
 let session     = require('express-session');
 // 用来验证登陆
@@ -106,7 +106,7 @@ app.use(requestLog);
 
 // 静态资源
 // TODO 会用之后找个 sass 的
-app.use(Loader.less(__dirname));
+// app.use(Loader.less(__dirname));
 app.use('/public', express.static(staticDir));
 //app.use('/agent', proxyMiddleware.proxy);
 
