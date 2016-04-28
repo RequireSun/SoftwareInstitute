@@ -117,10 +117,10 @@ define([
         }
         getState (state) {
             let list =
-                !state || !state['navigator'] ||
-                !Array.isArray(state['navigator']) ?
+                !state || !state['style'] || !state['style']['navigator'] ||
+                !Array.isArray(state['style']['navigator']) ?
                     [] :
-                    state['navigator'];
+                    state['style']['navigator'];
             list = list.slice(0, navigatorSize || list.length);
             return { list };
         }
@@ -128,13 +128,13 @@ define([
             return (
                 <div className="navbar navbar-default">
                     <div className="container">
-                        <div className="navbar-header">
+                        <div className="navbar-header visible-xs">
                             <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigator-collapse-all">
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span>
                             </button>
-                            <a className="navbar-brand" href="#">Brand</a>
+                            <a className="navbar-brand" href="#">哈尔滨工业大学(威海)</a>
                         </div>
                         <div className="collapse navbar-collapse" id="navigator-collapse-all">
                             <ul className="nav navbar-nav">
@@ -175,17 +175,16 @@ define([
         }
         getState (state) {
             let list =
-                !state || !state['footer'] ||
-                !Array.isArray(state['footer']) ?
+                !state || !state['style'] || !state['style']['footer'] ||
+                !Array.isArray(state['style']['footer']) ?
                     [] :
-                    state['footer'];
+                    state['style']['footer'];
             list = list.slice(0, footerSize || list.length);
             return { list };
         }
         render () {
-            // const categories = this.state.list.slice(0, 2);
             return (
-                <div className="container-fluid" style={{ backgroundColor: 'black' }}>
+                <div className="container-fluid">
                     <div className="container">
                         {this.state.list.map(item =>
                             <FooterItem id={item['id']} type={item['type']}
@@ -208,10 +207,10 @@ define([
         }
         getState (state) {
             let list =
-                !state || !state['shortcut'] ||
-                !Array.isArray(state['shortcut']) ?
+                !state || !state['style'] || !state['style']['shortcut'] ||
+                !Array.isArray(state['style']['shortcut']) ?
                     [] :
-                    state['footer'];
+                    state['style']['footer'];
             list = list.slice(0, shortcutSize || list.length);
             return { list };
         }

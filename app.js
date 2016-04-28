@@ -158,7 +158,7 @@ app.get('/err', function (req, res, next) {
 // 设置辅助函数
 Object.assign(app.locals, {
     config: config,
-    Loader: Loader,
+    // Loader: Loader,
     assets: assets,
 });
 

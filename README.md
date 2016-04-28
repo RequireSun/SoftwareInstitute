@@ -8,8 +8,8 @@ __正在 gulp 化__
 1. 安装 mysql
 2. 安装 redis (目前还没用)
 3. 安装 node.js
-4. 安装 ruby (为了 sass)
-5. 安装 python (为了编译 node-sass)
+4. ~~安装 ruby (为了 sass)~~
+5. ~~安装 python (为了编译 node-sass)~~
 6. `npm install` 安装 node 依赖
 7. ~~`bower install` 安装 javascript 库依赖~~
 8. ~~`npm install -g supervisor grunt grunt-cli` 安装 supervisor 和 grunt~~
