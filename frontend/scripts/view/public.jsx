@@ -127,7 +127,7 @@ define([
         }
         render () {
             return (
-                <div className="navbar navbar-default">
+                <div className="navbar navigation">
                     <div className="container">
                         <div className="navbar-header visible-xs">
                             <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigator-collapse-all">
@@ -255,7 +255,7 @@ define([
         }
         render () {
             return (
-                <div className="container header">
+                <div className="container hidden-xs header">
                     <div className="row">
                         <div className="col-sm-6">
                             <a href="#" className="logo">
