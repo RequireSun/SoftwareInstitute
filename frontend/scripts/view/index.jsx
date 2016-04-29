@@ -15,9 +15,41 @@ define([
     const { Provider }  = ReactRedux;
     const scrollSize    = config['style'] && config['style']['scroll']    ? config['style']['scroll']    : 0;
 
+    const ScrollItem = (props) => (
+        <li>
+            <figure>
+                <img src={props['img']} alt={props['name']}/>
+                <div className="content">
+                    <figurecaption>{props['name']}</figurecaption>
+                    <article>{props['desc']}</article>
+                </div>
+            </figure>
+        </li>
+    );
+
     const Scroll = (props) => (
-        <div className="container">
-            123
+        <div className="row scroll-container">
+            <section className="scroll-section scroll-shadow left">
+                <ul>
+                    {props.list.map((item, index) =>
+                        <ScrollItem key={index} {...item}/>
+                    )}
+                </ul>
+            </section>
+            {/*<section className="scroll-section">>
+                <ul>
+                    {props.list.map((item, index) =>
+                        <ScrollItem key={index} {...item}/>
+                    )}
+                </ul>
+            </section>
+            <section className="scroll-section scroll-shadow right">>
+                <ul>
+                    {props.list.map((item, index) =>
+                        <ScrollItem key={index} {...item}/>
+                    )}
+                </ul>
+            </section>*/}
         </div>
     );
 
