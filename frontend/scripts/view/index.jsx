@@ -1,14 +1,25 @@
 'use strict';
 
-define(['react', 'ReactRouter', 'action/news', 'action/resource', 'common/util'], function (React, Router, actionNews, actionResource, commonUtil) {
-    var { Link } = Router;
-    var Scroll = React.createClass({
-        render: function () {
-            return (
-                <div>Scroll</div>
-            );
-        }
-    });
+define([
+    'react',
+    'ReactRouter',
+    'react-redux',
+    'common/util',
+    'common/redux_helper',
+    'root/config',
+    'root/store',
+    'action/news',
+    'action/resource',
+], function (React, Router, ReactRedux, commonUtil, reduxHelper, config, store, actionNews, actionResource) {
+    const { Link }      = Router;
+    const { Provider }  = ReactRedux;
+    const scrollSize    = config['style'] && config['style']['scroll']    ? config['style']['scroll']    : 0;
+
+    const Scroll = (props) => (
+        <div className="container">
+            123
+        </div>
+    );
 
     class News extends React.Component {
         constructor (props) {
@@ -68,13 +79,22 @@ define(['react', 'ReactRouter', 'action/news', 'action/resource', 'common/util']
     class Index extends React.Component {
         constructor (props) {
             super(props);
-            this.state = {
-                outline: {},
-            };
+            this.state = Index.getState(props);
         }
-        componentWillMount () {}
+        componentWillReceiveProps (nextProps) {
+            this.setState(Index.getState(nextProps));
+        }
+        static getState (state) {
+            let scrollList =
+                !state || !state['style'] || !state['style']['scroll'] ||
+                !Array.isArray(state['style']['scroll']) ?
+                    [] :
+                    state['style']['scroll'];
+            scrollList = scrollList.slice(0, scrollSize || scrollList.length);
+            return { scrollList };
+        }
         render () {
-            var newsArray = [], newsCount = 0;
+            // var newsArray = [], newsCount = 0;
             // for (var i in this.state.outlines) {
             //     newsArray.push({
             //         id: this.state.outlines[i].id,
@@ -87,18 +107,24 @@ define(['react', 'ReactRouter', 'action/news', 'action/resource', 'common/util']
             // }
             return (
                 <div className="container">
-                    <Scroll/>
+                    <Scroll list={this.state.scrollList}/>
                     <div className="row">
-                        {newsArray.map((news) =>
+                        {/*newsArray.map((news) =>
                             <News id={news.id} title={news.title}/>
-                        )}
+                        )*/}
                         <Resource/>
                     </div>
                 </div>
             );
         }
     }
-    return Index;
+
+    const ConnectIndex = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(Index);
+
+    return () =>
+        (<Provider store={store}>
+            <ConnectIndex/>
+        </Provider>);
 });
 
 // var News = React.createClass({

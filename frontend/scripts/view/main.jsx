@@ -8,7 +8,7 @@ define(['react', 'root/store', 'action/style', 'view/public'], (React, store, st
     class Main extends React.Component {
         constructor (props) {
             super(props);
-            store.dispatch(style.init(window['_styleConfig_']));
+            store.dispatch(style.init(window['_styleConfig_'] || {}));
         }
         render () {
             return (

@@ -249,6 +249,8 @@ function combineChildWithName (relation, outlines, categories, isChild) {
             !!item['link'] && (relationObj['link'] = '' + item['link']);
             !!item['type'] && (relationObj['type'] = +item['type']);
             !!item['id']   && (relationObj['id']   = +item['id']);
+            !!item['desc'] && (relationObj['desc'] = '' + item['desc']);
+            !!item['img']  && (relationObj['img']  = '' + item['img']);
         } else if (
             !isNaN(item['id']) &&
             0 !== +item['id'] &&
@@ -262,6 +264,8 @@ function combineChildWithName (relation, outlines, categories, isChild) {
             relationObj['id']   = item['id'];
             relationObj['name'] = name;
             relationObj['type'] = item['type'];
+            !!item['desc'] && (relationObj['desc'] = '' + item['desc']);
+            !!item['img']  && (relationObj['img']  = '' + item['img']);
         } else {
             continue;
         }

@@ -9,8 +9,7 @@ let less = require('gulp-less'),
     minifyCss = require('gulp-minify-css'),
     autoprefixer = require('gulp-autoprefixer');
 
-let react = require('gulp-react'),
-    babel = require('gulp-babel'),
+let babel = require('gulp-babel'),
     uglify = require('gulp-uglify');
 
 let livereload = require('gulp-livereload'),
@@ -79,7 +78,7 @@ gulp.task('images', () => {
 
 gulp.task('react', function () {
     gulp.src(app('scripts/**/*.jsx'))
-        .pipe(react({ harmony: true }))
+        .pipe(babel({ presets: ['es2015', 'react'] }))
         // .pipe(uglify())
         .pipe(gulp.dest(dist('scripts')))
         .pipe(livereload());
