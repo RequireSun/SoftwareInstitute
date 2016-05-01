@@ -15,27 +15,105 @@ define([
     const { Provider }  = ReactRedux;
     const scrollSize    = config['style'] && config['style']['scroll']    ? config['style']['scroll']    : 0;
 
-    const ScrollItem = (props) => (
-        <li>
-            <figure>
-                <img src={props['img']} alt={props['name']}/>
-                <div className="content">
-                    <figurecaption>{props['name']}</figurecaption>
-                    <article>{props['desc']}</article>
-                </div>
-            </figure>
-        </li>
-    );
+    class ScrollItem extends React.Component {
+        constructor (props) {
+            super(props);
+        }
+        componentDidMount () {
+            this.refs.root.className = ScrollItem.judgeClassName(this.props.pos);
+        }
+        componentDidUpdate (prevProps, prevState) {
+            const root = this.refs.root,
+                  pos  = this.props.pos;
+            if (!prevProps.pos && ('left' === pos || 'right' === pos)) {
+                // 为了保证图片的正常显示层次
+                root.className = ScrollItem.judgeClassName(pos).replace(/^.*\s/, '');
+                setTimeout(() =>
+                    root.className = ScrollItem.judgeClassName(pos)
+                , 20);
+            } else {
+                root.className = ScrollItem.judgeClassName(pos);
+            }
+        }
+        static judgeClassName (pos) {
+            switch (pos) {
+                case 'left':
+                    return 'transition-translateX transform-translateLeft';
+                case 'center':
+                    return 'transition-translateX transform-translateCenter';
+                case 'right':
+                    return 'transition-translateX transform-translateRight';
+                default:
+                    return '';
+            }
+        }
+        render () {
+            return (
+                <li ref="root">
+                    <figure>
+                        <img src={this.props['img']} alt={this.props['name']}/>
+                        <div className="content">
+                            <figcaption>{this.props['name']}</figcaption>
+                            <article>{this.props['desc']}</article>
+                        </div>
+                    </figure>
+                </li>
+            );
+        }
+    }
+
+    class ScrollSection extends React.Component {
+        constructor (props) {
+            super(props);
+            this.state = {
+                active: 0,
+                play  : true,
+            };
+        }
+        round (isReverse) {
+            if (!isReverse) {
+                const length = this.props.list.length;
+                this.setState({ active: (this.state.active - 1 + length) % length });
+            } else {
+                this.setState({ active: (this.state.active + 1) % this.props.list.length });
+            }
+        }
+        render () {
+            const length = this.props.list.length;
+            const left   = (this.state.active - 1 + length) % length,
+                  center = this.state.active,
+                  right  = (this.state.active + 1) % length;
+            return (
+                <section className="scroll-section scroll-shadow">
+                    <ul>
+                        {this.props.list.map((item, index) =>
+                            <ScrollItem key={index} {...item}
+                                        pos={left === index ? 'left' :
+                                             center === index ? 'center' :
+                                             right === index ? 'right' : ''}/>
+                        )}
+                    </ul>
+                    <div className="scroll-controller-prev">
+                        <span className="glyphicon glyphicon-chevron-left"></span>
+                    </div>
+                    <div className="scroll-controller-next">
+                        <span className="glyphicon glyphicon-chevron-right"></span>
+                    </div>
+                    <div className="scroll-controller-play">
+                        {!!this.state.play ?
+                            <span className="glyphicon glyphicon-play" onClick={this.round.bind(this)}></span> :
+                            <span className="glyphicon glyphicon-pause"></span>
+                        }
+                    </div>
+                </section>
+            );
+        }
+    }
+    ScrollSection.defaultProp = { list: [] };
 
     const Scroll = (props) => (
         <div className="row scroll-container">
-            <section className="scroll-section scroll-shadow left">
-                <ul>
-                    {props.list.map((item, index) =>
-                        <ScrollItem key={index} {...item}/>
-                    )}
-                </ul>
-            </section>
+            <ScrollSection list={props.list}/>
             {/*<section className="scroll-section">>
                 <ul>
                     {props.list.map((item, index) =>
