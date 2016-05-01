@@ -13,7 +13,8 @@ define([
 ], function (React, Router, ReactRedux, commonUtil, reduxHelper, config, store, actionNews, actionResource) {
     const { Link }      = Router;
     const { Provider }  = ReactRedux;
-    const scrollSize    = config['style'] && config['style']['scroll']    ? config['style']['scroll']    : 0;
+    const scrollSize    = config['style'] && config['style']['scroll'] ? config['style']['scroll'] : 0;
+          // scrollTime    = config['time']  && config['time']['scroll']  ? config['time']['scroll']  : 2000;
 
     class ScrollItem extends React.Component {
         constructor (props) {
@@ -67,15 +68,43 @@ define([
             super(props);
             this.state = {
                 active: 0,
-                play  : true,
+                play  : false,
+                coolDown: false,
             };
         }
-        round (isReverse) {
-            if (!isReverse) {
-                const length = this.props.list.length;
-                this.setState({ active: (this.state.active - 1 + length) % length });
+        componentDidMount () {
+            this.autoRound();
+        }
+        autoRound () {
+            if (!this.state.play) {
+                const interval = window.setInterval(() =>
+                    this.round()
+                , 3000);
+
+                this.setState({ play: true, interval, });
             } else {
-                this.setState({ active: (this.state.active + 1) % this.props.list.length });
+                window.clearInterval(this.state.interval);
+                this.setState({ play: false, interval: 0, });
+            }
+        }
+        round (isReverse = false) {
+            if (!this.state.coolDown) {
+                if (!isReverse) {
+                    this.setState({
+                        active: (this.state.active + 1) % this.props.list.length,
+                        coolDown: true
+                    }, () =>
+                        setTimeout(() => this.setState({ coolDown: false }), 1500)
+                    );
+                } else {
+                    const length = this.props.list.length;
+                    this.setState({
+                        active: (this.state.active - 1 + length) % length,
+                        coolDown: true
+                    }, () =>
+                        setTimeout(() => this.setState({ coolDown: false }), 1500)
+                    );
+                }
             }
         }
         render () {
@@ -93,17 +122,17 @@ define([
                                              right === index ? 'right' : ''}/>
                         )}
                     </ul>
-                    <div className="scroll-controller-prev">
+                    <div className="scroll-controller-order prev"
+                         onClick={this.round.bind(this, true)}>
                         <span className="glyphicon glyphicon-chevron-left"></span>
                     </div>
-                    <div className="scroll-controller-next">
+                    <div className="scroll-controller-order next"
+                         onClick={this.round.bind(this, false)}>
                         <span className="glyphicon glyphicon-chevron-right"></span>
                     </div>
-                    <div className="scroll-controller-play">
-                        {!!this.state.play ?
-                            <span className="glyphicon glyphicon-play" onClick={this.round.bind(this)}></span> :
-                            <span className="glyphicon glyphicon-pause"></span>
-                        }
+                    <div className="scroll-controller-play"
+                         onClick={this.autoRound.bind(this)}>
+                        <span className={"glyphicon glyphicon-" + (!!this.state.play ? "play" : "pause")}></span>
                     </div>
                 </section>
             );
