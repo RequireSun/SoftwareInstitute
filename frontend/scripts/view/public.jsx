@@ -78,6 +78,7 @@ define([
             );
         }
     }
+    // TODO 忘记做详情页的蓝色条条了
     // 导航栏的单个选项列表
     const NavigatorItem = props => (
         <li className="dropdown">
@@ -221,7 +222,7 @@ define([
         }
         render () {
             return (
-                <div className="list-group">
+                <nav className="list-group shortcut-box">
                     {this.state.list.map((item, index) =>
                         <Link className="list-group-item" to="newsList"
                               key={index} params={{ newsType: item['type'] }}
@@ -229,14 +230,14 @@ define([
                     )}
                     <Link className="list-group-item" to="resource"
                           query={{ pageSize, pageRequest }}>资源下载</Link>
-                </div>
+                </nav>
             );
         }
     }
     Shortcut.defaultProps = { shortcut: [] };
     // 标题栏
     const TitleLine = ({ title }) => (
-        <header>title</header>
+        <header>{title}</header>
     );
     TitleLine.defaultProps = { title: '' };
     // 抬头栏
@@ -311,10 +312,11 @@ define([
             (<Provider store={store}>
                 <ConnectShortcut/>
             </Provider>),
-        TitleLine: () =>
-            (<Provider store={store}>
-                <ConnectTitleLine/>
-            </Provider>),
+        TitleLine,
+        // TitleLine: () =>
+        //     (<Provider store={store}>
+        //         <ConnectTitleLine/>
+        //     </Provider>),
         Header: () =>
             (<Provider store={store}>
                 <ConnectHeaderLine/>

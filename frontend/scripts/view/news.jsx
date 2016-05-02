@@ -13,9 +13,9 @@ define([
 ], function (React, ReactRouter, ReactRedux, reduxHelper, config, store, commonUtil, templatePublic, actionNews) {
     const { Link }     = ReactRouter;
     const { Provider } = ReactRedux;
-    var TitleLine = templatePublic.TitleLine,
-        Shortcut = templatePublic.Shortcut,
-        Pager = templatePublic.Pager;
+    const TitleLine    = templatePublic.TitleLine,
+          Shortcut     = templatePublic.Shortcut,
+          Pager        = templatePublic.Pager;
 
     // var newsLink = '#/browse/news/{#newsType}?id={#id}&pageSize=20&pageRequest={#page}';
 
@@ -52,7 +52,7 @@ define([
             </Link>
         </li>
     );
-
+    // TODO 取标题栏没做
     class NewsList extends React.Component {
         constructor (props) {
             super(props);
@@ -82,21 +82,33 @@ define([
         }
         render () {
             return (
-                <div className="container">
-                    <div className="row">
-                        {/*<TitleLine id={this.state.id} type={this.state.newsType}/>*/}
-                    </div>
-                    <div className="row">
-                        <div className="col-sm-3 hidden-xs">
-                            <Shortcut/>
+                <div>
+                    <div className="container-fluid">
+                        <div className="row">
+                            <div className="title-header">
+                                <div className="container">
+                                    <div className="row">
+                                        <div className="shortcut-container col-sm-3 hidden-xs">
+                                            <Shortcut/>
+                                        </div>
+                                        <div className="col-xs-12 col-sm-9 col-sm-offset-3">
+                                            <TitleLine title="Title"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div className="col-sm-9">
-                            <ul>
-                                {this.state.list.map(item =>
-                                    <NewsItem {...item}/>
-                                )}
-                            </ul>
-                            {/*<Pager current={this.state.pageRequest} max={this.state.newsCount} link={tempNewsLink}/>*/}
+                    </div>
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-xs-12 col-sm-9 col-sm-offset-3">
+                                <ul>
+                                    {this.state.list.map(item =>
+                                        <NewsItem {...item}/>
+                                    )}
+                                </ul>
+                                {/*<Pager current={this.state.pageRequest} max={this.state.newsCount} link={tempNewsLink}/>*/}
+                            </div>
                         </div>
                     </div>
                 </div>

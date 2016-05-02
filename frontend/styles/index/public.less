@@ -1,0 +1,56 @@
+@import "../../../node_modules/bootstrap/less/variables";
+
+.title-header {
+  padding: .4rem 0;
+
+  min-height: 1.2rem;
+
+  background-color: #242424;
+
+  color: #eee;
+  //font-size: .28rem;
+  //line-height: .5rem;
+
+  header {
+    @media (min-width: @screen-sm-min) {
+      padding-left: .5rem;
+    }
+
+    font-size: .28rem;
+    line-height: .5rem;
+    word-wrap: break-word;
+  }
+}
+
+.shortcut-container {
+  position: absolute;
+
+  .shortcut-box {
+    background: #f5f6f6;
+    border: 0;
+    box-shadow: 0 0 1px #000;
+
+    &>a {
+      box-sizing: border-box;
+
+      border: none;
+      border-bottom: 2px solid #ccc;
+
+      &:first-of-type, &:last-of-type {
+        border-radius: 0;
+      }
+
+      &:first-of-type {
+        background-color: #575757;
+        border-bottom-color: #343333;
+
+        color: #fff;
+        font-weight: bold;
+
+        &:hover {
+          background-color: #666;
+        }
+      }
+    }
+  }
+}
