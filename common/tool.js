@@ -6,6 +6,8 @@ let config = require('../config');
 //     return Object.prototype.hasOwnProperty.apply(target, args);
 // };
 
+const hasOwnProperty = (target, ...args) => Object.prototype.hasOwnProperty.apply(target, args);
+
 const generatePageNumber = function (pageCurrent, pageMax, pageLink) {
     var numberList = [];
     // 填充页码， 取剩余页面数量和页面跳转限额中较小的一个， 作为页码个数， 循环填充
@@ -29,7 +31,7 @@ const formatDateTime = (dateString) => +new Date(dateString);
 
 const formatDateTimeArray = (dataArray, keyName) =>
     dataArray.map(item =>
-        Object.assign({}, item, { [keyName]: exports.formatDateTime(item[keyName]) })
+        Object.assign({}, item, { [keyName]: formatDateTime(item[keyName]) })
     );
 
 const formatInsertParameters = (params, nameMap) => {
@@ -37,7 +39,7 @@ const formatInsertParameters = (params, nameMap) => {
         queryArrayValue   = [],
         processedParams   = {};
     for (let i in params) {
-        if (exports.hasOwnProperty(params, i) && exports.hasOwnProperty(nameMap, i)) {
+        if (hasOwnProperty(params, i) && hasOwnProperty(nameMap, i)) {
             queryArrayDeclare.push(nameMap[i]);
             queryArrayValue.push(i);
             processedParams[i] = params[i];
@@ -51,7 +53,7 @@ const formatUpdateParameters = (params, nameMap) => {
     let queryArray = [],
         processedParams = {};
     for (let i in params) {
-        if (exports.hasOwnProperty(params, i) && exports.hasOwnProperty(nameMap, i)) {
+        if (hasOwnProperty(params, i) && hasOwnProperty(nameMap, i)) {
             queryArray.push(nameMap[i] + ' = :' + i);
             processedParams[i] = params[i];
         }
@@ -59,8 +61,6 @@ const formatUpdateParameters = (params, nameMap) => {
 
     return { queryArray, processedParams };
 };
-
-const hasOwnProperty = (target, ...args) => Object.prototype.hasOwnProperty.apply(target, args);
 
 const toString = target => Object.prototype.toString.call(target);
 // es6 type

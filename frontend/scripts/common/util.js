@@ -2,6 +2,8 @@
  * Created by kelvin on 15-8-8.
  */
 define([], function () {
+    const toString = target => Object.prototype.toString.call(target);
+
     const hasOwnProperty = (target, ...args) =>
         Object.prototype.hasOwnProperty.apply(target, args);
 
@@ -30,6 +32,7 @@ define([], function () {
         convertDateTimeStringToTime(inDateString);
 
     return {
+        toString,
         hasOwnProperty,
         convertDateTimeStringToDate,
         convertDateTimeStringToTime,

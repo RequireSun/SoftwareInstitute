@@ -222,9 +222,9 @@ define([
         render () {
             return (
                 <div className="list-group">
-                    {this.state.list.map(item =>
+                    {this.state.list.map((item, index) =>
                         <Link className="list-group-item" to="newsList"
-                              params={{ newsType: item['type'] }}
+                              key={index} params={{ newsType: item['type'] }}
                               query={{ id: item['id'], pageSize, pageRequest }}>{item['name']}</Link>
                     )}
                     <Link className="list-group-item" to="resource"
