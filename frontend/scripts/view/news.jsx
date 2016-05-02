@@ -47,7 +47,7 @@ define([
             <Link to="detail" params={{ id: props.id }}>
                 {props.title}
                 <span className="pull-right">
-                    {props.update_time}
+                    {commonUtil.convertDateTimeStringToDate(props.update_time)}
                 </span>
             </Link>
         </li>
@@ -60,13 +60,22 @@ define([
         }
         componentWillReceiveProps (nextProps) {
             this.setState(NewsList.getState(nextProps));
+            this.getData(nextProps);
         }
         componentWillMount () {
-            const type        = this.props.params.type       || 'category',
-                  id          = this.props.query.id,
-                  pageSize    = this.props.query.pageSize    || config.pageSize,
-                  pageRequest = this.props.query.pageRequest || config.pageRequest;
-            this.props.onNewsListGet(id, type, pageRequest, pageSize);
+            this.getData(this.props);
+        }
+        getData (props) {
+            const type        = props.params.type       || 'category',
+                  id          = props.query.id,
+                  pageRequest = props.query.pageRequest || config.pageRequest,
+                  pageSize    = props.query.pageSize    || config.pageSize;
+            if (this.state.type !== type || this.state.id !== id ||
+                this.state.pageRequest !== pageRequest ||
+                this.state.pageSize !== pageSize) {
+                this.setState({ type, id, pageRequest, pageSize });
+                props.onNewsListGet(id, type, pageRequest, pageSize);
+            }
         }
         static getState (state) {
             const news = !state || !state['news'] || '[object Object]' !== commonUtil.toString(state) ?
@@ -102,7 +111,7 @@ define([
                     <div className="container">
                         <div className="row">
                             <div className="col-xs-12 col-sm-9 col-sm-offset-3">
-                                <ul>
+                                <ul className="newsList-container">
                                     {this.state.list.map(item =>
                                         <NewsItem {...item}/>
                                     )}

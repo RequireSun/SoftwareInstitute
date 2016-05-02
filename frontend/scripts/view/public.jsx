@@ -92,8 +92,8 @@ define([
                     {props.list.map((item, index) =>
                         <li key={index}>
                             {!!item['id'] ?
-                                <Link to="newsList" params={{ newsType: item['type'] }}
-                                      query={{ id: item['id'], pageSize, pageRequest }}>
+                                <Link to={{ pathname: `/browse/news/${item['type']}`,
+                                            query: { id: item['id'], pageSize, pageRequest }}}>
                                     {item['name']}
                                 </Link> :
                                 <a href={item['link'] || 'javascript:;'}>{item['name']}</a>
@@ -103,12 +103,12 @@ define([
                 </ul>
             ] : (
                 !!props.id ?
-                    <Link to="newsList" params={{ newsType: props.type }}
-                        query={{ id: props.id, pageSize, pageRequest }}
+                    <Link to={{ pathname: `/browse/news/${props.type}`,
+                                query: { id: props.id, pageSize, pageRequest }}}
                         className="dropdown-toggle">
                         {props.name}
                     </Link> :
-                    <a href={props.link}>{props.name}</a>
+                    !!props.link ? <a href={props.link}>{props.name}</a> : ''
             )}
         </li>
     );
@@ -224,9 +224,17 @@ define([
             return (
                 <nav className="list-group shortcut-box">
                     {this.state.list.map((item, index) =>
-                        <Link className="list-group-item" to="newsList"
-                              key={index} params={{ newsType: item['type'] }}
-                              query={{ id: item['id'], pageSize, pageRequest }}>{item['name']}</Link>
+                        !!item['id'] ?
+                            <Link className="list-group-item" key={index}
+                                  to={{ pathname: `/browse/news/${item['type']}`,
+                                        query: { id: item['id'], pageSize, pageRequest }}}>
+                                {item['name']}
+                            </Link> :
+                            !!item['link'] ?
+                                <a className="list-group-item" href={item['link'] || 'javascript:;'}>
+                                    {item['name']}
+                                </a> :
+                                ''
                     )}
                     <Link className="list-group-item" to="resource"
                           query={{ pageSize, pageRequest }}>资源下载</Link>
