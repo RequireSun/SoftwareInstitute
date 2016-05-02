@@ -63,7 +63,48 @@ define([
         }
     }
 
-    class ScrollSection extends React.Component {
+    const ScrollSection = (props) => {
+        const length = props.list.length;
+        const left   = (props.active - 1 + length) % length,
+              center = props.active,
+              right  = (props.active + 1) % length;
+        const pos    = props.pos || '';
+        return (
+            <section className={
+                     "scroll-section " +
+                     (props.showShadow ? " scroll-shadow " : "") +
+                     pos}>
+                <ul>
+                    {props.list.map((item, index) =>
+                        <ScrollItem key={index} {...item}
+                                    pos={left === index ? 'left' :
+                                         center === index ? 'center' :
+                                         right === index ? 'right' : ''}/>
+                    )}
+                </ul>
+                {props.showController ? [
+                    <div className="scroll-controller-order prev"
+                         key="prev"
+                         onClick={props.round.bind(null, true)}>
+                        <span className="glyphicon glyphicon-chevron-left"></span>
+                    </div>,
+                    <div className="scroll-controller-order next"
+                         key="next"
+                         onClick={props.round.bind(null, false)}>
+                        <span className="glyphicon glyphicon-chevron-right"></span>
+                    </div>,
+                    <div className="scroll-controller-play"
+                         key="play"
+                         onClick={props.autoRound}>
+                        <span className={"glyphicon glyphicon-" + (!!props.play ? "play" : "pause")}></span>
+                    </div>
+                ] : ''}
+            </section>
+        );
+    };
+    ScrollSection.defaultProp = { list: [], active: 0, play: false, coolDown: false, };
+
+    class Scroll extends React.Component {
         constructor (props) {
             super(props);
             this.state = {
@@ -78,8 +119,8 @@ define([
         autoRound () {
             if (!this.state.play) {
                 const interval = window.setInterval(() =>
-                    this.round()
-                , 3000);
+                        this.round()
+                    , 3000);
 
                 this.setState({ play: true, interval, });
             } else {
@@ -91,74 +132,42 @@ define([
             if (!this.state.coolDown) {
                 if (!isReverse) {
                     this.setState({
-                        active: (this.state.active + 1) % this.props.list.length,
-                        coolDown: true
-                    }, () =>
-                        setTimeout(() => this.setState({ coolDown: false }), 1500)
+                            active: (this.state.active + 1) % this.props.list.length,
+                            coolDown: true
+                        }, () =>
+                            setTimeout(() => this.setState({ coolDown: false }), 1500)
                     );
                 } else {
                     const length = this.props.list.length;
                     this.setState({
-                        active: (this.state.active - 1 + length) % length,
-                        coolDown: true
-                    }, () =>
-                        setTimeout(() => this.setState({ coolDown: false }), 1500)
+                            active: (this.state.active - 1 + length) % length,
+                            coolDown: true
+                        }, () =>
+                            setTimeout(() => this.setState({ coolDown: false }), 1500)
                     );
                 }
             }
         }
         render () {
-            const length = this.props.list.length;
-            const left   = (this.state.active - 1 + length) % length,
-                  center = this.state.active,
-                  right  = (this.state.active + 1) % length;
+            const list = this.props.list;
+            const prev = list.slice(-1).concat(list.slice(0, -1)),
+                  next = list.slice(1).concat(list.slice(0, 1));
             return (
-                <section className="scroll-section scroll-shadow">
-                    <ul>
-                        {this.props.list.map((item, index) =>
-                            <ScrollItem key={index} {...item}
-                                        pos={left === index ? 'left' :
-                                             center === index ? 'center' :
-                                             right === index ? 'right' : ''}/>
-                        )}
-                    </ul>
-                    <div className="scroll-controller-order prev"
-                         onClick={this.round.bind(this, true)}>
-                        <span className="glyphicon glyphicon-chevron-left"></span>
-                    </div>
-                    <div className="scroll-controller-order next"
-                         onClick={this.round.bind(this, false)}>
-                        <span className="glyphicon glyphicon-chevron-right"></span>
-                    </div>
-                    <div className="scroll-controller-play"
-                         onClick={this.autoRound.bind(this)}>
-                        <span className={"glyphicon glyphicon-" + (!!this.state.play ? "play" : "pause")}></span>
-                    </div>
-                </section>
+                <div className="row scroll-container">
+                    <ScrollSection key="left" list={prev} pos="left" {...this.state}
+                                   showController={false} showShadow={true}
+                                   round={this.round.bind(this)} autoRound={this.autoRound.bind(this)}/>
+                    <ScrollSection key="center" list={list} pos="center" {...this.state}
+                                   showController={true} showShadow={false}
+                                   round={this.round.bind(this)} autoRound={this.autoRound.bind(this)}/>
+                    <ScrollSection key="right" list={next} pos="right" {...this.state}
+                                   showController={false} showShadow={true}
+                                   round={this.round.bind(this)} autoRound={this.autoRound.bind(this)}/>
+                </div>
             );
         }
     }
-    ScrollSection.defaultProp = { list: [] };
-
-    const Scroll = (props) => (
-        <div className="row scroll-container">
-            <ScrollSection list={props.list}/>
-            {/*<section className="scroll-section">>
-                <ul>
-                    {props.list.map((item, index) =>
-                        <ScrollItem key={index} {...item}/>
-                    )}
-                </ul>
-            </section>
-            <section className="scroll-section scroll-shadow right">>
-                <ul>
-                    {props.list.map((item, index) =>
-                        <ScrollItem key={index} {...item}/>
-                    )}
-                </ul>
-            </section>*/}
-        </div>
-    );
+    Scroll.defaultProps = { list: [] };
 
     class News extends React.Component {
         constructor (props) {
