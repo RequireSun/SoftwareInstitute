@@ -42,7 +42,7 @@ define([
         }
         getData (props) {
             const type        = props.params.type        || 'category',
-                  id          = props.query.id,
+                  id          = +props.query.id,
                   pageRequest = +props.query.pageRequest || +config.pageRequest,
                   pageSize    = +props.query.pageSize    || +config.pageSize;
             if (this.state.type !== type || this.state.id !== id ||
@@ -53,7 +53,8 @@ define([
             }
         }
         static getState (state) {
-            const news = !state || !state['news'] || '[object Object]' !== commonUtil.toString(state) ?
+            const news = !state || !state['news'] ||
+                         '[object Object]' !== commonUtil.toString(state) ?
                          {} :
                          state['news'];
             if (!Array.isArray(news['list'])) {
@@ -83,7 +84,7 @@ define([
                             </div>
                         </div>
                     </div>
-                    <div className="container">
+                    <div className="content-container container">
                         <div className="row">
                             <div className="newsList-container col-xs-12 col-sm-9 col-sm-offset-3">
                                 <ul className="newsList-box">

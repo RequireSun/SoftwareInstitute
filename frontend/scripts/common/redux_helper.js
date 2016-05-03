@@ -3,11 +3,19 @@
  */
 'use strict';
 
-define(['jquery', 'root/config', 'action/style', 'action/news'], ($, config, Style, News) => ({
-    mapStateToProps: ({ style, news }) => ({
+define([
+    'jquery',
+    'root/config',
+    'action/style',
+    'action/news',
+    'action/resource'
+], ($, config, Style, News, Resource) => ({
+    mapStateToProps: ({ style, news, resource }) => ({
         style,
         news,
+        resource,
     }),
+    // TODO 错误处理
     mapDispatchToProps: (dispatch) => ({
         onStyleInit: (style) =>
             dispatch(Style.init(style)),
@@ -31,7 +39,6 @@ define(['jquery', 'root/config', 'action/style', 'action/news'], ($, config, Sty
                 },
                 dataType: 'json',
             }).success(data => {
-                // console.log(data);
                 if (!data['code']) {
                     const { list, count } = data['data'];
                     dispatch(News.listSet(list, count));
@@ -39,7 +46,25 @@ define(['jquery', 'root/config', 'action/style', 'action/news'], ($, config, Sty
             }).error((xhr, msg) => {
                 console.log(msg);
             });
-            // dispatch(News);
+        },
+        onResourceListGet: (pageRequest = config.pageRequest, pageSize = config.pageSize) => {
+            const url = '/api/resourceList';
+            $.ajax({
+                url,
+                method: 'GET',
+                data: {
+                    pageSize,
+                    pageRequest,
+                },
+                dataType: 'json',
+            }).success(data => {
+                if (!data['code']) {
+                    const { list, count } = data['data'];
+                    dispatch(Resource.listSet(list, count));
+                }
+            }).error((xhr, msg) => {
+                console.log(msg);
+            });
         },
     }),
 }));

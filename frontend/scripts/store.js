@@ -3,8 +3,8 @@
  */
 'use strict';
 
-define(['redux', 'reducer/style', 'reducer/news'], (Redux, style, news) => {
-    const store = Redux.createStore(Redux.combineReducers({ style, news }));
+define(['redux', 'reducer/style', 'reducer/news', 'reducer/resource'], (Redux, style, news, resource) => {
+    const store = Redux.createStore(Redux.combineReducers({ style, news, resource }));
     window['store'] = store;
     return store;
 });

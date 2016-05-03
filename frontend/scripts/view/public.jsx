@@ -35,6 +35,9 @@ define([
                 tempMax     = +this.props.max,
                 tempLink    = this.props.link || '';
             let pagerArray  = [tempCurrent];
+            if (tempMax <= 1) {
+                return <div></div>;
+            }
             // 生成对应的前一页 / 后一页
             const prevLink = tempCurrent <= 0 ?
                 (<li className="disabled">

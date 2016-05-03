@@ -1,95 +1,173 @@
-define(['react', 'view/public', 'action/resource', 'common/util'], function (React, templatePublic, actionResource, commonUtil) {
-    var TitleLine = templatePublic.TitleLine,
-        Shortcut = templatePublic.Shortcut,
-        Pager = templatePublic.Pager;
+'use strict';
 
-    var resourceLink = '#/browse/resource?pageSize=20&pageRequest={#page}';
+define([
+    'react',
+    'react-redux',
+    'common/redux_helper',
+    'root/config',
+    'root/store',
+    'common/util',
+    'view/public',
+    'action/resource'
+], function (React, ReactRedux, reduxHelper, config, store, commonUtil, templatePublic, actionResource) {
+    const { Provider } = ReactRedux;
+    var { TitleLine, Shortcut, Pager } = templatePublic;
 
-    var ResourceItem = React.createClass({
-        mixins: [commonUtil],
-        getInitialState: function () {
-            return {
-                id: this.props.id,
-                title: this.props.title,
-                path: this.props.path,
-                updateTime: this.props.update_time
-            }
-        },
-        componentWillReceiveProps: function (nextProps) {
-            this.setState({
-                id: nextProps.id,
-                title: nextProps.title,
-                path: nextProps.path,
-                updateTime: nextProps.updateTime
-            });
-        },
-        render: function () {
-            return (
-                <li><a href={this.state.path}>{this.state.title}<span className="pull-right">{this.ConvertDateTimeToDate(this.state.updateTime)}</span></a></li>
-            );
+    const ResourceItem = (props) => (
+        <li>
+            <a href={`/public/upload/${props['path']}`}>
+                {props['title']}
+                <span className="pull-right">
+                    {commonUtil.convertDateTimeStringToDate(props['update_time'])}
+                </span>
+            </a>
+        </li>
+    );
+
+    class ResourceList extends React.Component {
+        constructor (props) {
+            super(props);
+            this.state = ResourceList.getState(props);
         }
-    });
-    var ResourceList = React.createClass({
-        mixins: [actionResource],
-        getData: function (pageSize, pageRequest) {
-            this.ResourceList(function (err, data) {
-                if (err) {
-                    location.hash = '#notFound/' + err;
-                    return ;
-                }
-                this.setState({
-                    resourceList: data.data ? data.data : [],
-                    resourceCount: data.count ? data.count : 0
-                });
-            }.bind(this), pageSize, pageRequest);
-        },
-        getInitialState: function () {
-            return {
-                pageSize : this.props.query.pageSize,
-                pageRequest : this.props.query.pageRequest,
-                resourceList: [],
-                resourceCount: 0
-            };
-        },
-        componentWillReceiveProps: function (nextProps) {
-            this.setState({
-                pageSize : nextProps.query.pageSize,
-                pageRequest : nextProps.query.pageRequest,
-                resourceList: [],
-                resourceCount: 0
-            }, function () {
-                this.getData(this.state.pageSize, this.state.pageRequest);
-            });
-        },
-        componentWillMount: function () {
-            this.getData(this.state.pageSize, this.state.pageRequest);
-        },
-        render: function () {
-            var resourceItems = [], tempResourceList = this.state.resourceList;
-            for (var i = 0, l = tempResourceList.length; i < l; ++i) {
-                resourceItems.push(
-                    <ResourceItem {...tempResourceList[i]}/>
-                );
+        componentWillReceiveProps (nextProps) {
+            this.setState(ResourceList.getState(nextProps));
+            this.getData(nextProps);
+        }
+        componentWillMount () {
+            this.getData(this.props);
+        }
+        getData (props) {
+            const pageRequest = +props.query.pageRequest || +config.pageRequest,
+                  pageSize    = +props.query.pageSize    || +config.pageSize;
+            if (this.state.pageRequest !== pageRequest ||
+                this.state.pageSize !== pageSize) {
+                this.setState({ pageRequest, pageSize });
+                props.onResourceListGet(pageRequest, pageSize);
             }
+        }
+        static getState (state) {
+            const resource = !state || !state['resource'] ||
+                             '[object Object]' !== commonUtil.toString(state) ?
+                                 {} :
+                                 state['resource'];
+            if (!Array.isArray(resource['list'])) {
+                resource['list'] = [];
+            }
+            if (isNaN(resource['count'])) {
+                resource['count'] = 0;
+            }
+            return resource;
+        }
+        render () {
             return (
-                <div className="container">
-                    <div className="row">
-                        <TitleLine title="资源下载"/>
-                    </div>
-                    <div className="row">
-                        <div className="col-sm-3 hidden-xs">
-                            <Shortcut/>
+                <div>
+                    <div className="container-fluid">
+                        <div className="row">
+                            <div className="title-header">
+                                <div className="container">
+                                    <div className="row">
+                                        <div className="shortcut-container col-sm-3 hidden-xs">
+                                            <Shortcut/>
+                                        </div>
+                                        <div className="col-xs-12 col-sm-9 col-sm-offset-3">
+                                            <TitleLine title="资源下载"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div className="col-sm-9">
-                            <ul>
-                                {resourceItems}
-                            </ul>
-                            <Pager current={this.state.pageRequest} max={this.state.resourceCount} link={resourceLink}/>
+                    </div>
+                    <div className="content-container container">
+                        <div className="row">
+                            <div className="newsList-container col-xs-12 col-sm-9 col-sm-offset-3">
+                                <ul className="newsList-box">
+                                    {this.state.list.map(item =>
+                                        <ResourceItem key={item['id']} {...item}/>
+                                    )}
+                                </ul>
+                                <div className="pull-right">
+                                    <Pager current={this.state.pageRequest} max={this.state.count}
+                                           link={`#/browse/resource?pageSize=${this.state.pageSize}&pageRequest={#page}`}/>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             );
         }
-    });
-    return ResourceList;
+    }
+
+    const ConnectNewsList = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(ResourceList);
+
+    return (props) => {
+        return (
+            <Provider store={store}>
+                <ConnectNewsList params={props.params} query={props.location.query}/>
+            </Provider>
+        );
+    };
+
+    // var ResourceList = React.createClass({
+    //     mixins: [actionResource],
+    //     getData: function (pageSize, pageRequest) {
+    //         this.ResourceList(function (err, data) {
+    //             if (err) {
+    //                 location.hash = '#notFound/' + err;
+    //                 return ;
+    //             }
+    //             this.setState({
+    //                 resourceList: data.data ? data.data : [],
+    //                 resourceCount: data.count ? data.count : 0
+    //             });
+    //         }.bind(this), pageSize, pageRequest);
+    //     },
+    //     getInitialState: function () {
+    //         return {
+    //             pageSize : this.props.query.pageSize,
+    //             pageRequest : this.props.query.pageRequest,
+    //             resourceList: [],
+    //             resourceCount: 0
+    //         };
+    //     },
+    //     componentWillReceiveProps: function (nextProps) {
+    //         this.setState({
+    //             pageSize : nextProps.query.pageSize,
+    //             pageRequest : nextProps.query.pageRequest,
+    //             resourceList: [],
+    //             resourceCount: 0
+    //         }, function () {
+    //             this.getData(this.state.pageSize, this.state.pageRequest);
+    //         });
+    //     },
+    //     componentWillMount: function () {
+    //         this.getData(this.state.pageSize, this.state.pageRequest);
+    //     },
+    //     render: function () {
+    //         var resourceItems = [], tempResourceList = this.state.resourceList;
+    //         for (var i = 0, l = tempResourceList.length; i < l; ++i) {
+    //             resourceItems.push(
+    //                 <ResourceItem {...tempResourceList[i]}/>
+    //             );
+    //         }
+    //         return (
+    //             <div className="container">
+    //                 <div className="row">
+    //                     <TitleLine title="资源下载"/>
+    //                 </div>
+    //                 <div className="row">
+    //                     <div className="col-sm-3 hidden-xs">
+    //                         <Shortcut/>
+    //                     </div>
+    //                     <div className="col-sm-9">
+    //                         <ul>
+    //                             {resourceItems}
+    //                         </ul>
+    //                         <Pager current={this.state.pageRequest} max={this.state.resourceCount} link={resourceLink}/>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         );
+    //     }
+    // });
+    // return ResourceList;
 });
