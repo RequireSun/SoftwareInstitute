@@ -41,10 +41,10 @@ define([
             this.getData(this.props);
         }
         getData (props) {
-            const type        = props.params.type       || 'category',
+            const type        = props.params.type        || 'category',
                   id          = props.query.id,
-                  pageRequest = props.query.pageRequest || config.pageRequest,
-                  pageSize    = props.query.pageSize    || config.pageSize;
+                  pageRequest = +props.query.pageRequest || +config.pageRequest,
+                  pageSize    = +props.query.pageSize    || +config.pageSize;
             if (this.state.type !== type || this.state.id !== id ||
                 this.state.pageRequest !== pageRequest ||
                 this.state.pageSize !== pageSize) {
@@ -85,13 +85,16 @@ define([
                     </div>
                     <div className="container">
                         <div className="row">
-                            <div className="col-xs-12 col-sm-9 col-sm-offset-3">
-                                <ul className="newsList-container">
+                            <div className="newsList-container col-xs-12 col-sm-9 col-sm-offset-3">
+                                <ul className="newsList-box">
                                     {this.state.list.map(item =>
                                         <NewsItem key={item['id']} {...item}/>
                                     )}
                                 </ul>
-                                {/*<Pager current={this.state.pageRequest} max={this.state.newsCount} link={tempNewsLink}/>*/}
+                                <div className="pull-right">
+                                    <Pager current={this.state.pageRequest} max={this.state.count}
+                                           link={`#/browse/news/${this.state.type}?id=${this.state.id}&pageSize=${this.state.pageSize}&pageRequest={#page}`}/>
+                                </div>
                             </div>
                         </div>
                     </div>

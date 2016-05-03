@@ -31,8 +31,8 @@ define([
             super(props);
         }
         render () {
-            let tempCurrent = this.props.current,
-                tempMax     = this.props.max,
+            let tempCurrent = +this.props.current,
+                tempMax     = +this.props.max,
                 tempLink    = this.props.link || '';
             let pagerArray  = [tempCurrent];
             // 生成对应的前一页 / 后一页
@@ -57,10 +57,10 @@ define([
                 ++pagerCount
             ) {
                 if (tempCurrent - pagerCount >= 0) {
-                    pagerArray.push(tempCurrent - pagerCount);
+                    pagerArray.push(+tempCurrent - pagerCount);
                 }
-                if (tempCurrent + pagerCount <= tempMax) {
-                    pagerArray.push(tempCurrent + pagerCount);
+                if (tempCurrent + pagerCount < tempMax) {
+                    pagerArray.push(+tempCurrent + pagerCount);
                 }
             }
             pagerArray = pagerArray.sort();
@@ -69,8 +69,8 @@ define([
                     {prevLink}
                     {pagerArray.map(pager =>
                         // pageCurrent 是字符串, pager 是数字
-                        (<li className={pager == tempCurrent ? 'active' : ''}>
-                            <a href={tempLink.replace(/\{#page}/, pager)}>{pager}</a>
+                        (<li key={pager} className={pager == tempCurrent ? 'active' : ''}>
+                            <a href={tempLink.replace(/\{#page}/, pager)}>{+pager + 1}</a>
                         </li>)
                     )}
                     {nextLink}
@@ -78,6 +78,7 @@ define([
             );
         }
     }
+    Pager.defaultProps = { current: 0, max: 0, link: '', pathname: '', query: {} };
     // TODO 忘记做详情页的蓝色条条了
     // 导航栏的单个选项列表
     const NavigatorItem = props => (
