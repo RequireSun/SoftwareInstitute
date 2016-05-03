@@ -8,8 +8,7 @@ define([
     'root/store',
     'common/util',
     'view/public',
-    'action/resource'
-], function (React, ReactRedux, reduxHelper, config, store, commonUtil, templatePublic, actionResource) {
+], function (React, ReactRedux, reduxHelper, config, store, commonUtil, templatePublic) {
     const { Provider } = ReactRedux;
     var { TitleLine, Shortcut, Pager } = templatePublic;
 

@@ -27,9 +27,9 @@ define([
                         <IndexRoute component={error}/>*/}
                     </Route>
                     <Route name="resource" path="resource" component={resource}/>
-                    <Route path="detail">
-                        <Route name="detail" path=":newsId" component={detail}/>
-                        <IndexRoute component={error}/>
+                    <Route name="detail" path="detail" component={detail}>
+                        {/*<Route name="detail" path=":newsId" component={detail}/>
+                        <IndexRoute component={error}/>*/}
                     </Route>
                     <IndexRoute component={error}/>
                 </Route>

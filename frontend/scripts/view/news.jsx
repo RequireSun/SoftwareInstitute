@@ -9,8 +9,7 @@ define([
     'root/store',
     'common/util',
     'view/public',
-    'action/news',
-], function (React, ReactRouter, ReactRedux, reduxHelper, config, store, commonUtil, templatePublic, actionNews) {
+], function (React, ReactRouter, ReactRedux, reduxHelper, config, store, commonUtil, templatePublic) {
     const { Link }     = ReactRouter;
     const { Provider } = ReactRedux;
     const TitleLine    = templatePublic.TitleLine,

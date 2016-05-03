@@ -7,11 +7,13 @@ define([
     'jquery',
     'root/config',
     'action/style',
+    'action/detail',
     'action/news',
     'action/resource'
-], ($, config, Style, News, Resource) => ({
-    mapStateToProps: ({ style, news, resource }) => ({
+], ($, config, Style, Detail, News, Resource) => ({
+    mapStateToProps: ({ style, detail, news, resource }) => ({
         style,
+        detail,
         news,
         resource,
     }),
@@ -19,6 +21,23 @@ define([
     mapDispatchToProps: (dispatch) => ({
         onStyleInit: (style) =>
             dispatch(Style.init(style)),
+        onNewsDetailGet: (id) => {
+            const url = '/api/news';
+            $.ajax({
+                url,
+                method: 'GET',
+                data: {
+                    id,
+                },
+                dataType: 'json',
+            }).success(data => {
+                if (!data['code']) {
+                    dispatch(Detail.detailSet(data['data']));
+                }
+            }).error((xhr, msg) => {
+                console.log(msg);
+            });
+        },
         onNewsListGet: (id, type, pageRequest = config.pageRequest, pageSize = config.pageSize) => {
             let url;
             switch (type) {

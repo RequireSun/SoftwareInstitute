@@ -8,8 +8,7 @@ define([
     'common/redux_helper',
     'root/config',
     'root/store',
-    'action/news'
-], (React, Router, ReactRedux, commonUtil, reduxHelper, config, store, actionNews) => {
+], (React, Router, ReactRedux, commonUtil, reduxHelper, config, store) => {
     const { Link }      = Router;
     const { Provider }  = ReactRedux;
     const pagerSize     = config['pagerSize']   || 2,
