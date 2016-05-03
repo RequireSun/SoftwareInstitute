@@ -157,51 +157,6 @@ define([
         }
     }
     Navigation.defaultProps = { navigator: [] };
-    // 页脚的单个选项列表
-    const FooterItem = props => (
-        <ul className="nav nav-pills nav-stacked">
-            {props.title}
-            {props.category.map(item =>
-                <li>
-                    <Link to="newsList" params={{ newsType: item['type'] }}
-                          query={{ id: item['id'], pageSize, pageRequest }}>{item['name']}</Link>
-                </li>
-            )}
-        </ul>
-    );
-    FooterItem.defaultProps = { title: '', category: [] };
-    // 页脚
-    class Footer extends React.Component {
-        constructor (props) {
-            super(props);
-            this.state = Footer.getState(props);
-        }
-        componentWillReceiveProps (nextProps) {
-            this.setState(Footer.getState(nextProps));
-        }
-        static getState (state) {
-            let list =
-                !state || !state['style'] || !state['style']['footer'] ||
-                !Array.isArray(state['style']['footer']) ?
-                    [] :
-                    state['style']['footer'];
-            list = list.slice(0, footerSize || list.length);
-            return { list };
-        }
-        render () {
-            return (
-                <div className="container-fluid">
-                    <footer className="container">
-                        {this.state.list.map((item, index) =>
-                            <FooterItem key={index} id={item['id']} type={item['type']}
-                                        title={item['name']} category={item['list']}/>
-                        )}
-                    </footer>
-                </div>
-            );
-        }
-    }
-    Footer.defaultProps = { footer: [] };
     // 每个页面里面左边的快捷入口
     class Shortcut extends React.Component {
         constructor (props) {
@@ -300,21 +255,92 @@ define([
             );
         }
     }
+    // 页脚的单个选项列表
+    const FooterItem = props => (
+        <div className="col-xs-12 col-sm-6 col-md-3">
+            <h1>{props.title}</h1>
+            <ul>
+                {props.category.map(item =>
+                    <li>
+                        <Link to="newsList" params={{ newsType: item['type'] }}
+                              query={{ id: item['id'], pageSize, pageRequest }}>{item['name']}</Link>
+                    </li>
+                )}
+            </ul>
+        </div>
+    );
+    FooterItem.defaultProps = { title: '', category: [] };
+    // 页脚
+    class Footer extends React.Component {
+        constructor (props) {
+            super(props);
+            this.state = Footer.getState(props);
+        }
+        componentWillReceiveProps (nextProps) {
+            this.setState(Footer.getState(nextProps));
+        }
+        static getState (state) {
+            let list =
+                !state || !state['style'] || !state['style']['footer'] ||
+                !Array.isArray(state['style']['footer']) ?
+                    [] :
+                    state['style']['footer'];
+            list = list.slice(0, footerSize || list.length);
+            return { list };
+        }
+        render () {
+            return (
+                <div className="container-fluid footer-container">
+                    <div className="title row">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-xs-12">
+                                    <ul>
+                                        <li>
+                                            <a href="/moodle">教学在线</a>
+                                        </li>
+                                        <li>
+                                            <a href="/map">网站地图</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <footer className="container">
+                        <div className="row">
+                            {this.state.list.map((item, index) =>
+                                <FooterItem key={index} id={item['id']} type={item['type']}
+                                            title={item['name']} category={item['list']}/>
+                            )}
+                            <div className="footer-information col-xs-12 col-md-6">
+                                <a className="logo" href="//www.hitwh.edu.cn">
+                                    <img src="/public/images/LogoFooter.png" alt="哈尔滨工业大学(威海)"/>
+                                </a>
+                                <p>&copy;版权所有：哈尔滨工业大学（威海）软件学院 Werun Club</p>
+                                <p>山东省威海市文化西路2号 邮编：264209</p>
+                                <p>
+                                    <a href="/page/management">管理员登录</a>
+                                </p>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+    }
+    Footer.defaultProps = { footer: [] };
 
     const ConnectNavigation = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(Navigation);
-    const ConnectFooter     = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(Footer);
     const ConnectShortcut   = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(Shortcut);
     const ConnectTitleLine  = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(TitleLine);
     const ConnectHeaderLine = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(HeaderLine);
+    const ConnectFooter     = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(Footer);
 
     return {
         Navigation: () =>
             (<Provider store={store}>
                 <ConnectNavigation/>
-            </Provider>),
-        Footer: () =>
-            (<Provider store={store}>
-                <ConnectFooter/>
             </Provider>),
         Shortcut: () =>
             (<Provider store={store}>
@@ -328,6 +354,10 @@ define([
         Header: () =>
             (<Provider store={store}>
                 <ConnectHeaderLine/>
+            </Provider>),
+        Footer: () =>
+            (<Provider store={store}>
+                <ConnectFooter/>
             </Provider>),
         Pager,
     };
