@@ -191,8 +191,8 @@ define([
                                 </a> :
                                 ''
                     )}
-                    <Link className="list-group-item" to="resource"
-                          query={{ pageSize, pageRequest }}>资源下载</Link>
+                    <Link to={{ pathname: "/browse/resource", query: { pageSize, pageRequest }}}
+                          className="list-group-item">资源下载</Link>
                 </nav>
             );
         }
@@ -235,8 +235,8 @@ define([
                                 <ul className="breadcrumb">
                                     {this.state.list.map((item, index) =>
                                         <li key={index}>
-                                            <Link to="newsList" params={{ newsType: item['type'] }}
-                                                  query={{ id: item['id'], pageSize, pageRequest }}>
+                                            <Link to={{ pathname: `/browse/news/${item['type']}`,
+                                                        query: { id: item['id'], pageSize, pageRequest }}}>
                                                 {item['name']}
                                             </Link>
                                         </li>
@@ -260,10 +260,12 @@ define([
         <div className="col-xs-12 col-sm-6 col-md-3">
             <h1>{props.title}</h1>
             <ul>
-                {props.category.map(item =>
-                    <li>
-                        <Link to="newsList" params={{ newsType: item['type'] }}
-                              query={{ id: item['id'], pageSize, pageRequest }}>{item['name']}</Link>
+                {props.category.map((item, index) =>
+                    <li key={index}>
+                        <Link to={{ pathname: `/browse/news/${item['type']}`,
+                                    query: { id: item['id'], pageSize, pageRequest }}}>
+                            {item['name']}
+                        </Link>
                     </li>
                 )}
             </ul>
