@@ -21,7 +21,7 @@ define([
             return (
                 <div>
                     <Header/>
-                    <Navigation/>
+                    <Navigation pathname={this.props.location.pathname}/>
                     {this.props.children}
                     <Footer/>
                 </div>

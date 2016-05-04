@@ -48,6 +48,15 @@
           white-space: nowrap;
           text-overflow: ellipsis;
         }
+
+        &.light {
+          background-color: #32659c;
+          border-left: 1px solid #32659c;
+
+          &>a {
+            color: #fff;
+          }
+        }
       }
     }
     // 让菜单和按钮等宽
@@ -68,6 +77,33 @@
     .dropdown:hover .dropdown-menu {
       display: block;
       margin-top: 0; // remove the gap so it doesn't close
+    }
+
+    .decoration.container {
+      height: .5rem;
+
+      background-color: #32659c;
+
+      &>section {
+        color: #fff;
+        font-size: .16rem;
+        font-weight: bold;
+        line-height: .5rem;
+        text-indent: .2rem;
+      }
+
+      &>.arrow-down {
+        position: relative;
+
+        width: 0;
+        height: 0;
+
+        left: .3rem;
+
+        border-top: .16rem solid #32659c;
+        border-right: .15rem solid transparent;
+        border-left: .15rem solid transparent;
+      }
     }
   }
 

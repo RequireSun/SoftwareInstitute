@@ -26,7 +26,7 @@ define([
             </Link>
         </li>
     );
-    // TODO 取标题栏没做
+    
     class NewsList extends React.Component {
         constructor (props) {
             super(props);
@@ -71,7 +71,7 @@ define([
         }
         render () {
             const titleText = (this.state[this.state.type || 'category'] || []).find(item =>
-                    this.state.id === item['id']
+                this.state.id === item['id']
             )['name'] || '新闻列表';
 
             return (

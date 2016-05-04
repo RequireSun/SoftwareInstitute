@@ -105,7 +105,6 @@ app.use(requestLog);
 // }
 
 // 静态资源
-// TODO 会用之后找个 sass 的
 // app.use(Loader.less(__dirname));
 app.use('/public', express.static(staticDir));
 //app.use('/agent', proxyMiddleware.proxy);

@@ -18,7 +18,7 @@ define([
           headerSize    = config['style'] && config['style']['header']    ? config['style']['header']    : 0,
           footerSize    = config['style'] && config['style']['footer']    ? config['style']['footer']    : 2,
           shortcutSize  = config['style'] && config['style']['shortcut']  ? config['style']['shortcut']  : 0;
-    // TODO page 的 prop state 逻辑明显不对
+    // TODO 兼容 LINK ?
     /**
      * 页码生成组件
      * @param   current 当前页码
@@ -81,7 +81,6 @@ define([
         }
     }
     Pager.defaultProps = { current: 0, max: 0, link: '', pathname: '', query: {} };
-    // TODO 忘记做详情页的蓝色条条了
     // 导航栏的单个选项列表
     const NavigatorItem = props => (
         <li className="dropdown">
@@ -132,7 +131,8 @@ define([
                     [] :
                     state['style']['navigator'];
             list = list.slice(0, navigatorSize || list.length);
-            return { list };
+            const needDecoration = !('/' === state['pathname'] || '/index' === state['pathname']);
+            return { list, needDecoration };
         }
         render () {
             return (
@@ -148,13 +148,22 @@ define([
                         </div>
                         <div className="collapse navbar-collapse" id="navigator-collapse-all">
                             <ul className="nav navbar-nav">
-                                <li><Link to="index">首页</Link></li>
+                                <li className={this.state.needDecoration ? 'light' : ''}>
+                                    <Link to="index">首页</Link>
+                                </li>
                                 {this.state.list.map((item, index) =>
                                     <NavigatorItem key={index} {...item}/>
                                 )}
                             </ul>
                         </div>
                     </div>
+                    {this.state.needDecoration ?
+                        <div className="decoration container">
+                            <section>Welcome to the School of Software</section>
+                            <div className="arrow-down"></div>
+                        </div> :
+                        ''
+                    }
                 </div>
             );
         }
@@ -338,14 +347,14 @@ define([
 
     const ConnectNavigation = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(Navigation);
     const ConnectShortcut   = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(Shortcut);
-    const ConnectTitleLine  = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(TitleLine);
+    // const ConnectTitleLine  = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(TitleLine);
     const ConnectHeaderLine = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(HeaderLine);
     const ConnectFooter     = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(Footer);
 
     return {
-        Navigation: () =>
+        Navigation: (props) =>
             (<Provider store={store}>
-                <ConnectNavigation/>
+                <ConnectNavigation pathname={props.pathname}/>
             </Provider>),
         Shortcut: () =>
             (<Provider store={store}>

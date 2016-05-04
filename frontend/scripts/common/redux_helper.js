@@ -19,7 +19,7 @@ define([
         news,
         resource,
     }),
-    // TODO 错误处理
+    // TODO 错误处理 (跳转到错误页)
     mapDispatchToProps: (dispatch) => ({
         onStyleInit: (style) =>
             dispatch(Style.init(style)),
@@ -37,9 +37,12 @@ define([
             }).success(data => {
                 if (!data['code']) {
                     dispatch(Detail.detailSet(data['data']));
+                } else {
+                    dispatch(Detail.detailSet({}));
                 }
             }).error((xhr, msg) => {
-                console.log(msg);
+                // console.log(msg);
+                alert('请检查您的网络！');
             });
         },
         onNewsListGet: (id, type, pageRequest = config.pageRequest, pageSize = config.pageSize) => {
@@ -65,9 +68,12 @@ define([
                 if (!data['code']) {
                     const { list, count } = data['data'];
                     dispatch(News.listSet(list, count));
+                } else {
+                    dispatch(News.listSet([], 0));
                 }
             }).error((xhr, msg) => {
-                console.log(msg);
+                alert('请检查您的网络！')
+                // console.log(msg);
             });
         },
         onResourceListGet: (pageRequest = config.pageRequest, pageSize = config.pageSize) => {
@@ -84,9 +90,12 @@ define([
                 if (!data['code']) {
                     const { list, count } = data['data'];
                     dispatch(Resource.listSet(list, count));
+                } else {
+                    dispatch(Resource.listSet([], 0));
                 }
             }).error((xhr, msg) => {
-                console.log(msg);
+                alert('请检查您的网络！');
+                // console.log(msg);
             });
         },
     }),
