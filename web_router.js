@@ -30,6 +30,8 @@ let router          = express.Router();
 // router.get('/login', supervisor.login);
 // router.post('/validate', supervisor.validate);
 
-router.get('/index', singlePage);
+router.get('/index', singlePage.index);
+// TODO 登录态验证
+router.get('/manage', singlePage.manage);
 
 module.exports = router;

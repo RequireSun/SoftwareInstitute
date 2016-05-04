@@ -1,24 +1,23 @@
 /**
- * Created by kelvinsun on 2015/8/5.
+ * Created by kelvinsun on 2015/9/28.
  */
 requirejs.config({
-    baseUrl: '/public/scripts/lib',
+    baseUrl: 'scripts/lib',
     paths: {
         action : '../action',
-        reducer: '../reducer',
-        view   : '../view',
+        reducer: '../reducer_manage',
+        view   : '../view_manage',
         common : '../common',
         root   : '..'
     },
     shim: {
-        bootstrap: ['jquery']
-    }
+       bootstrap: ['jquery'],
+    },
 });
-// TODO 搜索
-// TODO 页面路由补全
+
 requirejs([
     'react-dom',
-    'root/router',
+    'root/router_manage',
     'bootstrap'
 ], (ReactDOM, routes) => {
     ReactDOM.render(routes, document.getElementById('content') || document.body);
