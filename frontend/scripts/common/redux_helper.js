@@ -7,12 +7,14 @@ define([
     'jquery',
     'root/config',
     'action/style',
+    'action/struct',
     'action/detail',
     'action/news',
     'action/resource'
-], ($, config, Style, Detail, News, Resource) => ({
-    mapStateToProps: ({ style, detail, news, resource }) => ({
+], ($, config, Style, Struct, Detail, News, Resource) => ({
+    mapStateToProps: ({ style, detail, struct, news, resource }) => ({
         style,
+        struct,
         detail,
         news,
         resource,
@@ -21,6 +23,8 @@ define([
     mapDispatchToProps: (dispatch) => ({
         onStyleInit: (style) =>
             dispatch(Style.init(style)),
+        onStructInit: (category, outline) =>
+            dispatch(Struct.init(category, outline)),
         onNewsDetailGet: (id) => {
             const url = '/api/news';
             $.ajax({

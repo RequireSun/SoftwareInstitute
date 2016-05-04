@@ -1,6 +1,12 @@
 'use strict';
 
-define(['react', 'root/store', 'action/style', 'view/public'], (React, store, style, templatePublic) => {
+define([
+    'react',
+    'root/store',
+    'action/style',
+    'action/struct',
+    'view/public'
+], (React, store, style, struct, templatePublic) => {
     const Navigation = templatePublic.Navigation,
           Header     = templatePublic.Header,
           Footer     = templatePublic.Footer;
@@ -9,6 +15,7 @@ define(['react', 'root/store', 'action/style', 'view/public'], (React, store, st
         constructor (props) {
             super(props);
             store.dispatch(style.init(window['_styleConfig_'] || {}));
+            store.dispatch(struct.init(window['_categoryConfig_'] || [], window['_outlineConfig_'] || []));
         }
         render () {
             return (

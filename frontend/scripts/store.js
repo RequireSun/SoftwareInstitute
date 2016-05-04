@@ -6,11 +6,12 @@
 define([
     'redux',
     'reducer/style',
+    'reducer/struct',
     'reducer/detail',
     'reducer/news',
-    'reducer/resource'
-], (Redux, style, detail, news, resource) => {
-    const store = Redux.createStore(Redux.combineReducers({ style, detail, news, resource }));
+    'reducer/resource',
+], (Redux, style, struct, detail, news, resource) => {
+    const store = Redux.createStore(Redux.combineReducers({ style, struct, detail, news, resource }));
     window['store'] = store;
     return store;
 });

@@ -62,9 +62,18 @@ define([
             if (isNaN(news['count'])) {
                 news['count'] = 0;
             }
-            return news;
+            const struct = !state || !state['struct'] ||
+                           '[object Object]' !== commonUtil.toString(state) ?
+                               {} :
+                               state['struct'];
+
+            return Object.assign({}, news, struct);
         }
         render () {
+            const titleText = (this.state[this.state.type || 'category'] || []).find(item =>
+                    this.state.id === item['id']
+            )['name'] || '新闻列表';
+
             return (
                 <div>
                     <div className="container-fluid">
@@ -76,7 +85,7 @@ define([
                                             <Shortcut/>
                                         </div>
                                         <div className="col-xs-12 col-sm-9 col-sm-offset-3">
-                                            <TitleLine title="Title"/>
+                                            <TitleLine title={titleText}/>
                                         </div>
                                     </div>
                                 </div>
