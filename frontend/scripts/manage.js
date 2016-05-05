@@ -1,13 +1,17 @@
 /**
  * Created by kelvinsun on 2015/9/28.
  */
+'use strict';
+
 requirejs.config({
     baseUrl: '/public/scripts/lib',
     paths: {
         action : '../action',
         reducer: '../reducer_manage',
+        _reducer: '../reducer',
         view   : '../view_manage',
         common : '../common',
+        network: '../network',
         root   : '..'
     },
     shim: {

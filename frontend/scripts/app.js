@@ -1,6 +1,8 @@
 /**
  * Created by kelvinsun on 2015/8/5.
  */
+'use strict';
+
 requirejs.config({
     baseUrl: '/public/scripts/lib',
     paths: {
@@ -8,6 +10,7 @@ requirejs.config({
         reducer: '../reducer',
         view   : '../view',
         common : '../common',
+        network: '../network',
         root   : '..'
     },
     shim: {

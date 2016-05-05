@@ -3,9 +3,8 @@
  */
 
 define({
-    init: (category, outline) => ({
+    init: (data) => ({
         type: 'STRUCT_INIT',
-        category,
-        outline,
+        data,
     }),
 });

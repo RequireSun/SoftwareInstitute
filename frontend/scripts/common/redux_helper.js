@@ -6,12 +6,14 @@
 define([
     'jquery',
     'root/config',
+    'common/util',
     'action/style',
     'action/struct',
     'action/detail',
     'action/news',
-    'action/resource'
-], ($, config, Style, Struct, Detail, News, Resource) => ({
+    'action/resource',
+    'network/struct',
+], ($, config, util, Style, Struct, Detail, News, Resource, nStruct) => ({
     mapStateToProps: ({ style, detail, struct, news, resource }) => ({
         style,
         struct,
@@ -23,8 +25,34 @@ define([
     mapDispatchToProps: (dispatch) => ({
         onStyleInit: (style) =>
             dispatch(Style.init(style)),
-        onStructInit: (category, outline) =>
-            dispatch(Struct.init(category, outline)),
+        onStructInit: (data) =>
+            dispatch(Struct.init(data)),
+        onStructGet: ({ category = false, outline = false, all = false } = {}) => {
+            const promises = [];
+            if (all) {
+                promises.push(util.promiseWrap(nStruct.getAll));
+            } else {
+                promises.push(Promise.resolve());
+            }
+
+            if (outline) {
+                promises.push(util.promiseWrap(nStruct.outlineGetAll));
+            } else {
+                promises.push(Promise.resolve());
+            }
+
+            if (category) {
+                promises.push(util.promiseWrap(nStruct.categoryGetAll));
+            } else {
+                promises.push(Promise.resolve());
+            }
+
+            return Promise.all(promises).then(([dataAll = undefined, dataOutline = undefined, dataCategory = undefined]) => {
+                dispatch(Struct.init({ all: dataAll, outline: dataOutline, category: dataCategory }));
+            }, () => {
+                alert('请检查您的网络！');
+            });
+        },
         onNewsDetailGet: (id) => {
             const url = '/api/news';
             $.ajax({

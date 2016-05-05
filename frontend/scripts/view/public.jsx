@@ -9,8 +9,9 @@ define([
     'root/config',
     'root/store',
 ], (React, Router, ReactRedux, commonUtil, reduxHelper, config, store) => {
+    const { mapStateToProps, mapDispatchToProps } = reduxHelper;
+    const { Provider, connect } = ReactRedux;
     const { Link }      = Router;
-    const { Provider }  = ReactRedux;
     const pagerSize     = config['pagerSize']   || 2,
           pageSize      = config['pageSize']    || 20,
           pageRequest   = config['pageRequest'] || 0,
@@ -345,11 +346,11 @@ define([
     }
     Footer.defaultProps = { footer: [] };
 
-    const ConnectNavigation = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(Navigation);
-    const ConnectShortcut   = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(Shortcut);
-    // const ConnectTitleLine  = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(TitleLine);
-    const ConnectHeaderLine = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(HeaderLine);
-    const ConnectFooter     = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(Footer);
+    const ConnectNavigation = connect(mapStateToProps, mapDispatchToProps)(Navigation);
+    const ConnectShortcut   = connect(mapStateToProps, mapDispatchToProps)(Shortcut);
+    // const ConnectTitleLine  = connect(mapStateToProps, mapDispatchToProps)(TitleLine);
+    const ConnectHeaderLine = connect(mapStateToProps, mapDispatchToProps)(HeaderLine);
+    const ConnectFooter     = connect(mapStateToProps, mapDispatchToProps)(Footer);
 
     return {
         Navigation: (props) =>

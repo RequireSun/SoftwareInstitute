@@ -13,7 +13,10 @@ define([
         constructor (props) {
             super(props);
             store.dispatch(style.init(window['_styleConfig_'] || {}));
-            store.dispatch(struct.init(window['_categoryConfig_'] || [], window['_outlineConfig_'] || []));
+            store.dispatch(struct.init({
+                category: window['_categoryConfig_'] || [],
+                outline : window['_outlineConfig_'] || [],
+            }));
         }
         render () {
             return (

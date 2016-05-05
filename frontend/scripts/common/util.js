@@ -1,7 +1,7 @@
 /**
  * Created by kelvin on 15-8-8.
  */
-define([], function () {
+define(['jquery'], function ($) {
     const toString = target => Object.prototype.toString.call(target);
 
     const hasOwnProperty = (target, ...args) =>
@@ -31,6 +31,26 @@ define([], function () {
         ' ' +
         convertDateTimeStringToTime(inDateString);
 
+    const promiseWrap = (func, ...args) =>
+        (resolve, reject) =>
+            func(
+                ((err, data) =>
+                    err ?
+                        reject(err) :
+                        resolve(data)),
+                ...args);
+
+    const ajaxWrap = (callback = () => {}, parameters = {}) =>
+        $.ajax(parameters).success(data => {
+            if (!!data['code']) {
+                callback(data);
+            } else {
+                callback(null, data['data']);
+            }
+        }).error((xhr, status, error) =>
+            callback({ code: xhr.status, message: error })
+        );
+
     return {
         toString,
         hasOwnProperty,
@@ -40,5 +60,7 @@ define([], function () {
         convertDateTimeToDate,
         convertDateTimeToTime,
         convertDateTimeFormat,
+        promiseWrap,
+        ajaxWrap,
     };
 });
