@@ -116,11 +116,14 @@ define([
         componentDidMount () {
             this.autoRound();
         }
+        componentWillUnmount () {
+            !!this.state.interval && window.clearInterval(this.state.interval);
+        }
         autoRound () {
             if (!this.state.play) {
                 const interval = window.setInterval(() =>
-                        this.round()
-                    , 3000);
+                    this.round()
+                , 3000);
 
                 this.setState({ play: true, interval, });
             } else {
@@ -130,22 +133,20 @@ define([
         }
         round (isReverse = false) {
             if (!this.state.coolDown) {
-                if (!isReverse) {
-                    this.setState({
-                            active: (this.state.active + 1) % this.props.list.length,
-                            coolDown: true
-                        }, () =>
-                            setTimeout(() => this.setState({ coolDown: false }), 1500)
-                    );
-                } else {
-                    const length = this.props.list.length;
-                    this.setState({
-                            active: (this.state.active - 1 + length) % length,
-                            coolDown: true
-                        }, () =>
-                            setTimeout(() => this.setState({ coolDown: false }), 1500)
-                    );
-                }
+                const lastActive = this.state.active,
+                      listLength = this.props.list.length;
+                const active = !isReverse ?
+                                   ((lastActive + 1) % listLength) :
+                                   ((lastActive - 1 + listLength)) % listLength;
+                this.setState({
+                        active,
+                        coolDown: true
+                    }, () =>
+                        setTimeout(() =>
+                            this.setState({ coolDown: false }),
+                        1500
+                    )
+                );
             }
         }
         render () {

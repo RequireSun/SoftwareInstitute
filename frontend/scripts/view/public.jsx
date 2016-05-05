@@ -334,7 +334,7 @@ define([
                                 <p>&copy;版权所有：哈尔滨工业大学（威海）软件学院 Werun Club</p>
                                 <p>山东省威海市文化西路2号 邮编：264209</p>
                                 <p>
-                                    <a href="/page/management">管理员登录</a>
+                                    <a href="/page/manage">管理员登录</a>
                                 </p>
                             </div>
                         </div>

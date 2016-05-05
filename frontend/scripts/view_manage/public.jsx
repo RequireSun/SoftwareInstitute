@@ -3,7 +3,9 @@
  */
 'use strict';
 
-define(['react', 'React'], (React) => {
+define(['react', 'ReactRouter'], (React, ReactRouter) => {
+    const { Link } = ReactRouter;
+
     class Navigation extends React.Component {
         constructor (props) {
             super(props);

@@ -1,9 +1,9 @@
 # SoftwareInstitute
 A Node.js CMS using MySQL.
 
-__正在 gulp 化__
+~~__正在 gulp 化__~~
 
-开发环境:
+## 开发环境
 
 1. 安装 mysql
 2. 安装 redis (目前还没用)
@@ -21,20 +21,24 @@ __正在 gulp 化__
    + `gulp watch` 开启前端监视
    + 直接结束进程就可以结束任务
 
-TODO:
+## TODO
 
 - [ ] request_log 中间件的 ip 获取方式
 - [x] 把前端部分合并进来
 - [ ] 新闻阅读量防刷
-- [ ] 减少包的依赖数量 (必要的话从 sass 迁到 less, 因为 sass 的依赖实在太恶心了)
+- [x] 减少包的依赖数量 (必要的话从 sass 迁到 less, 因为 sass 的依赖实在太恶心了)
 - [ ] 文件路径获取
 - [ ] 数据库更新 update_time 的时候要把 pv 的值删掉啊
 - [ ] 输入字符串的长度限制
 
-数据库结构解释:
+## 数据库配置
 
-style_type 样式的类型 (左侧栏 / 标题栏 / 页脚)
+```shell
+mysql -u root -p
+```
 
-style 样式内部的列表组 (第一个 xxx / 第二个 yyy / 第三个 zzz)
-
-style_relation 列表组内部连接到的大 / 小栏目
+```sql
+SOURCE /path/to/SofwareInstitute/software_institute.sql
+CREATE USER 'sa'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL ON software_institute.* TO 'sa'@'localhost';
+```
