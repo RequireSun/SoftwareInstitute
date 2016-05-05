@@ -7,9 +7,7 @@ define([
     'action/struct',
     'view/public'
 ], (React, store, style, struct, templatePublic) => {
-    const Navigation = templatePublic.Navigation,
-          Header     = templatePublic.Header,
-          Footer     = templatePublic.Footer;
+    const { Navigation, Header, Footer } = templatePublic;
 
     class Main extends React.Component {
         constructor (props) {

@@ -2,7 +2,7 @@
  * Created by kelvinsun on 2015/9/28.
  */
 requirejs.config({
-    baseUrl: 'scripts/lib',
+    baseUrl: '/public/scripts/lib',
     paths: {
         action : '../action',
         reducer: '../reducer_manage',
@@ -18,7 +18,7 @@ requirejs.config({
 requirejs([
     'react-dom',
     'root/router_manage',
-    'bootstrap'
+    'bootstrap',
 ], (ReactDOM, routes) => {
     ReactDOM.render(routes, document.getElementById('content') || document.body);
 });

@@ -6,7 +6,7 @@ let gulp = require('gulp');
 let htmlmin = require('gulp-htmlmin');
 
 let less = require('gulp-less'),
-    minifyCss = require('gulp-minify-css'),
+    cleanCss = require('gulp-clean-css'),
     autoprefixer = require('gulp-autoprefixer');
 
 let babel = require('gulp-babel'),
@@ -51,7 +51,7 @@ gulp.task('less', function () {
     gulp.src(app('styles/*.less'))
         .pipe(less())
         .pipe(autoprefixer({ browsers: ['last 2 versions', 'ie >= 8'] }))
-        .pipe(minifyCss(/*{compatibility: 'ie8'}*/))
+        .pipe(cleanCss(/*{compatibility: 'ie8'}*/))
         .pipe(gulp.dest(dist('styles')))
         .pipe(livereload());
 });
