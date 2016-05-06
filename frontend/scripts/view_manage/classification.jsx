@@ -12,14 +12,59 @@ define([
     const { Provider, connect } = ReactRedux;
     const { mapStateToProps, mapDispatchToProps } = reduxHelper;
 
-    class ClassificationItem extends React.Component {
+    class ClassificationMenu extends React.Component {
         constructor (props) {
             super(props);
         }
         render () {
             return (
+                <ul>
+                    <li onClick={this.props.onRename}>重命名</li>
+                    <li>移动</li>
+                    <li>删除</li>
+                </ul>
+            );
+        }
+    }
+
+    class ClassificationItem extends React.Component {
+        constructor (props) {
+            super(props);
+            this.state = {
+                showMenu: false,
+                showRename: false,
+            };
+        }
+        onMenu () {
+            this.setState({ showMenu: !this.state.showMenu });
+        }
+        onRename () {
+            this.setState({
+                showMenu: false,
+                showRename: !this.state.showRename
+            });
+        }
+        render () {
+            return (
                 <li>
-                    {this.props.name}
+                    <div>
+                        {this.state.showRename ?
+                            <div className="input-group">
+                                <input type="text" defaultValue={this.props.name}
+                                       className="form-control" placeholder="请输入名称"/>
+                                <span className="input-group-btn">
+                                    <button className="btn btn-success" type="button">
+                                        <span className="glyphicon glyphicon-ok"></span>
+                                    </button>
+                                    <button className="btn btn-danger" type="button">
+                                        <span className="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div> :
+                            <span onClick={this.onMenu.bind(this)}>{this.props.name}</span>
+                        }
+                    </div>
+                    {this.state.showMenu ? <ClassificationMenu onRename={this.onRename.bind(this)}/> : ''}
                 </li>
             );
         }
