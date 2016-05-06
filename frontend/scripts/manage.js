@@ -7,8 +7,8 @@ requirejs.config({
     baseUrl: '/public/scripts/lib',
     paths: {
         action : '../action',
-        reducer: '../reducer_manage',
-        _reducer: '../reducer',
+        // reducer: '../reducer_manage',
+        reducer: '../reducer',
         view   : '../view_manage',
         common : '../common',
         network: '../network',

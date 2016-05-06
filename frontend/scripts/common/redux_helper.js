@@ -30,19 +30,19 @@ define([
         onStructGet: ({ category = false, outline = false, all = false } = {}) => {
             const promises = [];
             if (all) {
-                promises.push(util.promiseWrap(nStruct.getAll));
+                promises.push(new Promise(util.promiseWrap(nStruct.getAll)));
             } else {
                 promises.push(Promise.resolve());
             }
 
             if (outline) {
-                promises.push(util.promiseWrap(nStruct.outlineGetAll));
+                promises.push(new Promise(util.promiseWrap(nStruct.outlineGetAll)));
             } else {
                 promises.push(Promise.resolve());
             }
 
             if (category) {
-                promises.push(util.promiseWrap(nStruct.categoryGetAll));
+                promises.push(new Promise(util.promiseWrap(nStruct.categoryGetAll)));
             } else {
                 promises.push(Promise.resolve());
             }
