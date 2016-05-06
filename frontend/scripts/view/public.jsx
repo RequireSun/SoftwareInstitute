@@ -145,7 +145,7 @@ define([
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span>
                             </button>
-                            <a className="navbar-brand" href="#">哈尔滨工业大学(威海)</a>
+                            <a className="navbar-brand" href="#">哈尔滨工业大学(威海)&nbsp;软件学院</a>
                         </div>
                         <div className="collapse navbar-collapse" id="navigator-collapse-all">
                             <ul className="nav navbar-nav">

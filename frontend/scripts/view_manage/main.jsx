@@ -15,8 +15,12 @@ define([
             return (
                 <div>
                     <Navigation/>
-                    <Menu/>
-                    {this.props.children}
+                    <div className="container-fluid">
+                        <div className="row">
+                            <Menu/>
+                            {this.props.children}
+                        </div>
+                    </div>
                 </div>
             );
         }
