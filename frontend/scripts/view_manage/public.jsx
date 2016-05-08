@@ -29,16 +29,18 @@ define(['react', 'ReactRouter'], (React, ReactRouter) => {
         }
         render () {
             return (
-                <div className="navbar navbar-default navigation">
+                <div className="navigation navbar navbar-default navbar-fixed-top">
                     <div className="color-line"></div>
                     <div className="container-fluid">
-                        <div className="navbar-header col-sm-3 col-lg-2">
-                            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigator-collapse-all">
-                                <span className="icon-bar"></span>
-                                <span className="icon-bar"></span>
-                                <span className="icon-bar"></span>
-                            </button>
-                            <a className="navbar-brand" href="#">哈尔滨工业大学(威海)</a>
+                        <div className="row">
+                            <div className="navbar-header col-sm-3 col-lg-2">
+                                <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigator-collapse-all">
+                                    <span className="icon-bar"></span>
+                                    <span className="icon-bar"></span>
+                                    <span className="icon-bar"></span>
+                                </button>
+                                <a className="navbar-brand" href="#">哈尔滨工业大学(威海)</a>
+                            </div>
                         </div>
                     </div>
                     <div className="collapse navbar-collapse" id="navigator-collapse-all">
@@ -61,13 +63,15 @@ define(['react', 'ReactRouter'], (React, ReactRouter) => {
         }
         render () {
             return (
-                <div className="col-sm-3 col-lg-2 hidden-xs">
-                    <ul>
+                <aside className="menu">
+                    <ul className="nav">
                         {menus.map(item =>
-                            <li><Link to={item['link']}>{item['name']}</Link></li>
+                            <li className={item['link'] === this.props.pathname ? 'active' : ''}>
+                                <Link to={item['link']}>{item['name']}</Link>
+                            </li>
                         )}
                     </ul>
-                </div>
+                </aside>
             );
         }
     }

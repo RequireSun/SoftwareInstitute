@@ -190,7 +190,7 @@ define([
         }
         render () {
             return (
-                <nav className="list-group shortcut-box">
+                <aside className="list-group shortcut-box">
                     {this.state.list.map((item, index) =>
                         !!item['id'] ?
                             <Link className="list-group-item" key={index}
@@ -206,7 +206,7 @@ define([
                     )}
                     <Link to={{ pathname: "/browse/resource", query: { pageSize, pageRequest }}}
                           className="list-group-item">资源下载</Link>
-                </nav>
+                </aside>
             );
         }
     }

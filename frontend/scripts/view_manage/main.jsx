@@ -5,7 +5,6 @@ define([
     'view/public',
 ], (React, viewPublic) => {
     const { Navigation, Menu } = viewPublic;
-    // classification
 
     class Main extends React.Component {
         constructor (props) {
@@ -14,11 +13,17 @@ define([
         render () {
             return (
                 <div>
-                    <Navigation/>
-                    <div className="container-fluid">
-                        <div className="row">
-                            <Menu/>
-                            {this.props.children}
+                    <div className="manage-container">
+                        <Navigation/>
+                        <div className="container-fluid">
+                            <div className="row">
+                                <div className="menu-container col-sm-3 col-lg-2 hidden-xs">
+                                    <Menu pathname={this.props.location.pathname}/>
+                                </div>
+                                <div className="col-sm-9 col-lg-10">
+                                    {this.props.children}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

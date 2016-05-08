@@ -1,7 +1,9 @@
+@import "../../../node_modules/bootstrap/less/variables";
+
 @institute-font: 'Microsoft Yahei', 'LiHei Pro Medium', sans-serif;
 
 html {
-  //font-size: 100px;
+  font-size: 100px;
   font-family: @institute-font;
 }
 body {
@@ -10,3 +12,19 @@ body {
 
 @import "manage/navigation";
 @import "manage/menu";
+@import "manage/panel";
+
+@media (min-width: @screen-sm-min) {
+  html, body, body>div[id], body>div[id]>div[data-reactroot],
+  .manage-container, .manage-container>.container-fluid,
+  .manage-container>.container-fluid>.row, .manage-container>.container-fluid>.row>div {
+    position: relative;
+    height: 100%;
+  }
+}
+
+.manage-container {
+  padding-top: .56rem;
+
+  background: #f1f3f6;
+}

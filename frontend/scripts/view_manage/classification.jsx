@@ -18,11 +18,11 @@ define([
         }
         render () {
             return (
-                <ul>
-                    <li onClick={this.props.onRename}>重命名</li>
-                    <li>移动</li>
-                    <li>删除</li>
-                </ul>
+                <div className="menu list-group">
+                    <a className="list-group-item" onClick={this.props.onShowRename}>重命名</a>
+                    <a className="list-group-item">移动</a>
+                    <a className="list-group-item">删除</a>
+                </div>
             );
         }
     }
@@ -38,33 +38,31 @@ define([
         onMenu () {
             this.setState({ showMenu: !this.state.showMenu });
         }
-        onRename () {
+        onShowRename (isShow = false) {
             this.setState({
-                showMenu: false,
+                showMenu  : isShow,
                 showRename: !this.state.showRename
             });
         }
         render () {
             return (
-                <li>
-                    <div>
-                        {this.state.showRename ?
-                            <div className="input-group">
-                                <input type="text" defaultValue={this.props.name}
-                                       className="form-control" placeholder="请输入名称"/>
-                                <span className="input-group-btn">
-                                    <button className="btn btn-success" type="button">
-                                        <span className="glyphicon glyphicon-ok"></span>
-                                    </button>
-                                    <button className="btn btn-danger" type="button">
-                                        <span className="glyphicon glyphicon-remove"></span>
-                                    </button>
-                                </span>
-                            </div> :
-                            <span onClick={this.onMenu.bind(this)}>{this.props.name}</span>
-                        }
-                    </div>
-                    {this.state.showMenu ? <ClassificationMenu onRename={this.onRename.bind(this)}/> : ''}
+                <li className="list-group-item classification-item">
+                    {this.state.showRename ?
+                        <div className="input-group">
+                            <input type="text" defaultValue={this.props.name}
+                                   className="form-control" placeholder="请输入名称"/>
+                            <span className="input-group-btn">
+                                <button className="btn btn-success" type="button">
+                                    <span className="glyphicon glyphicon-ok"></span>
+                                </button>
+                                <button className="btn btn-danger" type="button" onClick={this.onShowRename.bind(this, false)}>
+                                    <span className="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div> :
+                        <div className="title" onClick={this.onMenu.bind(this)}>{this.props.name}</div>
+                    }
+                    {this.state.showMenu ? <ClassificationMenu onShowRename={this.onShowRename.bind(this, true)}/> : ''}
                 </li>
             );
         }
@@ -76,13 +74,17 @@ define([
         }
         render () {
             return (
-                <div>
-                    <div>{this.props.name}</div>
-                    <ul>
-                        {this.props.categories.map(item =>
-                            <ClassificationItem key={item['id']} {...item} />
-                        )}
-                    </ul>
+                <div className="col-sm-6 col-md-4 col-lg-3">
+                    <div className="panel panel-sharp">
+                        <div className="panel-heading">
+                            {this.props.name}
+                        </div>
+                        <ul className="list-group">
+                            {this.props.categories.map(item =>
+                                <ClassificationItem key={item['id']} {...item} />
+                            )}
+                        </ul>
+                    </div>
                 </div>
             );
         }
@@ -117,7 +119,7 @@ define([
                 }
             }
             return (
-                <div>
+                <div className="row">
                     {DOMArray}
                 </div>
             );
