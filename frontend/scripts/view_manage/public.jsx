@@ -46,7 +46,7 @@ define(['react', 'ReactRouter'], (React, ReactRouter) => {
                     <div className="collapse navbar-collapse" id="navigator-collapse-all">
                         <ul className="nav navbar-nav">
                             {menus.map(item =>
-                                <li>
+                                <li key={item['link']}>
                                     <Link to={item['link']}>{item['name']}</Link>
                                 </li>
                             )}
@@ -66,7 +66,7 @@ define(['react', 'ReactRouter'], (React, ReactRouter) => {
                 <aside className="menu">
                     <ul className="nav">
                         {menus.map(item =>
-                            <li className={item['link'] === this.props.pathname ? 'active' : ''}>
+                            <li key={item['link']} className={item['link'] === this.props.pathname ? 'active' : ''}>
                                 <Link to={item['link']}>{item['name']}</Link>
                             </li>
                         )}

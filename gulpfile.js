@@ -95,6 +95,7 @@ gulp.task('javascript', function () {
         nodeModule('react-redux/dist/react-redux.js'),
         // nodeModule('react-bootstrap/react-bootstrap.js'),
         nodeModule('requirejs/require.js'),
+        nodeModule('immutable/dist/immutable.js'),
     ])
         // .pipe(uglify())
         .pipe(gulp.dest(dist('scripts/lib')))

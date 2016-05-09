@@ -44,18 +44,29 @@ define([
                 showRename: !this.state.showRename
             });
         }
+        onRename () {
+            const name = this.refs.name.value;
+            this.props.onStructRename({
+                outlineId: this.props.outlineId,
+                categoryId: this.props.id,
+                name
+            });
+            this.setState({ showMenu: false, showRename: false, });
+        }
         render () {
             return (
                 <li className="list-group-item classification-item">
                     {this.state.showRename ?
                         <div className="input-group">
-                            <input type="text" defaultValue={this.props.name}
+                            <input type="text" ref="name" defaultValue={this.props.name}
                                    className="form-control" placeholder="请输入名称"/>
                             <span className="input-group-btn">
-                                <button className="btn btn-success" type="button">
+                                <button className="btn btn-success" type="button"
+                                        onClick={this.onRename.bind(this)}>
                                     <span className="glyphicon glyphicon-ok"></span>
                                 </button>
-                                <button className="btn btn-danger" type="button" onClick={this.onShowRename.bind(this, false)}>
+                                <button className="btn btn-danger" type="button"
+                                        onClick={this.onShowRename.bind(this, false)}>
                                     <span className="glyphicon glyphicon-remove"></span>
                                 </button>
                             </span>
@@ -81,7 +92,9 @@ define([
                         </div>
                         <ul className="list-group">
                             {this.props.categories.map(item =>
-                                <ClassificationItem key={item['id']} {...item} />
+                                <ClassificationItem id={item.get('id')} name={item.get('name')}
+                                                    outlineId={this.props.id} key={item.get('id')}
+                                                    onStructRename={this.props.onStructRename}/>
                             )}
                         </ul>
                     </div>
@@ -110,17 +123,24 @@ define([
             return Object.assign({}, struct);
         }
         render () {
-            const DOMArray = [],
-                  { all }  = this.state;
-            console.log(all);
-            for (let key in all) {
-                if (util.hasOwnProperty(all, key)) {
-                    DOMArray.push(<ClassificationList key={key} {...all[key]}/>);
-                }
-            }
+            // const DOMArray = [],
+            //       { all }  = this.state;
+            // console.log(all);
+            // for (let key in all) {
+            //     if (util.hasOwnProperty(all, key)) {
+            //         DOMArray.push(<ClassificationList key={key} {...all[key]}/>);
+            //     }
+            // }
+            // console.log(this.state.all.map((item, index) =>
+            //     <ClassificationList key={index} {...item}/>
+            // ));
             return (
                 <div className="row">
-                    {DOMArray}
+                    {this.state.all.map((item, index) =>
+                        <ClassificationList key={index} id={item.get('id')} name={item.get('name')}
+                                            categories={item.get('categories')}
+                                            onStructRename={this.props.onStructRename}/>
+                    ).toList()}
                 </div>
             );
         }

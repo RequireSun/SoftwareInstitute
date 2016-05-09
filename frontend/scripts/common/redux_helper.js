@@ -53,6 +53,9 @@ define([
                 alert('请检查您的网络！');
             });
         },
+        onStructRename ({ outlineId, categoryId, name }) {
+            dispatch(Struct.rename({ outlineId, categoryId, name }));
+        },
         onNewsDetailGet: (id) => {
             const url = '/api/news';
             $.ajax({

@@ -7,4 +7,8 @@ define({
         type: 'STRUCT_INIT',
         data,
     }),
+    rename: ({ outlineId, categoryId, name }) => ({
+        type: 'STRUCT_RENAME',
+        data: { outlineId, categoryId, name },
+    }),
 });
