@@ -59,6 +59,9 @@ define([
         onStructDelete ({ outlineId, categoryId }) {
             dispatch(Struct.delete({ outlineId, categoryId }));
         },
+        onStructMove ({ originId, targetId, categoryId }) {
+            dispatch(Struct.delete({ originId, targetId, categoryId }));
+        },
         onNewsDetailGet: (id) => {
             const url = '/api/news';
             $.ajax({

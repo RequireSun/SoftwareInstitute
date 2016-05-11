@@ -16,5 +16,11 @@ define({
             type: 'STRUCT_DELETE',
             data: { outlineId, categoryId, },
         };
+    },
+    move ({ originId, targetId, categoryId, }) {
+        return {
+            type: 'STRUCT_MOVE',
+            data: { originId, targetId, categoryId, },
+        };
     }
 });

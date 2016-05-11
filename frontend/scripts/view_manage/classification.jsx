@@ -17,6 +17,7 @@ define([
             super(props);
             this.state = {
                 showDelete: false,
+                showMove  : false,
             };
         }
         onShowDelete () {
@@ -24,11 +25,26 @@ define([
                 showDelete: !this.state.showDelete,
             });
         }
+        onShowMove () {
+            this.setState({
+                showMove: !this.state.showMove,
+            });
+        }
         render () {
             return (
                 <div className="menu list-group">
                     <a className="list-group-item" onClick={this.props.onShowRename}>重命名</a>
-                    <a className="list-group-item">移动</a>
+                    {this.state.showMove ?
+                        <a className="list-group-item" onClick={this.onShowMove.bind(this)}>移动</a> :
+                        <ul className="list-group">
+                            {this.props.outlines.map(item =>
+                                <li className="list-group-item"
+                                    onClick={this.props.onMove.bind(null, item.get('id'))}>
+                                    {item.get('name')}
+                                </li>
+                            )}
+                        </ul>
+                    }
                     {this.state.showDelete ?
                         <div className="list-group-item">
                             <div className="content">删除</div>
@@ -77,6 +93,7 @@ define([
         onDelete () {
             this.props.onStructDelete({ outlineId: this.props.outlineId, categoryId: this.props.id, });
         }
+        onMove () {}
         render () {
             return (
                 <li className="list-group-item classification-item">
@@ -99,7 +116,9 @@ define([
                     }
                     {this.state.showMenu ?
                         <ClassificationMenu onShowRename={this.onShowRename.bind(this, true)}
-                                            onDelete={this.onDelete.bind(this)}/> :
+                                            onDelete={this.onDelete.bind(this)}
+                                            onMove={this.onMove.bind(this)}
+                                            outlines={this.props.outlines}/> :
                         ''
                     }
                 </li>
@@ -178,6 +197,7 @@ define([
                             {this.props.categories.map(item =>
                                 <ClassificationItem id={item.get('id')} name={item.get('name')}
                                                     outlineId={this.props.id} key={item.get('id')}
+                                                    outlines={this.props.outlines}
                                                     onStructRename={this.props.onStructRename}
                                                     onStructDelete={this.props.onStructDelete}/>
                             )}
@@ -208,22 +228,12 @@ define([
             return Object.assign({}, struct);
         }
         render () {
-            // const DOMArray = [],
-            //       { all }  = this.state;
-            // console.log(all);
-            // for (let key in all) {
-            //     if (util.hasOwnProperty(all, key)) {
-            //         DOMArray.push(<ClassificationList key={key} {...all[key]}/>);
-            //     }
-            // }
-            // console.log(this.state.all.map((item, index) =>
-            //     <ClassificationList key={index} {...item}/>
-            // ));
             return (
                 <div className="row">
                     {this.state.all.map((item, index) =>
                         <ClassificationList key={index} id={item.get('id')} name={item.get('name')}
                                             categories={item.get('categories')}
+                                            outlines={this.state.all}
                                             onStructRename={this.props.onStructRename}
                                             onStructDelete={this.props.onStructDelete}/>
                     ).toList()}

@@ -21,7 +21,10 @@ define(['immutable'], Immutable =>
             return result;
         case 'STRUCT_RENAME': {
             const { outlineId, categoryId, name } =  action['data'];
-            let outlineIndex  = state['all'].findKey(item => outlineId == item.get('id'));
+            if (!outlineId || !categoryId) {
+                return state;
+            }
+            const outlineIndex = state['all'].findKey(item => outlineId == item.get('id'));
             if (!!categoryId) {
                 let categoryIndex = state['all'].getIn([outlineIndex, 'categories']).findKey(item => categoryId == item.get('id'));
                 state['all'] = state['all'].updateIn([outlineIndex, 'categories', categoryIndex, 'name'], oldName => name);
@@ -32,7 +35,10 @@ define(['immutable'], Immutable =>
             }
         } case 'STRUCT_DELETE': {
             const { outlineId, categoryId } =  action['data'];
-            let outlineIndex  = state['all'].findKey(item => outlineId == item.get('id'));
+            if (!outlineId) {
+                return state;
+            }
+            const outlineIndex = state['all'].findKey(item => outlineId == item.get('id'));
             if (!!categoryId) {
                 let categoryIndex = state['all'].getIn([outlineIndex, 'categories']).findKey(item => categoryId == item.get('id'));
                 state['all'] = state['all'].deleteIn([outlineIndex, 'categories', categoryIndex]);
@@ -41,7 +47,20 @@ define(['immutable'], Immutable =>
                 state['all'] = state['all'].delete(outlineIndex);
                 return Object.assign({}, state);
             }
-        } default:
+        } case 'STRUCT_MOVE': {
+            const { originId, targetId, categoryId } = action['data'];
+            if (!originId || !targetId || !categoryId) {
+                return state;
+            }
+            const originIndex   = state['all'].findKey(item => originId == item.get('id')),
+                  targetIndex   = state['all'].findKey(item => targetId == item.get('id')),
+                  categoryIndex = state['all'].getIn([originIndex, 'categories']).findKey(item => categoryId == item.get('id')),
+                  categoryItem  = state['all'].getIn([originIndex, 'categories', categoryIndex]);
+
+            state['all'] = state['all'].updateIn([targetIndex, 'categories'], value => value.push(categoryItem));
+            state['all'] = state['all'].deleteIn([targetIndex, 'categories', categoryIndex]);
+            return Object.assign({}, state);
+    } default:
             return state;
     }
 });
