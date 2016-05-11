@@ -20,45 +20,25 @@ define(['immutable'], Immutable =>
             !!all      && (result['original'] = Immutable.fromJS(all));
             return result;
         case 'STRUCT_RENAME':
-            // state['all'] = state['all'].updateIn(['1', 'categories', 0, 'name'], name => 'aaa');
-            // state['all'] = state['all'].updateIn(['1', 'name'], name => 'aaa');
-            // return Object.assign({}, state);
             const { outlineId, categoryId, name } =  action['data'];
+            let outlineIndex  = state['all'].findKey(item => outlineId == item.get('id'));
             if (!!categoryId) {
-                let outlineIndex  = state['all'].findKey(item => outlineId == item.get('id')),
-                    categoryIndex = state['all'].getIn([outlineIndex, 'categories']).findKey(item => categoryId == item.get('id'));
+                let categoryIndex = state['all'].getIn([outlineIndex, 'categories']).findKey(item => categoryId == item.get('id'));
                 state['all'] = state['all'].updateIn([outlineIndex, 'categories', categoryIndex, 'name'], oldName => name);
                 return Object.assign({}, state);
-                // let all = state['all'].update(item => {
-                //     if (outlineId == item.get('id')) {
-                //         return item.update('categories', categories => {
-                //             return categories.update(categoryId, category => category.set('name', name));
-                //         });
-                //     } else {
-                //         return item;
-                //     }
-                // });
-                // return Object.assign({}, state, { all });
+            } else {
+                state['all'] = state['all'].update(outlineIndex, value => value.set('name', name));
+                return Object.assign({}, state);
             }
-        // switch (type) {
-            //     case 'outline':
-            //         // state['all'].update()
-            //         return state;
-            //     case 'category':
-            //     default:
-                    // const outlineKey = state['all'].findKey(item =>
-                    //     item.get('categories').some(item =>
-                    //         +id === +item.get('id')
-                    //     )
-                    // );
-                    // const categoryKey = state['all'].getIn([outlineKey, 'categories']).findKey(item =>
-                    //     +id === +item.get('id')
-                    // );
-                    // state['all'] = state['all'].updateIn([outlineKey, 'categories', categoryKey], item =>
-                    //     item.set('name', name)
-                    // );
-                    // return state;
-            // }
+        case 'STRUCT_DELETE':
+            const { outlineId, categoryId } =  action['data'];
+            let outlineIndex  = state['all'].findKey(item => outlineId == item.get('id'));
+            if (!!categoryId) {
+                let categoryIndex = state['all'].getIn([outlineIndex, 'categories']).findKey(item => categoryId == item.get('id'));
+                state['all'] = state['all'].deleteIn([outlineIndex, 'categories', categoryIndex]);
+                return Object.assign({}, state);
+            }
+            return ;
         default:
             return state;
     }

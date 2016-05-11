@@ -56,6 +56,7 @@ define([
         onStructRename ({ outlineId, categoryId, name }) {
             dispatch(Struct.rename({ outlineId, categoryId, name }));
         },
+        onStructDelete ({ outlineId, categoryId }) {}
         onNewsDetailGet: (id) => {
             const url = '/api/news';
             $.ajax({

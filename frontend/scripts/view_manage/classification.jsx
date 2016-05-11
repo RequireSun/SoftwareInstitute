@@ -45,7 +45,7 @@ define([
             });
         }
         onRename () {
-            const name = this.refs.name.value;
+            const name = this.refs.name.value || '';
             this.props.onStructRename({
                 outlineId: this.props.outlineId,
                 categoryId: this.props.id,
@@ -82,13 +82,65 @@ define([
     class ClassificationList extends React.Component {
         constructor (props) {
             super(props);
+            this.state = {
+                showRename: false,
+                showDelete: false,
+            };
         }
+        onShowRename (showRename = false) {
+            this.setState({ showRename });
+        }
+        onShowDelete (showDelete = false) {
+            this.setState({ showDelete });
+        }
+        onRename () {
+            const name = this.refs.name.value || '';
+            this.props.onStructRename({
+                outlineId : this.props.id,
+                name
+            });
+            this.setState({ showRename: false, showDelete: false, });
+        }
+        onDelete () {}
         render () {
             return (
                 <div className="col-sm-6 col-md-4 col-lg-3">
                     <div className="panel panel-sharp">
                         <div className="panel-heading">
-                            {this.props.name}
+                            {this.state.showRename ?
+                                <div className="input-group">
+                                    <input type="text" ref="name" defaultValue={this.props.name}
+                                           className="form-control" placeholder="请输入名称"/>
+                                    <span className="input-group-btn">
+                                        <button className="btn btn-success" type="button"
+                                                onClick={this.onRename.bind(this)}>
+                                            <span className="glyphicon glyphicon-ok"></span>
+                                        </button>
+                                        <button className="btn btn-danger" type="button"
+                                                onClick={this.onShowRename.bind(this, false)}>
+                                            <span className="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div> : [
+                                this.props.name,
+                                this.state.showDelete ?
+                                    (<div key="btn-group" className="btn-group pull-right">
+                                        <button className="btn btn-xs btn-danger" onClick={this.onDelete.bind(this)}>
+                                            <span className="glyphicon glyphicon-floppy-remove"></span>
+                                        </button>
+                                        <button className="btn btn-xs btn-success" onClick={this.onShowDelete.bind(this, false)}>
+                                            <span className="glyphicon glyphicon-share-alt"></span>
+                                        </button>
+                                    </div>) :
+                                    (<div key="btn-group" className="btn-group pull-right">
+                                        <button className="btn btn-xs btn-default" onClick={this.onShowRename.bind(this, true)}>
+                                            <span className="glyphicon glyphicon-pencil"></span>
+                                        </button>
+                                        <button className="btn btn-xs btn-default" onClick={this.onShowDelete.bind(this, true)}>
+                                            <span className="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                    </div>)
+                            ]}
                         </div>
                         <ul className="list-group">
                             {this.props.categories.map(item =>
