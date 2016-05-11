@@ -15,13 +15,34 @@ define([
     class ClassificationMenu extends React.Component {
         constructor (props) {
             super(props);
+            this.state = {
+                showDelete: false,
+            };
+        }
+        onShowDelete () {
+            this.setState({
+                showDelete: !this.state.showDelete,
+            });
         }
         render () {
             return (
                 <div className="menu list-group">
                     <a className="list-group-item" onClick={this.props.onShowRename}>重命名</a>
                     <a className="list-group-item">移动</a>
-                    <a className="list-group-item">删除</a>
+                    {this.state.showDelete ?
+                        <div className="list-group-item">
+                            <div className="content">删除</div>
+                            <div key="btn-group" className="btn-group pull-right">
+                                <button className="btn btn-xs btn-danger" onClick={this.props.onDelete}>
+                                    <span className="glyphicon glyphicon-floppy-remove"></span>
+                                </button>
+                                <button className="btn btn-xs btn-success" onClick={this.onShowDelete.bind(this)}>
+                                    <span className="glyphicon glyphicon-share-alt"></span>
+                                </button>
+                            </div>
+                        </div> :
+                        <a className="list-group-item" onClick={this.onShowDelete.bind(this)}>删除</a>
+                    }
                 </div>
             );
         }
@@ -31,7 +52,7 @@ define([
         constructor (props) {
             super(props);
             this.state = {
-                showMenu: false,
+                showMenu  : false,
                 showRename: false,
             };
         }
@@ -53,6 +74,9 @@ define([
             });
             this.setState({ showMenu: false, showRename: false, });
         }
+        onDelete () {
+            this.props.onStructDelete({ outlineId: this.props.outlineId, categoryId: this.props.id, });
+        }
         render () {
             return (
                 <li className="list-group-item classification-item">
@@ -73,7 +97,11 @@ define([
                         </div> :
                         <div className="title" onClick={this.onMenu.bind(this)}>{this.props.name}</div>
                     }
-                    {this.state.showMenu ? <ClassificationMenu onShowRename={this.onShowRename.bind(this, true)}/> : ''}
+                    {this.state.showMenu ?
+                        <ClassificationMenu onShowRename={this.onShowRename.bind(this, true)}
+                                            onDelete={this.onDelete.bind(this)}/> :
+                        ''
+                    }
                 </li>
             );
         }
@@ -101,7 +129,11 @@ define([
             });
             this.setState({ showRename: false, showDelete: false, });
         }
-        onDelete () {}
+        onDelete () {
+            this.props.onStructDelete({
+                outlineId: this.props.id
+            });
+        }
         render () {
             return (
                 <div className="col-sm-6 col-md-4 col-lg-3">
@@ -146,7 +178,8 @@ define([
                             {this.props.categories.map(item =>
                                 <ClassificationItem id={item.get('id')} name={item.get('name')}
                                                     outlineId={this.props.id} key={item.get('id')}
-                                                    onStructRename={this.props.onStructRename}/>
+                                                    onStructRename={this.props.onStructRename}
+                                                    onStructDelete={this.props.onStructDelete}/>
                             )}
                         </ul>
                     </div>
@@ -191,7 +224,8 @@ define([
                     {this.state.all.map((item, index) =>
                         <ClassificationList key={index} id={item.get('id')} name={item.get('name')}
                                             categories={item.get('categories')}
-                                            onStructRename={this.props.onStructRename}/>
+                                            onStructRename={this.props.onStructRename}
+                                            onStructDelete={this.props.onStructDelete}/>
                     ).toList()}
                 </div>
             );

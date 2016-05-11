@@ -19,7 +19,7 @@ define(['immutable'], Immutable =>
             !!all      && (result['all']      = Immutable.fromJS(all));
             !!all      && (result['original'] = Immutable.fromJS(all));
             return result;
-        case 'STRUCT_RENAME':
+        case 'STRUCT_RENAME': {
             const { outlineId, categoryId, name } =  action['data'];
             let outlineIndex  = state['all'].findKey(item => outlineId == item.get('id'));
             if (!!categoryId) {
@@ -30,16 +30,18 @@ define(['immutable'], Immutable =>
                 state['all'] = state['all'].update(outlineIndex, value => value.set('name', name));
                 return Object.assign({}, state);
             }
-        case 'STRUCT_DELETE':
+        } case 'STRUCT_DELETE': {
             const { outlineId, categoryId } =  action['data'];
             let outlineIndex  = state['all'].findKey(item => outlineId == item.get('id'));
             if (!!categoryId) {
                 let categoryIndex = state['all'].getIn([outlineIndex, 'categories']).findKey(item => categoryId == item.get('id'));
                 state['all'] = state['all'].deleteIn([outlineIndex, 'categories', categoryIndex]);
                 return Object.assign({}, state);
+            } else {
+                state['all'] = state['all'].delete(outlineIndex);
+                return Object.assign({}, state);
             }
-            return ;
-        default:
+        } default:
             return state;
     }
 });

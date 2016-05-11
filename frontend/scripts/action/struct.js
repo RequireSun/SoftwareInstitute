@@ -11,4 +11,10 @@ define({
         type: 'STRUCT_RENAME',
         data: { outlineId, categoryId, name },
     }),
+    delete ({ outlineId, categoryId }) {
+        return {
+            type: 'STRUCT_DELETE',
+            data: { outlineId, categoryId, },
+        };
+    }
 });
