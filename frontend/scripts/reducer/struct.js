@@ -58,7 +58,7 @@ define(['immutable'], Immutable =>
                   categoryItem  = state['all'].getIn([originIndex, 'categories', categoryIndex]);
 
             state['all'] = state['all'].updateIn([targetIndex, 'categories'], value => value.push(categoryItem));
-            state['all'] = state['all'].deleteIn([targetIndex, 'categories', categoryIndex]);
+            state['all'] = state['all'].deleteIn([originIndex, 'categories', categoryIndex]);
             return Object.assign({}, state);
     } default:
             return state;

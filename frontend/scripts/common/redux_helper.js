@@ -60,7 +60,7 @@ define([
             dispatch(Struct.delete({ outlineId, categoryId }));
         },
         onStructMove ({ originId, targetId, categoryId }) {
-            dispatch(Struct.delete({ originId, targetId, categoryId }));
+            dispatch(Struct.move({ originId, targetId, categoryId }));
         },
         onNewsDetailGet: (id) => {
             const url = '/api/news';

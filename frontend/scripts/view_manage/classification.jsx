@@ -34,17 +34,19 @@ define([
             return (
                 <div className="menu list-group">
                     <a className="list-group-item" onClick={this.props.onShowRename}>重命名</a>
-                    {this.state.showMove ?
-                        <a className="list-group-item" onClick={this.onShowMove.bind(this)}>移动</a> :
-                        <ul className="list-group">
-                            {this.props.outlines.map(item =>
-                                <li className="list-group-item"
-                                    onClick={this.props.onMove.bind(null, item.get('id'))}>
-                                    {item.get('name')}
-                                </li>
-                            )}
-                        </ul>
-                    }
+                        <a className="list-group-item" onClick={this.onShowMove.bind(this)}>移动</a>
+                        {this.state.showMove ?
+                            <div className="list-group">
+                                {this.props.outlines.toList().map(item =>
+                                    this.props.outlineId != item.get('id') ?
+                                        <a className="list-group-item" key={item.get('id')}
+                                            onClick={this.props.onMove.bind(null, item.get('id'))}>
+                                            {item.get('name')}
+                                        </a> :
+                                        ''
+                                )}
+                            </div> : ''
+                        }
                     {this.state.showDelete ?
                         <div className="list-group-item">
                             <div className="content">删除</div>
@@ -93,7 +95,9 @@ define([
         onDelete () {
             this.props.onStructDelete({ outlineId: this.props.outlineId, categoryId: this.props.id, });
         }
-        onMove () {}
+        onMove (targetId) {
+            this.props.onStructMove({ originId: this.props.outlineId, targetId, categoryId: this.props.id });
+        }
         render () {
             return (
                 <li className="list-group-item classification-item">
@@ -115,7 +119,8 @@ define([
                         <div className="title" onClick={this.onMenu.bind(this)}>{this.props.name}</div>
                     }
                     {this.state.showMenu ?
-                        <ClassificationMenu onShowRename={this.onShowRename.bind(this, true)}
+                        <ClassificationMenu outlineId={this.props.outlineId}
+                                            onShowRename={this.onShowRename.bind(this, true)}
                                             onDelete={this.onDelete.bind(this)}
                                             onMove={this.onMove.bind(this)}
                                             outlines={this.props.outlines}/> :
@@ -199,7 +204,8 @@ define([
                                                     outlineId={this.props.id} key={item.get('id')}
                                                     outlines={this.props.outlines}
                                                     onStructRename={this.props.onStructRename}
-                                                    onStructDelete={this.props.onStructDelete}/>
+                                                    onStructDelete={this.props.onStructDelete}
+                                                    onStructMove={this.props.onStructMove}/>
                             )}
                         </ul>
                     </div>
@@ -235,7 +241,8 @@ define([
                                             categories={item.get('categories')}
                                             outlines={this.state.all}
                                             onStructRename={this.props.onStructRename}
-                                            onStructDelete={this.props.onStructDelete}/>
+                                            onStructDelete={this.props.onStructDelete}
+                                            onStructMove={this.props.onStructMove}/>
                     ).toList()}
                 </div>
             );
