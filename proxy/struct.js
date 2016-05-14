@@ -105,9 +105,9 @@ exports.put = (callback, relation) => {
             // 数据库操作
             Promise.all([
                 // 清空两个表
-                new Promise(promiseWrapTail(connection.query, 'DELETE FROM `outline`')),
-                new Promise(promiseWrapTail(connection.query, 'DELETE FROM `category`')),
-            ]).then(new Promise(promiseWrap((cb) => {
+                new Promise(promiseWrapTail(connection.query.bind(connection), 'DELETE FROM `outline`')),
+                new Promise(promiseWrapTail(connection.query.bind(connection), 'DELETE FROM `category`')),
+            ]).then(results => new Promise(promiseWrap((cb) => {
                 // 插入 outline
                 async.everyLimit(outlineArray, 5, (item, cbk) => {
                     connection.query(
@@ -121,9 +121,9 @@ exports.put = (callback, relation) => {
                             if (err) {
                                 cbk(err);
                             } else if (!result || !result['affectedRows']) {
-                                cbk(null, false);
-                            } else {
                                 cbk(true);
+                            } else {
+                                cbk(null, true);
                             }
                         }
                     );
@@ -134,7 +134,7 @@ exports.put = (callback, relation) => {
                         cb(null, true);
                     }
                 });
-            }))).then(new Promise(promiseWrap(cb => {
+            }))).then(result => new Promise(promiseWrap(cb => {
                 // 插入 category
                 async.everyLimit(categoryArray, 5, (item, cbk) => {
                     connection.query(
@@ -148,9 +148,9 @@ exports.put = (callback, relation) => {
                             if (err) {
                                 cbk(err);
                             } else if (!result || !result['affectedRows']) {
-                                cbk(null, false);
-                            } else {
                                 cbk(true);
+                            } else {
+                                cbk(null, true);
                             }
                         }
                     );
@@ -161,15 +161,24 @@ exports.put = (callback, relation) => {
                         cb(null, true);
                     }
                 });
-            }))).then(new Promise(promiseWrap(cb => {
+            }))).then(result => new Promise(promiseWrap(cb => {
                 // 提交事务
-                connection.commit(err => { if (err) { cb(err); } else { connection.release(); callback(null); } })
+                connection.commit(err => {
+                    if (err) {
+                        cb(err);
+                    } else {
+                        connection.release();
+                        callback(null);
+                    }
+                })
             }))).catch(err =>
                 // 错误回滚
-                connection.rollback(err => {
+                {
+                    console.log(1, err);
+                    return connection.rollback(err => {
                     connection.release();
                     callback(err);
-                })
+                })}
             );
         });
     });

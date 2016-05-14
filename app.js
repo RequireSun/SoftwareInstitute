@@ -112,7 +112,7 @@ app.use('/public', express.static(staticDir));
 // 每日访问限制
 
 app.use(require('response-time')());
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 app.use(bodyParser.urlencoded({ extended: true }));
 // 添加额外的支持头，如 PUT DELETE
 //app.use(require('method-override')());

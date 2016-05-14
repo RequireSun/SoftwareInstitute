@@ -62,6 +62,34 @@ define([
         onStructMove ({ originId, targetId, categoryId }) {
             dispatch(Struct.move({ originId, targetId, categoryId }));
         },
+        onStructUpload (struct) {
+            const url = '/api/struct';
+
+            if (!!struct.toJS) {
+                struct = struct.toJS();
+            }
+
+            $.ajax({
+                url,
+                method: 'PUT',
+                data: {
+                    struct: JSON.stringify(struct),
+                },
+                // contentType: 'application/json',
+                dataType: 'json',
+            }).success(data => {
+                // if (!data['code']) {
+                //     dispatch(Detail.detailSet(data['data']));
+                // } else {
+                //     dispatch(Detail.detailSet({}));
+                // }
+                alert(1);
+            }).error((xhr, msg) => {
+                // console.log(msg);
+                // alert('请检查您的网络！');
+                alert(2);
+            });
+        },
         onNewsDetailGet: (id) => {
             const url = '/api/news';
             $.ajax({

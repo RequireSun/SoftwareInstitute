@@ -233,9 +233,28 @@ define([
 
             return Object.assign({}, struct);
         }
+        onUpload () {
+            const struct = this.state.all || null;
+            !!struct && this.props.onStructUpload(struct);
+        }
         render () {
             return (
                 <div className="row">
+                    <div className="col-xs-12 controllers-container">
+                        <button className="btn btn-success">
+                            <span className="glyphicon glyphicon-plus"></span>
+                            &nbsp;&nbsp;&nbsp;
+                            添加大类
+                        </button>
+                        {this.state.changed ?
+                            <button className="btn btn-blue-dark"
+                                    onClick={this.onUpload.bind(this)}>
+                                <span className="glyphicon glyphicon-ok"></span>
+                                &nbsp;&nbsp;&nbsp;
+                                保存
+                            </button> : ''
+                        }
+                    </div>
                     {this.state.all.map((item, index) =>
                         <ClassificationList key={index} id={item.get('id')} name={item.get('name')}
                                             categories={item.get('categories')}

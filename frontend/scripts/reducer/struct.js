@@ -9,6 +9,7 @@ define(['immutable'], Immutable =>
         outline : Immutable.Map(),
         all     : Immutable.Map(),
         original: Immutable.Map(),
+        changed : false,
     }, action) => {
     switch (action.type) {
         case 'STRUCT_INIT':
