@@ -2,7 +2,7 @@
  * Created by kelvinsun on 2016/4/27.
  */
 'use strict';
-
+// TODO 详细返回逻辑没做
 define([
     'jquery',
     'root/config',
@@ -53,6 +53,9 @@ define([
                 alert('请检查您的网络！');
             });
         },
+        onStructCreate ({ outlineId, name }) {
+            dispatch(Struct.create({ outlineId, name }));
+        },
         onStructRename ({ outlineId, categoryId, name }) {
             dispatch(Struct.rename({ outlineId, categoryId, name }));
         },
@@ -78,16 +81,18 @@ define([
                 // contentType: 'application/json',
                 dataType: 'json',
             }).success(data => {
-                // if (!data['code']) {
-                //     dispatch(Detail.detailSet(data['data']));
-                // } else {
-                //     dispatch(Detail.detailSet({}));
-                // }
-                alert(1);
+                if (!data['code']) {
+                    // dispatch(Detail.detailSet(data['data']));
+                    alert(1);
+                } else {
+                    alert(2);
+                    // dispatch(Detail.detailSet({}));
+                }
+                // alert(1);
             }).error((xhr, msg) => {
                 // console.log(msg);
                 // alert('请检查您的网络！');
-                alert(2);
+                alert(3);
             });
         },
         onNewsDetailGet: (id) => {

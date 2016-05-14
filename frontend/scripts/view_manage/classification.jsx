@@ -12,7 +12,7 @@ define([
     const { Provider, connect } = ReactRedux;
     const { mapStateToProps, mapDispatchToProps } = reduxHelper;
 
-    class ClassificationMenu extends React.Component {
+    class ClassificationItemMenu extends React.Component {
         constructor (props) {
             super(props);
             this.state = {
@@ -119,7 +119,7 @@ define([
                         <div className="title" onClick={this.onMenu.bind(this)}>{this.props.name}</div>
                     }
                     {this.state.showMenu ?
-                        <ClassificationMenu outlineId={this.props.outlineId}
+                        <ClassificationItemMenu outlineId={this.props.outlineId}
                                             onShowRename={this.onShowRename.bind(this, true)}
                                             onDelete={this.onDelete.bind(this)}
                                             onMove={this.onMove.bind(this)}
@@ -131,13 +131,44 @@ define([
         }
     }
 
+    class ClassificationCreate extends React.Component {
+        constructor (props) {
+            super(props);
+            this.state = {};
+        }
+        onCreate () {
+            this.props.onCreate(this.refs.name.value || '');
+        }
+        render () {
+            return (
+                <div className="input-group">
+                    <input type="text" ref="name" className="form-control" placeholder="请输入名称"/>
+                            <span className="input-group-btn">
+                                <button className="btn btn-success" type="button"
+                                        onClick={this.onCreate.bind(this)}>
+                                    <span className="glyphicon glyphicon-ok"></span>
+                                </button>
+                                <button className="btn btn-danger" type="button"
+                                        onClick={this.props.onShowCreate.bind(this, false)}>
+                                    <span className="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                </div>
+            );
+        }
+    }
+
     class ClassificationList extends React.Component {
         constructor (props) {
             super(props);
             this.state = {
+                showCreate: false,
                 showRename: false,
                 showDelete: false,
             };
+        }
+        onShowCreate (showCreate = false) {
+            this.setState({ showCreate });
         }
         onShowRename (showRename = false) {
             this.setState({ showRename });
@@ -145,13 +176,22 @@ define([
         onShowDelete (showDelete = false) {
             this.setState({ showDelete });
         }
+        onCreate (name = '') {
+            if (!!name) {
+                this.props.onStructCreate({
+                    outlineId: this.props.id,
+                    name,
+                });
+            }
+            this.setState({ showCreate: false, showRename: false, showDelete: false, })
+        }
         onRename () {
             const name = this.refs.name.value || '';
             this.props.onStructRename({
                 outlineId : this.props.id,
                 name
             });
-            this.setState({ showRename: false, showDelete: false, });
+            this.setState({ showCreate: false, showRename: false, showDelete: false, });
         }
         onDelete () {
             this.props.onStructDelete({
@@ -189,6 +229,12 @@ define([
                                         </button>
                                     </div>) :
                                     (<div key="btn-group" className="btn-group pull-right">
+                                        {this.state.showCreate ?
+                                            '' :
+                                            <button className="btn btn-xs btn-default" onClick={this.onShowCreate.bind(this, true)}>
+                                                <span className="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        }
                                         <button className="btn btn-xs btn-default" onClick={this.onShowRename.bind(this, true)}>
                                             <span className="glyphicon glyphicon-pencil"></span>
                                         </button>
@@ -207,6 +253,10 @@ define([
                                                     onStructDelete={this.props.onStructDelete}
                                                     onStructMove={this.props.onStructMove}/>
                             )}
+                            {this.state.showCreate ?
+                                <ClassificationCreate onShowCreate={this.onShowCreate.bind(this)}
+                                                      onCreate={this.onCreate.bind(this)}/> : ''
+                            }
                         </ul>
                     </div>
                 </div>
@@ -217,7 +267,7 @@ define([
     class Classification extends React.Component {
         constructor (props) {
             super(props);
-            this.state = Classification.getState(props);
+            this.state = Object.assign({ showCreate: false }, Classification.getState(props));
         }
         componentWillMount () {
             this.props.onStructGet({ all: true });
@@ -233,6 +283,13 @@ define([
 
             return Object.assign({}, struct);
         }
+        onShowCreate (showCreate = false) {
+            this.setState({ showCreate });
+        }
+        onCreate () {
+            this.props.onStructCreate({ name: this.refs.name.value || '' });
+            this.setState({ showCreate: false });
+        }
         onUpload () {
             const struct = this.state.all || null;
             !!struct && this.props.onStructUpload(struct);
@@ -240,12 +297,27 @@ define([
         render () {
             return (
                 <div className="row">
-                    <div className="col-xs-12 controllers-container">
-                        <button className="btn btn-success">
-                            <span className="glyphicon glyphicon-plus"></span>
-                            &nbsp;&nbsp;&nbsp;
-                            添加大类
-                        </button>
+                    <div className="col-xs-12 form-inline controllers-container">
+                        {this.state.showCreate ?
+                            <div className="input-group">
+                                <input type="text" ref="name" className="form-control" placeholder="请输入名称"/>
+                                <span className="input-group-btn">
+                                    <button className="btn btn-success" type="button"
+                                            onClick={this.onCreate.bind(this)}>
+                                        <span className="glyphicon glyphicon-ok"></span>
+                                    </button>
+                                    <button className="btn btn-danger" type="button"
+                                            onClick={this.onShowCreate.bind(this, false)}>
+                                        <span className="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div> :
+                            <button className="btn btn-success" onClick={this.onShowCreate.bind(this)}>
+                                <span className="glyphicon glyphicon-plus"></span>
+                                &nbsp;&nbsp;&nbsp;
+                                添加大类
+                            </button>
+                        }
                         {this.state.changed ?
                             <button className="btn btn-blue-dark"
                                     onClick={this.onUpload.bind(this)}>
@@ -259,6 +331,7 @@ define([
                         <ClassificationList key={index} id={item.get('id')} name={item.get('name')}
                                             categories={item.get('categories')}
                                             outlines={this.state.all}
+                                            onStructCreate={this.props.onStructCreate}
                                             onStructRename={this.props.onStructRename}
                                             onStructDelete={this.props.onStructDelete}
                                             onStructMove={this.props.onStructMove}/>

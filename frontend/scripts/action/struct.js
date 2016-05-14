@@ -7,6 +7,10 @@ define({
         type: 'STRUCT_INIT',
         data,
     }),
+    create: ({ outlineId, name }) => ({
+        type: 'STRUCT_CREATE',
+        data: { outlineId, name, },
+    }),
     rename: ({ outlineId, categoryId, name }) => ({
         type: 'STRUCT_RENAME',
         data: { outlineId, categoryId, name },

@@ -44,7 +44,9 @@ exports.get = callback => {
                         if (!hasOwnProperty(processed, item['id'])) {
                             processed[item['id']] = { id: item['id'], name: item['name'], categories: [] };
                         }
-                        processed[item['id']]['categories'].push({ id: item['category_id'], name: item['category_name'] });
+                        if (!!item['category_id'] && !!item['category_name']) {
+                            processed[item['id']]['categories'].push({ id: item['category_id'], name: item['category_name'] });
+                        }
                     }
                 }
                 callback(null, processed);
@@ -55,7 +57,6 @@ exports.get = callback => {
 
 exports.put = (callback, relation) => {
     let processed = transformRelationObject(relation);
-
     if (!processed) {
         return callback(new Error('Input wrong struct!'));
     }
@@ -200,6 +201,7 @@ function transformRelationObject (relation) {
             if ('[object Array]' === toString(relation[i]['categories'])) {
                 for (let j = 0, item; item = relation[i]['categories'][j]; ++j) {
                     if (isNaN(+item['id']) || 0 === +item['id'] || !item['name']) {
+                        console.log(isNaN(+item['id']), 0 === +item['id'], item['name']);
                         return;
                     } else {
                         categoryArray.push({ id: +item['id'], name: item['name'], outlineId: relation[i]['id'] });
