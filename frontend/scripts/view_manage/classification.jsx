@@ -7,7 +7,7 @@ define([
     'react-redux',
     'common/redux_helper',
     'common/util',
-    'root/store_manage'
+    'root/store_manage',
 ], (React, ReactRedux, reduxHelper, util, store) => {
     const { Provider, connect } = ReactRedux;
     const { mapStateToProps, mapDispatchToProps } = reduxHelper;

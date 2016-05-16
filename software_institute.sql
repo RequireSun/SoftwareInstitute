@@ -9,27 +9,31 @@ USE `software_institute`;
 --
 -- 表的结构 `category`
 --
--- 创建时间： 2016-04-10 08:43:20
+-- 创建时间： 2016-05-16 18:10:21
 --
 
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE IF NOT EXISTS `category` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
-  `outline_id` int(10) UNSIGNED NOT NULL,
+  `outline_id` int(10) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `outline_id` (`outline_id`) USING HASH
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- 转存表中的数据 `category`
 --
 
 -- INSERT INTO `category` (`id`, `name`, `outline_id`) VALUES
--- (1, 'categoryname1', 1),
--- (2, 'categoryname123', 4),
+-- (1, 'categoryname1', 4),
+-- (2, 'categoryname3', 1),
+-- (3, '1234', 5),
+-- (4, '123231', 2),
 -- (5, 'ccname2', 1),
--- (6, 'haha', 4);
+-- (6, 'haha', 4),
+-- (8, 'adfsaf', 3),
+-- (9, '00000', 0);
 
 -- --------------------------------------------------------
 
@@ -118,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `outline` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- 转存表中的数据 `outline`
@@ -126,7 +130,10 @@ CREATE TABLE IF NOT EXISTS `outline` (
 
 -- INSERT INTO `outline` (`id`, `name`) VALUES
 -- (1, 'outlinename1'),
--- (4, 'fuck');
+-- (2, '1231'),
+-- (3, '1'),
+-- (4, 'fuck'),
+-- (5, '啊啊啊');
 
 -- --------------------------------------------------------
 

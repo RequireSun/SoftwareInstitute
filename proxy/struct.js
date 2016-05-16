@@ -26,33 +26,63 @@ exports.outlineDelete   = outline.delete;
 exports.outlineGetAll   = outline.getAll;
 
 exports.get = callback => {
-    var queryString =
-        'SELECT outline.id AS id, outline.name AS name, category.id AS category_id, category.name AS category_name ' +
-        'FROM outline LEFT JOIN category ON category.outline_id = outline.id';
+    const queryString =
+          'SELECT outline.id AS id, outline.name AS name, category.id AS category_id, category.name AS category_name ' +
+          'FROM outline LEFT JOIN category ON category.outline_id = outline.id',
+          queryStringEmpty =
+          'SELECT id AS category_id, name AS category_name FROM `category` WHERE outline_id IS NULL';
 
-    database.query(
-        queryString,
-        (err, result) => {
-            if (err) {
-                callback(err);
-            } else if (!result) {
-                callback(new Error('No Data!'));
-            } else {
-                let processed = {};
-                for (let i = 0, item; item = result[i]; ++i) {
-                    if (undefined !== item['id']) {
-                        if (!hasOwnProperty(processed, item['id'])) {
-                            processed[item['id']] = { id: item['id'], name: item['name'], categories: [] };
-                        }
-                        if (!!item['category_id'] && !!item['category_name']) {
-                            processed[item['id']]['categories'].push({ id: item['category_id'], name: item['category_name'] });
-                        }
+    return Promise.all([
+        new Promise(promiseWrapTail(database.query.bind(database), queryString)),
+        new Promise(promiseWrapTail(database.query.bind(database), queryStringEmpty)),
+    ]).then(([relation, standAlone]) => {
+        let processed = {};
+        if (!!relation && Array.isArray(relation) && !!relation.length) {
+            relation.forEach(({ id, name, category_id, category_name }) => {
+                if (undefined !== id) {
+                    if (!hasOwnProperty(processed, id)) {
+                        processed[id] = { id, name, categories: [] };
+                    }
+                    if (!!category_id && !!category_name) {
+                        processed[id]['categories'].push({ id: category_id, name: category_name });
                     }
                 }
-                callback(null, processed);
-            }
+            });
         }
-    );
+        if (!!standAlone && Array.isArray(standAlone) && !!standAlone.length) {
+            processed[0] = { id: 0, name: '未分组', categories: [] };
+            standAlone.forEach(({ category_id, category_name }) => {
+                if (!!category_id && !!category_name) {
+                    processed[0]['categories'].push({ id: category_id, name: category_name });
+                }
+            });
+        }
+        return callback(null, processed);
+    }, err => callback(err));
+
+    // database.query(
+    //     queryString,
+    //     (err, result) => {
+    //         if (err) {
+    //             callback(err);
+    //         } else if (!result) {
+    //             callback(new Error('No Data!'));
+    //         } else {
+    //             let processed = {};
+    //             for (let i = 0, item; item = result[i]; ++i) {
+    //                 if (undefined !== item['id']) {
+    //                     if (!hasOwnProperty(processed, item['id'])) {
+    //                         processed[item['id']] = { id: item['id'], name: item['name'], categories: [] };
+    //                     }
+    //                     if (!!item['category_id'] && !!item['category_name']) {
+    //                         processed[item['id']]['categories'].push({ id: item['category_id'], name: item['category_name'] });
+    //                     }
+    //                 }
+    //             }
+    //             callback(null, processed);
+    //         }
+    //     }
+    // );
 };
 
 exports.put = (callback, relation) => {
