@@ -76,6 +76,10 @@ define(['immutable'], Immutable =>
                 state['all'] = state['all'].deleteIn([outlineIndex, 'categories', categoryIndex]);
                 // return Object.assign({}, state);
             } else {
+                state['all'] = state['all'].updateIn(
+                    ['0', 'categories'],
+                    value => value.concat(state['all'].getIn([outlineIndex, 'categories']))
+                );
                 state['all'] = state['all'].delete(outlineIndex);
             }
             return Object.assign({}, state);
