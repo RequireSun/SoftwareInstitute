@@ -6,7 +6,8 @@ define([
     'view/main',
     'view/index',
     'view/classification',
-], (React, ReactRouter, main, index, classification) => {
+    'view/news',
+], (React, ReactRouter, main, index, classification, news) => {
     const { Router, Route, IndexRoute, hashHistory } = ReactRouter;
 
     return (
@@ -15,6 +16,7 @@ define([
                 <IndexRoute component={index}/>
                 <Route name="index" path="index" component={index}/>
                 <Route name="classification" path="classification" component={classification}/>
+                <Route name="news" path="news" component={news}/>
             </Route>
         </Router>
     );

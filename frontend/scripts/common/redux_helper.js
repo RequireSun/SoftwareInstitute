@@ -95,6 +95,7 @@ define([
                 alert(3);
             });
         },
+        
         onNewsDetailGet: (id) => {
             const url = '/api/news';
             $.ajax({
@@ -115,7 +116,7 @@ define([
                 alert('请检查您的网络！');
             });
         },
-        onNewsListGet: (id, type, pageRequest = config.pageRequest, pageSize = config.pageSize) => {
+        onNewsListGet: (id, type = 'category', pageRequest = config.pageRequest, pageSize = config.pageSize) => {
             let url;
             switch (type) {
                 case 'category':
