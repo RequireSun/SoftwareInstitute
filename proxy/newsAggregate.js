@@ -44,11 +44,21 @@ exports.outline         = (callback, id, pageSize, pageRequest) => {
         return callback(new Error('Parameter: pageSize / pageRequest must be non-negative number!'));
     }
 
-    var queryString =
-        'SELECT news.id AS id, title, update_time ' +
-        'FROM news INNER JOIN category ON news.category_id = category.id ' +
-        'WHERE category.outline_id = :id ' +
-        'ORDER BY update_time DESC LIMIT :pageLimit OFFSET :pageOffset';
+    let queryString;
+    if (0 === +id) {
+        queryString =
+            'SELECT news.id AS id, title, update_time ' +
+            'FROM news INNER JOIN category ON news.category_id = category.id ' +
+            'LEFT JOIN outline ON category.outline_id = outline.id ' +
+            'WHERE outline.id IS NULL ' +
+            'ORDER BY update_time DESC LIMIT :pageLimit OFFSET :pageOffset';
+    } else {
+        queryString =
+            'SELECT news.id AS id, title, update_time ' +
+            'FROM news INNER JOIN category ON news.category_id = category.id ' +
+            'WHERE category.outline_id = :id ' +
+            'ORDER BY update_time DESC LIMIT :pageLimit OFFSET :pageOffset';
+    }
 
     database.query(queryString, {
         id,
@@ -69,7 +79,7 @@ exports.categoryCount   = (callback, id) => {
         return callback(new Error('Parameter: id must be number!'));
     }
 
-    var queryString = 'SELECT COUNT(*) as categoryCount FROM news WHERE category_id = :id';
+    const queryString = 'SELECT COUNT(*) as categoryCount FROM news WHERE category_id = :id';
 
     database.query(
         queryString,
@@ -91,10 +101,24 @@ exports.outlineCount    = (callback, id) => {
         return callback(new Error('Parameter: id must be number!'));
     }
 
-    var queryString =
-        'SELECT COUNT(*) as outlineCount ' +
-        'FROM news INNER JOIN category ON news.category_id = category.id ' +
-        'WHERE category.outline_id = :id';
+    let queryString;
+    if (0 === +id) {
+        queryString =
+            'SELECT COUNT(*) as outlineCount ' +
+            'FROM news INNER JOIN category ON news.category_id = category.id ' +
+            'LEFT JOIN outline ON category.outline_id = outline.id ' +
+            'WHERE outline.id IS NULL';
+    } else {
+        queryString =
+            'SELECT COUNT(*) as outlineCount ' +
+            'FROM news INNER JOIN category ON news.category_id = category.id ' +
+            'WHERE category.outline_id = :id ';
+    }
+
+    // var queryString =
+    //     'SELECT COUNT(*) as outlineCount ' +
+    //     'FROM news INNER JOIN category ON news.category_id = category.id ' +
+    //     'WHERE category.outline_id = :id';
 
     database.query(
         queryString,

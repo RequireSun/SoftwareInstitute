@@ -27,7 +27,7 @@ define([
         render () {
             return (
                 <li href="javascript:;" className="list-group-item">
-                    <a href="javascript:;">
+                    <a href="javascript:;" onClick={this.props.onNewsActiveSet.bind(null, { id: this.props.id, type: 'outline' })}>
                         {this.props.name}
                         <span onClick={this.openChild.bind(this)}
                               className={'pull-right glyphicon ' + (this.state.open ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down')}></span>
@@ -53,7 +53,8 @@ define([
                         <ClassificationItem key={item.get('id')}
                                             id={item.get('id')}
                                             name={item.get('name')}
-                                            categories={item.get('categories')}/>
+                                            categories={item.get('categories')}
+                                            onNewsActiveSet={this.props.onNewsActiveSet}/>
                     ).toList()}
                 </nav>
             );
@@ -86,7 +87,8 @@ define([
             return (
                 <div className="row news-container">
                     <div className="col-sm-4">
-                        <Classification classification={this.state.classification}/>
+                        <Classification classification={this.state.classification}
+                                        onNewsActiveSet={this.props.onNewsActiveSet}/>
                     </div>
                     <div className="col-sm-8"></div>
                 </div>

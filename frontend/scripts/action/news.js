@@ -10,5 +10,11 @@ define({
             list,
             count,
         };
+    },
+    activeSet ({ id, type = 'category' } = {}) {
+        return {
+            type: 'NEWS_ACTIVE_SET',
+            data: { id, type },
+        }
     }
 });
