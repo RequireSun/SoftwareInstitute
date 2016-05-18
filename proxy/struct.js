@@ -49,8 +49,8 @@ exports.get = callback => {
                 }
             });
         }
+        processed[0] = { id: 0, name: '未分组', categories: [] };
         if (!!standAlone && Array.isArray(standAlone) && !!standAlone.length) {
-            processed[0] = { id: 0, name: '未分组', categories: [] };
             standAlone.forEach(({ category_id, category_name }) => {
                 if (!!category_id && !!category_name) {
                     processed[0]['categories'].push({ id: category_id, name: category_name });
@@ -224,17 +224,19 @@ function transformRelationObject (relation) {
 
     for (let i in relation) {
         if (hasOwnProperty(relation, i)) {
-            if (isNaN(+relation[i]['id']) || 0 === +relation[i]['id'] || !relation[i]['name']) {
+            if (isNaN(+relation[i]['id'])/* || 0 === +relation[i]['id']*/ || !relation[i]['name']) {
                 return;
             }
-            outlineArray.push({ id: +relation[i]['id'], name: relation[i]['name'] });
+            if (!!+relation[i]['id']) {
+                outlineArray.push({ id: +relation[i]['id'], name: relation[i]['name'] });
+            }
             if ('[object Array]' === toString(relation[i]['categories'])) {
                 for (let j = 0, item; item = relation[i]['categories'][j]; ++j) {
                     if (isNaN(+item['id']) || 0 === +item['id'] || !item['name']) {
-                        console.log(isNaN(+item['id']), 0 === +item['id'], item['name']);
+                        // console.log(isNaN(+item['id']), 0 === +item['id'], item['name']);
                         return;
                     } else {
-                        categoryArray.push({ id: +item['id'], name: item['name'], outlineId: relation[i]['id'] });
+                        categoryArray.push({ id: +item['id'], name: item['name'], outlineId: +relation[i]['id'] || null });
                     }
                 }
             }

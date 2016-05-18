@@ -26,7 +26,7 @@ define(['immutable'], Immutable =>
             if (!name) {
                 return state;
             }
-            if (!!outlineId) {
+            if (!!outlineId || 0 == outlineId) {
                 let outlineIndex = state['all'].findKey(item => outlineId == item.get('id'));
 
                 let ids   = state['all'].
@@ -52,7 +52,7 @@ define(['immutable'], Immutable =>
         }
         case 'STRUCT_RENAME': {
             const { outlineId, categoryId, name } =  action['data'];
-            if (!outlineId || !categoryId) {
+            if ((!outlineId && 0 != outlineId) || !categoryId) {
                 return state;
             }
             const outlineIndex = state['all'].findKey(item => outlineId == item.get('id'));
@@ -67,7 +67,7 @@ define(['immutable'], Immutable =>
         }
         case 'STRUCT_DELETE': {
             const { outlineId, categoryId } =  action['data'];
-            if (!outlineId) {
+            if (!outlineId && 0 != outlineId) {
                 return state;
             }
             const outlineIndex = state['all'].findKey(item => outlineId == item.get('id'));
@@ -82,7 +82,7 @@ define(['immutable'], Immutable =>
         }
         case 'STRUCT_MOVE': {
             const { originId, targetId, categoryId } = action['data'];
-            if (!originId || !targetId || !categoryId) {
+            if ((!originId && 0 != originId) || (!targetId && 0 != targetId) || !categoryId) {
                 return state;
             }
             const originIndex   = state['all'].findKey(item => originId == item.get('id')),

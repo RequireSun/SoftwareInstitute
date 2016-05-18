@@ -235,12 +235,15 @@ define([
                                                 <span className="glyphicon glyphicon-plus"></span>
                                             </button>
                                         }
-                                        <button className="btn btn-xs btn-default" onClick={this.onShowRename.bind(this, true)}>
-                                            <span className="glyphicon glyphicon-pencil"></span>
-                                        </button>
-                                        <button className="btn btn-xs btn-default" onClick={this.onShowDelete.bind(this, true)}>
-                                            <span className="glyphicon glyphicon-trash"></span>
-                                        </button>
+                                        {0 == this.props.id ?
+                                            '' :
+                                            [<button className="btn btn-xs btn-default" onClick={this.onShowRename.bind(this, true)}>
+                                                <span className="glyphicon glyphicon-pencil"></span>
+                                            </button>,
+                                            <button className="btn btn-xs btn-default" onClick={this.onShowDelete.bind(this, true)}>
+                                                <span className="glyphicon glyphicon-trash"></span>
+                                            </button>]
+                                        }
                                     </div>)
                             ]}
                         </div>
