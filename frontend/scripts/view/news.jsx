@@ -1,6 +1,7 @@
 'use strict';
 
 define([
+    'immutable',
     'react',
     'ReactRouter',
     'react-redux',
@@ -9,7 +10,7 @@ define([
     'root/store',
     'common/util',
     'view/public',
-], function (React, ReactRouter, ReactRedux, reduxHelper, config, store, commonUtil, templatePublic) {
+], (Immutable, React, ReactRouter, ReactRedux, reduxHelper, config, store, commonUtil, templatePublic) => {
     const { Link }     = ReactRouter;
     const { Provider } = ReactRedux;
     const TitleLine    = templatePublic.TitleLine,
@@ -56,8 +57,11 @@ define([
                          '[object Object]' !== commonUtil.toString(state) ?
                          {} :
                          state['news'];
-            if (!Array.isArray(news['list'])) {
-                news['list'] = [];
+            // if (!Array.isArray(news['list'])) {
+            //     news['list'] = [];
+            // }
+            if (!Immutable.List.isList(news['list'])) {
+                news['list'] = Immutable.List();
             }
             if (isNaN(news['count'])) {
                 news['count'] = 0;
@@ -70,9 +74,9 @@ define([
             return Object.assign({}, news, struct);
         }
         render () {
-            const titleText = (this.state[this.state.type || 'category'] || []).find(item =>
-                this.state.id === item['id']
-            )['name'] || '新闻列表';
+            const titleText = (this.state[this.state.type || 'category'] || Immutable.List()).find(item =>
+                this.state.id === item.get('id')
+            ).get('name') || '新闻列表';
 
             return (
                 <div>
@@ -97,7 +101,9 @@ define([
                             <div className="newsList-container col-xs-12 col-sm-9 col-sm-offset-3">
                                 <ul className="newsList-box">
                                     {this.state.list.map(item =>
-                                        <NewsItem key={item['id']} {...item}/>
+                                        <NewsItem key={item.get('id')} id={item.get('id')}
+                                                  title={item.get('title')}
+                                                  update_time={item.get('update_time')}/>
                                     )}
                                 </ul>
                                 <div className="pull-right">
@@ -114,11 +120,9 @@ define([
 
     const ConnectNewsList = ReactRedux.connect(reduxHelper.mapStateToProps, reduxHelper.mapDispatchToProps)(NewsList);
 
-    return (props) => {
-        return (
-            <Provider store={store}>
-                <ConnectNewsList params={props.params} query={props.location.query}/>
-            </Provider>
-        );
-    };
+    return (props) => (
+        <Provider store={store}>
+            <ConnectNewsList params={props.params} query={props.location.query}/>
+        </Provider>
+    );
 });

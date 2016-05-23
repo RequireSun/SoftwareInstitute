@@ -7,12 +7,58 @@ define([
     'ReactRouter',
     'react-redux',
     'common/redux_helper',
+    'root/config',
+    'root/store_manage',
     'common/util',
-    'root/store_manage'
-], (Immutable, React, ReactRouter, ReactRedux, reduxHelper, util, store) => {
+], (Immutable, React, ReactRouter, ReactRedux, reduxHelper, config, store, util) => {
     const { Link } = ReactRouter;
     const { Provider, connect } = ReactRedux;
     const { mapStateToProps, mapDispatchToProps } = reduxHelper;
+
+    class NewsList extends React.Component {
+        constructor (props) {
+            super(props);
+            this.state = NewsList.getState(props);
+        }
+        componentWillReceiveProps (nextProps) {
+            this.setState(NewsList.getState(nextProps));
+            this.getData(nextProps);
+        }
+        componentWillMount () {
+            this.getData(this.props);
+        }
+        getData (props) {
+            const type        = props.params.type        || 'category',
+                  id          = +props.query.id,
+                  pageRequest = +props.query.pageRequest || +config.pageRequest,
+                  pageSize    = +props.query.pageSize    || +config.pageSize;
+            if (this.state.type !== type || this.state.id !== id ||
+                this.state.pageRequest !== pageRequest ||
+                this.state.pageSize !== pageSize) {
+                this.setState({ type, id, pageRequest, pageSize });
+                props.onNewsListGet(id, type, pageRequest, pageSize);
+            }
+        }
+        static getState (state) {
+            const news = !state || !state['news'] ||
+                         '[object Object]' !== util.toString(state) ?
+                             {} :
+                             state['news'];
+            if (!Immutable.List.isList(news['list'])) {
+                news['list'] = Immutable.List();
+            }
+            if (isNaN(news['count'])) {
+                news['count'] = 0;
+            }
+
+            return Object.assign({}, news);
+        }
+        render () {
+            return (
+                <div></div>
+            );
+        }
+    }
 
     class ClassificationItem extends React.Component {
         constructor (props) {
@@ -34,10 +80,11 @@ define([
                     </a>
                     <div className={'list-group' + (this.state.open ? '' : ' hidden')}>
                         {this.props.categories.map(category =>
-                            <a href="javascript:;" className="list-group-item"
-                               key={category.get('id')}>
+                            <Link href="javascript:;" className="list-group-item"
+                                  to={{ pathname: "/news/list/category", query: { id: category.get('id') }}}
+                                  key={category.get('id')} >
                                 {category.get('name')}
-                            </a>
+                            </Link>
                         )}
                     </div>
                 </li>
@@ -90,16 +137,28 @@ define([
                         <Classification classification={this.state.classification}
                                         onNewsActiveSet={this.props.onNewsActiveSet}/>
                     </div>
-                    <div className="col-sm-9"></div>
+                    <div className="col-sm-9">
+                        {this.props.children}
+                    </div>
                 </div>
             );
         }
     }
 
-    const ConnectNews = connect(mapStateToProps, mapDispatchToProps)(News);
+    const ConnectNews = connect(mapStateToProps, mapDispatchToProps)(News),
+          ConnectNewsList = connect(mapStateToProps, mapDispatchToProps)(NewsList);
 
-    return () =>
-        (<Provider store={store}>
-            <ConnectNews/>
-        </Provider>);
+    return {
+        news: (props) => (
+            <Provider store={store}>
+                <ConnectNews params={props.params} query={props.location.query}
+                             children={props.children}/>
+            </Provider>
+        ),
+        newsList: (props) => (
+            <Provider store={store}>
+                <ConnectNewsList params={props.params} query={props.location.query}/>
+            </Provider>
+        )
+    };
 });

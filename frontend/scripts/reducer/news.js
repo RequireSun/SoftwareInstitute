@@ -14,7 +14,7 @@ define([
     switch (action.type) {
         case 'NEWS_LIST_SET':
             const { list, count } = action;
-            return { list, count, };
+            return { list: Immutable.fromJS(list), count, };
         case 'NEWS_ACTIVE_SET':
             const { id, type } = action['data'];
             if (!id && 0 != id) {
