@@ -86,11 +86,11 @@ define([
         render () {
             return (
                 <div className="row news-container">
-                    <div className="col-sm-4">
+                    <div className="col-sm-3">
                         <Classification classification={this.state.classification}
                                         onNewsActiveSet={this.props.onNewsActiveSet}/>
                     </div>
-                    <div className="col-sm-8"></div>
+                    <div className="col-sm-9"></div>
                 </div>
             );
         }
