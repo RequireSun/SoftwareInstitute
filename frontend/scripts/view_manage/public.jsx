@@ -3,25 +3,25 @@
  */
 'use strict';
 
-define(['react', 'ReactRouter'], (React, ReactRouter) => {
+define(['react', 'ReactRouter', 'root/config_manage'], (React, ReactRouter, mConfig) => {
     const { Link } = ReactRouter;
-
-    const menus = [{
-        name: '首页',
-        link: '/',
-    },{
-        name: '内容管理',
-        link: '/news',
-    },{
-        name: '类别管理',
-        link: '/classification',
-    },{
-        name: '资源管理',
-        link: '/resource',
-    },{
-        name: '样式管理',
-        link: '/style',
-    },];
+    const menus = mConfig['menus'] || [];
+    // const menus = [{
+    //     name: '首页',
+    //     link: '/',
+    // },{
+    //     name: '内容管理',
+    //     link: '/news',
+    // },{
+    //     name: '类别管理',
+    //     link: '/classification',
+    // },{
+    //     name: '资源管理',
+    //     link: '/resource',
+    // },{
+    //     name: '样式管理',
+    //     link: '/style',
+    // },];
 
     class Navigation extends React.Component {
         constructor (props) {

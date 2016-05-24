@@ -1,6 +1,8 @@
 /**
  * Created by kelvinsun on 2016/5/16.
  */
+'use strict';
+
 define([
     'immutable',
     'react',
@@ -10,10 +12,22 @@ define([
     'root/config',
     'root/store_manage',
     'common/util',
-], (Immutable, React, ReactRouter, ReactRedux, reduxHelper, config, store, util) => {
+    'pView/pager',
+], (Immutable, React, ReactRouter, ReactRedux, reduxHelper, config, store, util, Pager) => {
     const { Link } = ReactRouter;
     const { Provider, connect } = ReactRedux;
     const { mapStateToProps, mapDispatchToProps } = reduxHelper;
+
+    class NewsDetail extends React.Component {
+        constructor (props) {
+            super(props);
+        }
+        render () {
+            return (
+                <div></div>
+            );
+        }
+    }
 
     class NewsList extends React.Component {
         constructor (props) {
@@ -55,7 +69,23 @@ define([
         }
         render () {
             return (
-                <div></div>
+                <div className="panel panel-sharp">
+                    <div className="list-group">
+                        {this.state.list.map(item =>
+                            <Link to={{ pathname: "/news/detail", query: { id: item.get('id') }}}
+                                  className="list-group-item" key={item.get('id')}>
+                                {item.get('title')}
+                                <span className="pull-right">
+                                    {util.convertDateTimeStringToDate(item.get('update_time'))}
+                                </span>
+                            </Link>
+                        )}
+                    </div>
+                    <div className="pull-right">
+                        <Pager current={this.state.pageRequest} max={this.state.count}
+                               link={`#/news/list/${this.state.type}?id=${this.state.id}&pageSize=${this.state.pageSize}&pageRequest={#page}`}/>
+                    </div>
+                </div>
             );
         }
     }
@@ -146,7 +176,8 @@ define([
     }
 
     const ConnectNews = connect(mapStateToProps, mapDispatchToProps)(News),
-          ConnectNewsList = connect(mapStateToProps, mapDispatchToProps)(NewsList);
+          ConnectNewsList = connect(mapStateToProps, mapDispatchToProps)(NewsList),
+          ConnectNewsDetail = connect(mapStateToProps, mapDispatchToProps)(NewsDetail);
 
     return {
         news: (props) => (
@@ -158,6 +189,11 @@ define([
         newsList: (props) => (
             <Provider store={store}>
                 <ConnectNewsList params={props.params} query={props.location.query}/>
+            </Provider>
+        ),
+        newsDetail: (props) => (
+            <Provider store={store}>
+                <ConnectNewsDetail params={props.params} query={props.location.query}/>
             </Provider>
         )
     };

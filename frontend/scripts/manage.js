@@ -10,6 +10,7 @@ requirejs.config({
         middleware: '../middleware',
         reducer: '../reducer',
         view   : '../view_manage',
+        pView  : '../view_public',
         common : '../common',
         network: '../network',
         root   : '..'

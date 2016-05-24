@@ -9,6 +9,7 @@ requirejs.config({
         action : '../action',
         reducer: '../reducer',
         view   : '../view',
+        pView  : '../view_public',
         common : '../common',
         network: '../network',
         root   : '..'

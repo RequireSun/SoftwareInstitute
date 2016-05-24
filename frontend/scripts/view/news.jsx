@@ -10,12 +10,13 @@ define([
     'root/store',
     'common/util',
     'view/public',
-], (Immutable, React, ReactRouter, ReactRedux, reduxHelper, config, store, commonUtil, templatePublic) => {
+    'pView/pager',
+], (Immutable, React, ReactRouter, ReactRedux, reduxHelper, config, store, commonUtil, templatePublic, Pager) => {
     const { Link }     = ReactRouter;
     const { Provider } = ReactRedux;
     const TitleLine    = templatePublic.TitleLine,
-          Shortcut     = templatePublic.Shortcut,
-          Pager        = templatePublic.Pager;
+          Shortcut     = templatePublic.Shortcut;
+          // Pager        = templatePublic.Pager;
 
     const NewsItem = (props) => (
         <li>
