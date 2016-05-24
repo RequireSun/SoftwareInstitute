@@ -155,6 +155,32 @@ define([
                         alert('请检查您的网络！');
                     });
                 },
+                onNewsDetailPut: (id, data) => {
+                    const { title, article, category_id } = data;
+
+                    const url = '/api/news?id=' + id;
+
+                    $.ajax({
+                        url,
+                        method: 'PUT',
+                        data: {
+                            title,
+                            article,
+                            categoryId: category_id,
+                        },
+                        dataType: 'json',
+                    }).success(data => {
+                        if (!data['code']) {
+                            // dispatch(Detail.detailSet(data['data']));
+                            alert(1);
+                        } else {
+                            alert(2);
+                            // dispatch(Detail.detailSet({}));
+                        }
+                    }).error((xhr, msg) => {
+                        alert(3);
+                    });
+                },
                 onNewsListGet,
 
                 onResourceListGet: (pageRequest = config.pageRequest, pageSize = config.pageSize) => {

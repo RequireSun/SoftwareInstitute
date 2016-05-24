@@ -80,6 +80,13 @@ define([
         selectCategory (id) {
             this.setState({ category_id: id });
         }
+        submitData () {
+            this.props.onNewsDetailPut(this.state.id, {
+                category_id: this.state.category_id,
+                title      : this.refs.title.value || '',
+                article    : this.refs.article.value || '',
+            });
+        }
         render () {
             return (
                 <div className="panel panel-sharp">
@@ -114,7 +121,7 @@ define([
                                 <div className="col-sm-11">
                                     <div className="dropdown">
                                         <a href="javascript:;" ref="category"
-                                           className="btn btn-primary"
+                                           className="btn btn-dropdown"
                                            data-toggle="dropdown" data-target="#">
                                             请选择
                                         </a>
@@ -147,6 +154,10 @@ define([
                                               className="form-control"
                                               placeholder="article"/>
                                 </div>
+                            </div>
+                            <div className="form-group">
+                                <button onClick={this.submitData.bind(this)}>提交</button>
+                                <button>删除</button>
                             </div>
                         </form>
                     </div>
