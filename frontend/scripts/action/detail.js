@@ -9,5 +9,10 @@ define({
             type: 'NEWS_DETAIL_SET',
             detail,
         };
+    },
+    detailClear () {
+        return {
+            type: 'NEWS_DETAIL_CLEAR',
+        };
     }
 });

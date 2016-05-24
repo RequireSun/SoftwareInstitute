@@ -40,7 +40,14 @@ define([
             const id = +props.query.id;
             if (this.state.id !== id) {
                 this.setState({ id });
-                props.onNewsDetailGet(id);
+                if (0 === id) {
+                    this.refs.title.value = '';
+                    this.refs.article.value = '';
+                    this.setState({ title: '', article: '' });
+                    props.onNewsDetailClear();
+                } else {
+                    props.onNewsDetailGet(id);
+                }
             }
         }
         static getState (state) {
@@ -73,15 +80,21 @@ define([
                 Immutable.Map.isMap(this.state.struct)) {
                 const id = this.state.category_id;
                 const outline = this.state.struct.find(item => item.get('categories').some(category => id == category.get('id')));
-                const category = outline.get('categories').find(category => id == category.get('id'));
-                this.refs.category.innerText = category.get('name') || '';
+                if (!!outline) {
+                    const category = outline.get('categories').find(category => id == category.get('id'));
+                    this.refs.category.innerText = category.get('name') || '';
+                } else {
+                    this.refs.category.innerText = '请选择';
+                }
+            } else {
+                this.refs.category.innerText = '请选择';
             }
         }
         selectCategory (id) {
             this.setState({ category_id: id });
         }
         submitData () {
-            this.props.onNewsDetailPut(this.state.id, {
+            this.props.onNewsDetailUpload(this.state.id, {
                 category_id: this.state.category_id,
                 title      : this.refs.title.value || '',
                 article    : this.refs.article.value || '',
@@ -95,6 +108,7 @@ define([
                         {this.state.update_time ?
                             <small className="pull-right">上次更新时间: {util.convertDateTimeStringFormat(this.state.update_time)}</small> : ''
                         }
+                        <span className="pull-right">&nbsp;&nbsp;</span>
                         {this.state.supervisor_name ?
                             <small className="pull-right">上次更新者: {this.state.supervisor_name}</small> : ''
                         }
@@ -155,10 +169,10 @@ define([
                                               placeholder="article"/>
                                 </div>
                             </div>
-                            <div className="form-group">
-                                <button onClick={this.submitData.bind(this)}>提交</button>
-                                <button>删除</button>
-                            </div>
+                            <button onClick={this.submitData.bind(this)}
+                                    className="btn btn-success pull-right">提交</button>
+                            <button className="btn btn-danger pull-right"
+                                    style={{ margin: '0 .1rem' }}>删除</button>
                         </form>
                     </div>
                 </div>
@@ -297,6 +311,12 @@ define([
             return (
                 <div className="row news-container">
                     <div className="col-sm-3">
+                        <div className="nav-btn-group row">
+                            <Link className="btn btn-blue-dark col-sm-6 pull-right"
+                                  to={{ pathname: "/news/detail", query: { id: 0 } }}>
+                                发布资讯
+                            </Link>
+                        </div>
                         <Classification classification={this.state.classification}
                                         onNewsActiveSet={this.props.onNewsActiveSet}/>
                     </div>

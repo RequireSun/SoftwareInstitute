@@ -35,8 +35,8 @@ exports.get     = (callback, id) => {
 exports.post    = (callback, detail) => {
     !detail && (detail = {});
 
-    if (isNaN(detail['category_id']) || isNaN(detail['supervisor_id'])) {
-        return callback(new Error('Parameter: category_id / supervisor_id must be number!'));
+    if (isNaN(detail['categoryId']) || isNaN(detail['supervisorId'])) {
+        return callback(new Error('Parameter: categoryId / supervisorId must be number!'));
     } else if (('string' !== typeof detail['title'] || !detail['title']) ||
                ('string' !== typeof detail['article'] || !detail['article'])) {
         return callback(new Error('Parameter: title / article should not be empty!'));

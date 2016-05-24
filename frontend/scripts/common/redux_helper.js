@@ -155,14 +155,22 @@ define([
                         alert('请检查您的网络！');
                     });
                 },
-                onNewsDetailPut: (id, data) => {
+                onNewsDetailUpload: (id, data) => {
                     const { title, article, category_id } = data;
 
-                    const url = '/api/news?id=' + id;
+                    let url, method;
+
+                    if (!!id) {
+                        url = `/api/news?id=${id}`;
+                        method = 'PUT';
+                    } else {
+                        url = '/api/news';
+                        method = 'POST';
+                    }
 
                     $.ajax({
                         url,
-                        method: 'PUT',
+                        method,
                         data: {
                             title,
                             article,
@@ -180,6 +188,9 @@ define([
                     }).error((xhr, msg) => {
                         alert(3);
                     });
+                },
+                onNewsDetailClear () {
+                    dispatch(Detail.detailClear());
                 },
                 onNewsListGet,
 
