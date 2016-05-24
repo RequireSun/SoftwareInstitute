@@ -98,8 +98,8 @@ exports.NewsGet = (req, res, next) => {
     Promise.all([
         new Promise(promiseWrap(News.get, id)),
         new Promise(promiseWrap(News.view, id)),
-    ]).then(result => {
-        let newsDetail    = result[0];
+    ]).then(([newsDetail]) => {
+        const { title, article, update_time, page_view, category_id } = newsDetail;
 
         if (!newsDetail) {
             res.jsonErrorParameterWrong('请输入正确的新闻编号！');
@@ -108,12 +108,13 @@ exports.NewsGet = (req, res, next) => {
         }
 
         res.jsonSuccess({
-            id              : id,
-            title           : newsDetail.title,
+            id,
+            title,
             supervisor_name : newsDetail.alias,
-            article         : newsDetail.article,
-            update_time     : newsDetail.update_time,
-            page_view       : newsDetail.page_view
+            article,
+            update_time,
+            page_view,
+            category_id,
         });
         next();
     }).catch(err => {

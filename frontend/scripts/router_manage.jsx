@@ -9,7 +9,7 @@ define([
     'view/news',
 ], (React, ReactRouter, main, index, classification, newsComponents) => {
     const { Router, Route, IndexRoute, hashHistory } = ReactRouter;
-    const { news, newsList } = newsComponents;
+    const { news, newsList, newsDetail } = newsComponents;
 
     return (
         <Router history={hashHistory}>
@@ -19,7 +19,7 @@ define([
                 <Route name="classification" path="classification" component={classification}/>
                 <Route name="news" path="news" component={news}>
                     <Route name="list" path="list/:type" component={newsList}/>
-                    <Route name="detail" path="detail"/>
+                    <Route name="detail" path="detail" component={newsDetail}/>
                 </Route>
             </Route>
         </Router>

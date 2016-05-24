@@ -12,7 +12,7 @@ exports.get     = (callback, id) => {
     }
 
     var queryString =
-        'SELECT news.title, news.article, news.update_time, news.page_view, supervisor.alias ' +
+        'SELECT news.title, news.article, news.update_time, news.page_view, supervisor.alias, news.category_id ' +
         'FROM news LEFT JOIN supervisor ON news.supervisor_id = supervisor.id ' +
         'WHERE news.id = :id AND news.deleted <> TRUE';
 

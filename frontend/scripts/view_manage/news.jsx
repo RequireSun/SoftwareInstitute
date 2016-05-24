@@ -21,10 +21,136 @@ define([
     class NewsDetail extends React.Component {
         constructor (props) {
             super(props);
+            this.state = NewsDetail.getState(props);
+        }
+        componentWillReceiveProps (nextProps) {
+            this.setState(NewsDetail.getState(nextProps)/*, () => this.fillData()*/);
+            this.getData(nextProps);
+        }
+        componentWillMount () {
+            this.getData(this.props);
+        }
+        componentDidMount () {
+            this.fillData();
+        }
+        componentDidUpdate () {
+            this.fillData();
+        }
+        getData (props) {
+            const id = +props.query.id;
+            if (this.state.id !== id) {
+                this.setState({ id });
+                props.onNewsDetailGet(id);
+            }
+        }
+        static getState (state) {
+            const detail = !state || !state['detail'] ||
+                           '[object Object]' !== util.toString(state) ?
+                               {} :
+                               state['detail'];
+            const struct = !state || !state['struct'] ||
+                           '[object Object]' !== util.toString(state) ?
+                               {} :
+                               state['struct'];
+            if (!Immutable.Map.isMap(struct['all'])) {
+                struct['all'] = Immutable.Map();
+            }
+
+            return Object.assign({ struct: struct['all'] }, detail);
+        }
+        fillData () {
+            if (!!this.refs.title.value && this.refs.title.value !== this.state.title) {
+                this.setState({ title: this.refs.title.value });
+            } else {
+                this.refs.title.value = this.state.title   || '';
+            }
+            if (!!this.refs.article.value && this.refs.article.value !== this.state.article) {
+                this.setState({ article: this.refs.article.value });
+            } else {
+                this.refs.article.value = this.state.article   || '';
+            }
+            if ((!!this.state.category_id || 0 === this.state.category_id) &&
+                Immutable.Map.isMap(this.state.struct)) {
+                const id = this.state.category_id;
+                const outline = this.state.struct.find(item => item.get('categories').some(category => id == category.get('id')));
+                const category = outline.get('categories').find(category => id == category.get('id'));
+                this.refs.category.innerText = category.get('name') || '';
+            }
+        }
+        selectCategory (id) {
+            this.setState({ category_id: id });
         }
         render () {
             return (
-                <div></div>
+                <div className="panel panel-sharp">
+                    <div className="panel-heading">
+                        编辑资讯
+                        {this.state.update_time ?
+                            <small className="pull-right">上次更新时间: {util.convertDateTimeStringFormat(this.state.update_time)}</small> : ''
+                        }
+                        {this.state.supervisor_name ?
+                            <small className="pull-right">上次更新者: {this.state.supervisor_name}</small> : ''
+                        }
+                    </div>
+                    <div className="panel-body">
+                        <form className="form-horizontal">
+                            <div className="form-group">
+                                <label htmlFor="titleInput"
+                                       className="control-label col-sm-1">
+                                    标题
+                                </label>
+                                <div className="col-sm-11">
+                                    <input id="titleInput" ref="title"
+                                           type="text"
+                                           className="form-control"
+                                           placeholder="title"/>
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="categorySelect"
+                                       className="control-label col-sm-1">
+                                    分类
+                                </label>
+                                <div className="col-sm-11">
+                                    <div className="dropdown">
+                                        <a href="javascript:;" ref="category"
+                                           className="btn btn-primary"
+                                           data-toggle="dropdown" data-target="#">
+                                            请选择
+                                        </a>
+                                        <ul className="dropdown-menu multi-level">
+                                            {this.state.struct.toList().map(item =>
+                                                <li key={item.get('id')} className="dropdown-submenu">
+                                                    <a href="javascript:;">{item.get('name')}</a>
+                                                    <ul className="dropdown-menu">
+                                                        {item.get('categories').map(category =>
+                                                            <li key={category.get('id')}>
+                                                                <a onClick={this.selectCategory.bind(this, category.get('id'))}
+                                                                   href="javascript:;">{category.get('name')}</a>
+                                                            </li>
+                                                        )}
+                                                    </ul>
+                                                </li>
+                                            )}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="articleInput"
+                                       className="control-label col-sm-1">
+                                    正文
+                                </label>
+                                <div className="col-sm-11">
+                                    <textarea id="articleInput" ref="article"
+                                              rows="10"
+                                              className="form-control"
+                                              placeholder="article"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             );
         }
     }
@@ -122,21 +248,17 @@ define([
         }
     }
 
-    class Classification extends React.Component {
-        render () {
-            return (
-                <nav className="list-group row classification">
-                    {this.props.classification.map(item =>
-                        <ClassificationItem key={item.get('id')}
-                                            id={item.get('id')}
-                                            name={item.get('name')}
-                                            categories={item.get('categories')}
-                                            onNewsActiveSet={this.props.onNewsActiveSet}/>
-                    ).toList()}
-                </nav>
-            );
-        }
-    }
+    const Classification = (props) => (
+        <nav className="list-group row classification">
+            {props.classification.map(item =>
+                <ClassificationItem key={item.get('id')}
+                                    id={item.get('id')}
+                                    name={item.get('name')}
+                                    categories={item.get('categories')}
+                                    onNewsActiveSet={props.onNewsActiveSet}/>
+            ).toList()}
+        </nav>
+    );
     Classification.defaultProps = { classification: Immutable.Map() };
 
     class News extends React.Component {
