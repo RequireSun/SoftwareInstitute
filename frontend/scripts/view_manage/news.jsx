@@ -177,11 +177,13 @@ define([
                             </div>
                             <button onClick={this.submitData.bind(this)}
                                     className="btn btn-success pull-right">提交</button>
-                            <button className="btn btn-danger pull-right"
-                                    style={{ margin: '0 .1rem' }}
-                                    onClick={this.props.onNewsDetailDelete.bind(null, this.state.id)}>
-                                删除
-                            </button>
+                            {0 == this.state.id ? '' :
+                                <button className="btn btn-danger pull-right"
+                                        style={{ margin: '0 .1rem' }}
+                                        onClick={this.props.onNewsDetailDelete.bind(null, this.state.id)}>
+                                    删除
+                                </button>
+                            }
                         </form>
                     </div>
                 </div>

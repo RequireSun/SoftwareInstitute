@@ -17,8 +17,10 @@ A Node.js CMS using MySQL.
    + `npm run develop` 开启监视
    + `npm run stopdev` 结束任务
 10. windows 用户 (分别在两个终端中)
-   + `node app` (最好是 `nodemon app --ignore public/ --ignore frontend/ --ignore log/ --ignore .git --ignore .idea`) 开启后端业务
-   + `gulp watch` 开启前端监视
+   + ~~`node app` (最好是 `nodemon app --ignore public/ --ignore frontend/ --ignore log/ --ignore .git --ignore .idea`) 开启后端业务~~
+   + ~~`gulp watch` 开启前端监视~~
+   + `npm run nodemon` 开启后端服务
+   + `npm run gulp` 开启前端监视
    + 直接结束进程就可以结束任务
 
 ## TODO
@@ -28,7 +30,7 @@ A Node.js CMS using MySQL.
 - [ ] 新闻阅读量防刷
 - [x] 减少包的依赖数量 (必要的话从 sass 迁到 less, 因为 sass 的依赖实在太恶心了)
 - [ ] 文件路径获取
-- [ ] 数据库更新 update_time 的时候要把 pv 的值删掉啊
+- [x] 数据库更新 update_time 的时候要把 pv 的值删掉啊
 - [ ] 输入字符串的长度限制
 
 ## 数据库配置
