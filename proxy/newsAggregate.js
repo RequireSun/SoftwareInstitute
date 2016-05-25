@@ -21,7 +21,8 @@ exports.category        = (callback, id, pageSize, pageRequest) => {
 
     var queryString =
         'SELECT id, title, update_time FROM news ' +
-        'WHERE category_id = :id ORDER BY update_time DESC LIMIT :pageLimit OFFSET :pageOffset';
+        'WHERE category_id = :id AND news.deleted <> TRUE ' +
+        'ORDER BY update_time DESC LIMIT :pageLimit OFFSET :pageOffset';
 
     database.query(queryString, {
         id,
@@ -50,13 +51,13 @@ exports.outline         = (callback, id, pageSize, pageRequest) => {
             'SELECT news.id AS id, title, update_time ' +
             'FROM news INNER JOIN category ON news.category_id = category.id ' +
             'LEFT JOIN outline ON category.outline_id = outline.id ' +
-            'WHERE outline.id IS NULL ' +
+            'WHERE outline.id IS NULL AND news.deleted <> TRUE ' +
             'ORDER BY update_time DESC LIMIT :pageLimit OFFSET :pageOffset';
     } else {
         queryString =
             'SELECT news.id AS id, title, update_time ' +
             'FROM news INNER JOIN category ON news.category_id = category.id ' +
-            'WHERE category.outline_id = :id ' +
+            'WHERE category.outline_id = :id AND news.deleted <> TRUE ' +
             'ORDER BY update_time DESC LIMIT :pageLimit OFFSET :pageOffset';
     }
 
@@ -79,7 +80,7 @@ exports.categoryCount   = (callback, id) => {
         return callback(new Error('Parameter: id must be number!'));
     }
 
-    const queryString = 'SELECT COUNT(*) as categoryCount FROM news WHERE category_id = :id';
+    const queryString = 'SELECT COUNT(*) as categoryCount FROM news WHERE category_id = :id AND news.deleted <> TRUE';
 
     database.query(
         queryString,
@@ -107,7 +108,7 @@ exports.outlineCount    = (callback, id) => {
             'SELECT COUNT(*) as outlineCount ' +
             'FROM news INNER JOIN category ON news.category_id = category.id ' +
             'LEFT JOIN outline ON category.outline_id = outline.id ' +
-            'WHERE outline.id IS NULL';
+            'WHERE outline.id IS NULL AND news.deleted <> TRUE';
     } else {
         queryString =
             'SELECT COUNT(*) as outlineCount ' +
