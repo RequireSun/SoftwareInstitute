@@ -39,7 +39,7 @@ define([
         getData (props) {
             const id = +props.query.id;
             if (this.state.id !== id) {
-                this.setState({ id });
+                // this.setState({ id });
                 if (0 === id) {
                     this.refs.title.value = '';
                     this.refs.article.value = '';
@@ -66,15 +66,17 @@ define([
             return Object.assign({ struct: struct['all'] }, detail);
         }
         fillData () {
-            if (!!this.refs.title.value && this.refs.title.value !== this.state.title) {
+            const recordId = this.refs.id.value,
+                  currentId = this.state.id;
+            if (/*!!this.refs.title.value && */recordId == currentId && this.refs.title.value !== this.state.title) {
                 this.setState({ title: this.refs.title.value });
             } else {
-                this.refs.title.value = this.state.title   || '';
+                this.refs.title.value = this.state.title || '';
             }
-            if (!!this.refs.article.value && this.refs.article.value !== this.state.article) {
+            if (/*!!this.refs.article.value && */recordId == currentId && this.refs.article.value !== this.state.article) {
                 this.setState({ article: this.refs.article.value });
             } else {
-                this.refs.article.value = this.state.article   || '';
+                this.refs.article.value = this.state.article || '';
             }
             if ((!!this.state.category_id || 0 === this.state.category_id) &&
                 Immutable.Map.isMap(this.state.struct)) {
@@ -88,6 +90,9 @@ define([
                 }
             } else {
                 this.refs.category.innerText = '请选择';
+            }
+            if (recordId != currentId) {
+                this.refs.id.value = currentId;
             }
         }
         selectCategory (id) {
@@ -115,6 +120,7 @@ define([
                     </div>
                     <div className="panel-body">
                         <form className="form-horizontal">
+                            <input type="hidden" ref="id"/>
                             <div className="form-group">
                                 <label htmlFor="titleInput"
                                        className="control-label col-sm-1">
@@ -172,7 +178,10 @@ define([
                             <button onClick={this.submitData.bind(this)}
                                     className="btn btn-success pull-right">提交</button>
                             <button className="btn btn-danger pull-right"
-                                    style={{ margin: '0 .1rem' }}>删除</button>
+                                    style={{ margin: '0 .1rem' }}
+                                    onClick={this.props.onNewsDetailDelete.bind(null, this.state.id)}>
+                                删除
+                            </button>
                         </form>
                     </div>
                 </div>

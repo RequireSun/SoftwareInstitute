@@ -192,6 +192,25 @@ define([
                 onNewsDetailClear () {
                     dispatch(Detail.detailClear());
                 },
+                onNewsDetailDelete (id) {
+                    const url = `/api/news?id=${id}`;
+
+                    $.ajax({
+                        url,
+                        method: 'DELETE',
+                        dataType: 'json',
+                    }).success(data => {
+                        if (!data['code']) {
+                            // dispatch(Detail.detailSet(data['data']));
+                            alert(1);
+                        } else {
+                            alert(2);
+                            // dispatch(Detail.detailSet({}));
+                        }
+                    }).error((xhr, msg) => {
+                        alert(3);
+                    });
+                },
                 onNewsListGet,
 
                 onResourceListGet: (pageRequest = config.pageRequest, pageSize = config.pageSize) => {
