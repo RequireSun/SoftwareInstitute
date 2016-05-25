@@ -21,10 +21,52 @@ define([
     class ResourceDetail extends React.Component {
         constructor (props) {
             super(props);
+            this.state = ResourceDetail.getState(props);
+        }
+        componentWillReceiveProps (nextProps) {
+            this.setState(ResourceDetail.getState(nextProps));
+            this.getData(nextProps);
+        }
+        componentWillMount () {
+            this.getData(this.props);
+        }
+        getData (props) {
+            const id = +props.query.id;
+            if (this.state.id !== id) {
+                if (0 === id) {
+                    this.refs.title.value = '';
+                    this.setState({ title: '' });
+                    props.onResourceDetailClear();
+                } else {
+                    props.onResourceDetailGet(id);
+                }
+            }
+        }
+        static getState (state) {
+            const resource = !state || !state['resource'] ||
+                 '[object Object]' !== util.toString(state) ?
+                     {} :
+                     state['resource'];
+
+            return Object.assign({}, resource);
         }
         render () {
             return (
                 <div className="row resource-container">
+                    <div className="col-xs-12">
+                        <div className="panel panel-sharp">
+                            <div className="panel-heading">
+                                编辑资源
+                                {this.state.update_time ?
+                                    <small className="pull-right">上次更新时间: {util.convertDateTimeStringFormat(this.state.update_time)}</small> : ''
+                                }
+                                <span className="pull-right">&nbsp;&nbsp;</span>
+                                {this.state.supervisor_name ?
+                                    <small className="pull-right">上次更新者: {this.state.supervisor_name}</small> : ''
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
             );
         }
