@@ -13,7 +13,7 @@ define({
         link: '/classification',
     },{
         name: '资源管理',
-        link: '/resource',
+        link: '/resource/list',
     },{
         name: '样式管理',
         link: '/style',

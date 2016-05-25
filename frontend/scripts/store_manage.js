@@ -8,10 +8,11 @@ define([
     'reducer/struct',
     'reducer/news',
     'reducer/detail',
+    'reducer/resource',
     'middleware/struct',
-], (Redux, struct, news, detail, mStruct) => {
+], (Redux, struct, news, detail, resource, mStruct) => {
     const createStoreWithMiddleware = Redux.applyMiddleware(mStruct)(Redux.createStore);
-    const store = createStoreWithMiddleware(Redux.combineReducers({ struct, news, detail }));
+    const store = createStoreWithMiddleware(Redux.combineReducers({ struct, news, detail, resource }));
     window['store'] = store;
     return store;
 });

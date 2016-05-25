@@ -205,9 +205,9 @@ define([
         }
         getData (props) {
             const type        = props.params.type        || 'category',
-                  id          = +props.query.id,
-                  pageRequest = +props.query.pageRequest || +config.pageRequest,
-                  pageSize    = +props.query.pageSize    || +config.pageSize;
+                id          = +props.query.id,
+                pageRequest = +props.query.pageRequest || +config.pageRequest,
+                pageSize    = +props.query.pageSize    || +config.pageSize;
             if (this.state.type !== type || this.state.id !== id ||
                 this.state.pageRequest !== pageRequest ||
                 this.state.pageSize !== pageSize) {

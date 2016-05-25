@@ -1,6 +1,7 @@
 'use strict';
 
 define([
+    'immutable',
     'react',
     'react-redux',
     'common/redux_helper',
@@ -8,7 +9,7 @@ define([
     'root/store',
     'common/util',
     'view/public',
-], function (React, ReactRedux, reduxHelper, config, store, commonUtil, templatePublic) {
+], function (Immutable, React, ReactRedux, reduxHelper, config, store, commonUtil, templatePublic) {
     const { Provider } = ReactRedux;
     var { TitleLine, Shortcut, Pager } = templatePublic;
 
@@ -49,9 +50,12 @@ define([
                              '[object Object]' !== commonUtil.toString(state) ?
                                  {} :
                                  state['resource'];
-            if (!Array.isArray(resource['list'])) {
-                resource['list'] = [];
+            if (!Immutable.List.isList(resource['list'])) {
+                resource['list'] = Immutable.List();
             }
+            // if (!Array.isArray(resource['list'])) {
+            //     resource['list'] = [];
+            // }
             if (isNaN(resource['count'])) {
                 resource['count'] = 0;
             }
@@ -81,7 +85,8 @@ define([
                             <div className="newsList-container col-xs-12 col-sm-9 col-sm-offset-3">
                                 <ul className="newsList-box">
                                     {this.state.list.map(item =>
-                                        <ResourceItem key={item['id']} {...item}/>
+                                        <ResourceItem key={item.get('id')} title={item.get('title')}
+                                                      path={item.get('path')} update_time={item.get('update_time')}/>
                                     )}
                                 </ul>
                                 <div className="pull-right">
