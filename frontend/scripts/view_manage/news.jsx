@@ -263,17 +263,19 @@ define([
             e.stopPropagation();
         }
         render () {
+            //onClick={this.props.onNewsActiveSet.bind(null, { id: this.props.id, type: 'outline' })}
             return (
                 <li href="javascript:;" className="list-group-item">
-                    <a href="javascript:;" onClick={this.props.onNewsActiveSet.bind(null, { id: this.props.id, type: 'outline' })}>
+                    <Link href="javascript:;"
+                          to={{ pathname: '/news/list/outline', query: { id: this.props.id, }}}>
                         {this.props.name}
                         <span onClick={this.openChild.bind(this)}
                               className={'pull-right glyphicon ' + (this.state.open ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down')}></span>
-                    </a>
+                    </Link>
                     <div className={'list-group' + (this.state.open ? '' : ' hidden')}>
                         {this.props.categories.map(category =>
                             <Link href="javascript:;" className="list-group-item"
-                                  to={{ pathname: "/news/list/category", query: { id: category.get('id') }}}
+                                  to={{ pathname: '/news/list/category', query: { id: category.get('id') }}}
                                   key={category.get('id')} >
                                 {category.get('name')}
                             </Link>
