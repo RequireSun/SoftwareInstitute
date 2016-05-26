@@ -10,5 +10,9 @@ define({
             list,
             count,
         };
-    }
+    },
+    detailSet: (detail) => ({
+        type: 'RESOURCE_DETAIL_SET',
+        detail,
+    }),
 });

@@ -191,7 +191,7 @@ exports.NewsPut = (req, res, next) => {
 };
 
 exports.NewsDelete = (req, res, next) => {
-    let id = +req.query.id;
+    const id = +req.query.id;
 
     if (isNaN(id)) {
         res.jsonErrorParameterMissing('id 不能为空！');

@@ -1,7 +1,60 @@
 'use strict';
 
-let Resource = require('../proxy').Resource;
-let promiseWrap = require('../common/tool').promiseWrap;
+const Resource = require('../proxy').Resource;
+const promiseWrap = require('../common/tool').promiseWrap;
+
+exports.get = (req, res, next) => {
+    const id = +req.query.id;
+
+    if (isNaN(id)) {
+        res.jsonErrorParameterMissing('请输入正确的新闻编号！');
+        next();
+        return;
+    }
+
+    return new Promise(promiseWrap(Resource.get, id)).
+        then((resourceDetail) => {
+            const { title, path, update_time } = resourceDetail;
+
+            if (!resourceDetail) {
+                res.jsonErrorParameterWrong('请输入正确的新闻编号！');
+                next();
+                return;
+            }
+
+            res.jsonSuccess({
+                id,
+                title,
+                path,
+                update_time,
+            });
+            next();
+        }).
+        catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
+            next();
+        });
+};
+
+exports.delete = (req, res, next) => {
+    const id = +req.query.id;
+
+    if (isNaN(id)) {
+        res.jsonErrorParameterMissing('id 不能为空！');
+        next();
+        return ;
+    }
+
+    return new Promise(promiseWrap(Resource.delete, id)).
+        then(result => {
+            res.jsonSuccess(result);
+            next();
+        }).
+        catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
+            next();
+        });
+};
 
 exports.ListGet = function (req, res, next) {
     let pageSize    = +req.query.pageSize;
@@ -17,13 +70,13 @@ exports.ListGet = function (req, res, next) {
         return;
     }
 
-    Promise.all([
-        new Promise(promiseWrap(Resource.listGet, pageSize, pageRequest)),
+    return Promise.all([
+        new Promise(promiseWrap(Resource.list, pageSize, pageRequest)),
         new Promise(promiseWrap(Resource.listCount)),
-    ]).then(result => {
-        let list    = result[0] || [],
-            amount  = result[1];
-        let count   = Math.ceil(amount / pageSize);
+    ]).then(([list = [], amount = 0]) => {
+        // let list    = result[0] || [],
+        //     amount  = result[1];
+        const count   = Math.ceil(amount / pageSize);
 
         res.jsonSuccess({
             list,

@@ -213,6 +213,26 @@ define([
                 },
                 onNewsListGet,
 
+                onResourceDetailGet (id) {
+                    const url = '/api/resource';
+                    $.ajax({
+                        url,
+                        method: 'GET',
+                        data: {
+                            id,
+                        },
+                        dataType: 'json',
+                    }).success(data => {
+                        if (!data['code']) {
+                            dispatch(Resource.detailSet(data['data']));
+                        } else {
+                            dispatch(Resource.detailSet({}));
+                        }
+                    }).error((xhr, msg) => {
+                        // console.log(msg);
+                        alert('请检查您的网络！');
+                    });
+                },
                 onResourceListGet: (pageRequest = config.pageRequest, pageSize = config.pageSize) => {
                     const url = '/api/resourceList';
                     $.ajax({

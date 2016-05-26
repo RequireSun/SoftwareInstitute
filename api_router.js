@@ -67,6 +67,9 @@ router.delete('/style', style.delete);
 router.get('/styleAll', style.getAll);
 router.put('/styleAll', style.putAll);
 // 资源列表
+router.get   ('/resource', resource.get);
+router.delete('/resource', resource.delete);
+
 router.get('/resourceList', resource.ListGet);
 
 router.get   ('/comment', comment.get);

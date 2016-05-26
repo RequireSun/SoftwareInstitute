@@ -68,12 +68,12 @@ define([
         fillData () {
             const recordId = this.refs.id.value,
                   currentId = this.state.id;
-            if (/*!!this.refs.title.value && */recordId == currentId && this.refs.title.value !== this.state.title) {
+            if (recordId == currentId && this.refs.title.value !== this.state.title) {
                 this.setState({ title: this.refs.title.value });
             } else {
                 this.refs.title.value = this.state.title || '';
             }
-            if (/*!!this.refs.article.value && */recordId == currentId && this.refs.article.value !== this.state.article) {
+            if (recordId == currentId && this.refs.article.value !== this.state.article) {
                 this.setState({ article: this.refs.article.value });
             } else {
                 this.refs.article.value = this.state.article || '';
