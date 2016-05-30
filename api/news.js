@@ -209,36 +209,3 @@ exports.NewsDelete = (req, res, next) => {
             next();
         });
 };
-
-// 样式内填充数据 (导航栏, 快捷入口, 脚) 获取
-// exports.StyleCategory = function (req, res, next) {
-//     var categoryType = req.query.categoryType;
-//
-//     if ('string' !== typeof categoryType || 0 === categoryType.length) {
-//         return res.json({ error: '请输入正确的样式类型！' });
-//     }
-//
-//     News.getStyleCategory(categoryType, function (err, result) {
-//         if (err) {
-//             return next(err);
-//         }
-//         res.json(result);
-//         next();
-//     })
-// };
-// 样式内填充数据 (导航栏, 快捷入口, 脚) 获取
-// exports.StyleOutline = function (req, res, next) {
-//     var outlineType = req.query.outlineType;
-//
-//     if ('string' !== typeof outlineType || 0 === outlineType.length) {
-//         return res.json({ error: '请输入正确的样式类型！' });
-//     }
-//
-//     News.getStyleOutline(outlineType, function (err, result) {
-//         if (err) {
-//             return next(err);
-//         }
-//         res.json(result);
-//         next();
-//     })
-// };

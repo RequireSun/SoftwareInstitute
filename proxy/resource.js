@@ -29,7 +29,32 @@ exports.get     = (callback, id) => {
     );
 };
 
-exports.post    = (callback) => {};
+exports.post    = (callback, resource = {}) => {
+    if (('string' !== typeof resource['title'] || !resource['title']) ||
+        ('string' !== typeof resource['path'] || !resource['path'])) {
+        return callback(new Error('Parameter: title / path should not be empty!'));
+    } else if (!(50 > resource['path'].length) || !(512 > resource['path'].length)) {
+        return callback(new Error('Parameter: title / path out of max size!'))
+    }
+
+    const queryString =
+        'INSERT INTO `resource` (`title`, `path`)' +
+        'VALUES (:title, :path)';
+
+    database.query(
+        queryString,
+        resource,
+        (err, result) => {
+            if (err) {
+                callback(err);
+            } else if (!result || !result['affectedRows']) {
+                callback(new Error('Insert failed!'));
+            } else {
+                callback(null, result['insertId']);
+            }
+        }
+    );
+};
 
 exports.put     = (callback) => {};
 

@@ -3,7 +3,14 @@
  */
 'use strict';
 
-define(['immutable'], Immutable => (state = { list: Immutable.List(), count: 0, }, action) => {
+define(['immutable'], Immutable => (state = {
+    list: Immutable.List(),
+    count: 0,
+    id: 0,
+    title: '',
+    path: '',
+    update_time: 0,
+}, action) => {
     switch (action.type) {
         case 'RESOURCE_LIST_SET':
             const { list, count } = action;

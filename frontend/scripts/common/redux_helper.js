@@ -233,6 +233,14 @@ define([
                         alert('请检查您的网络！');
                     });
                 },
+                onResourceDetailClear () {
+                    dispatch(Resource.detailSet({
+                        id: 0,
+                        title: '',
+                        path: '',
+                        update_time: 0,
+                    }));
+                },
                 onResourceListGet: (pageRequest = config.pageRequest, pageSize = config.pageSize) => {
                     const url = '/api/resourceList';
                     $.ajax({

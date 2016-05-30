@@ -70,9 +70,14 @@ define([
                             </div>
                             <div className="panel-body">
                                 <form ref="form" className="form-horizontal"
-                                      action="/api/resource"
-                                      method={!!this.state.id ? 'PUT' : 'POST'}>
+                                      action="/api/resource" method="POST"
+                                      encType="multipart/form-data"
+                                      target="target_frame">
+                                    <iframe name="target_frame" frameborder="0"
+                                            style={{ display: 'none' }}/>
                                     <input type="hidden" ref="id"/>
+                                    <input type="hidden" name="_method"
+                                           value={!!this.state.id ? 'PUT' : 'POST'}/>
                                     <div className="form-group">
                                         <label htmlFor="titleInput"
                                                className="control-label col-sm-1">
@@ -80,7 +85,7 @@ define([
                                         </label>
                                         <div className="col-sm-11">
                                             <input id="titleInput" ref="title"
-                                                   type="text"
+                                                   type="text" name="title"
                                                    className="form-control"
                                                    placeholder="title"/>
                                         </div>
@@ -92,7 +97,7 @@ define([
                                         </label>
                                         <div className="col-sm-11">
                                             <input id="fileInput" ref="file"
-                                                   type="file"
+                                                   type="file" name="file"
                                                    className="form-control"
                                                    placeholder="file"/>
                                         </div>

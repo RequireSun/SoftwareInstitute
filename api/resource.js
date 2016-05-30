@@ -3,7 +3,7 @@
 const Resource = require('../proxy').Resource;
 const promiseWrap = require('../common/tool').promiseWrap;
 
-exports.get = (req, res, next) => {
+exports.get     = (req, res, next) => {
     const id = +req.query.id;
 
     if (isNaN(id)) {
@@ -36,7 +36,29 @@ exports.get = (req, res, next) => {
         });
 };
 
-exports.delete = (req, res, next) => {
+exports.post    = (req, res, next) => {
+    console.log(req.file);
+    const title = req.body.title,
+          path  = req.file.name;
+
+    if (!title || !path) {
+        res.jsonErrorParameterMissing('标题 / 文件不能为空！');
+        next();
+        return ;
+    }
+
+    new Promise(promiseWrap(Resource.post, { title, path })).
+        then(result => {
+            res.jsonSuccess(result);
+            next();
+        }).
+        catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
+            next();
+        });
+};
+
+exports.delete  = (req, res, next) => {
     const id = +req.query.id;
 
     if (isNaN(id)) {
