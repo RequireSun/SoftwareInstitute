@@ -241,6 +241,34 @@ define([
                         update_time: 0,
                     }));
                 },
+                onResourceUpload (form) {
+                    // 自带防重复提交
+                    if (!window.frames['target_frame']) {
+                        // 构建 iframe
+                        const iframe = document.createElement('iframe');
+                        iframe.name = 'target_frame';
+                        iframe.style = 'display:none;';
+                        // 插入 form
+                        form.appendChild(iframe);
+                        form.target = 'target_frame';
+                        switch (form['_method']['value']) {
+                            case 'PUT':
+                                form.action = `/api/resource?id=${form['id']['value']}`;
+                                break;
+                            case 'POST':
+                            default:
+                                form.action = '/api/resource';
+                                break;
+                        }
+
+                        iframe.onload = () => {
+                            console.log(JSON.parse(iframe.contentDocument.body.innerText));
+                            form.removeChild(iframe);
+                            form.removeAttribute('target');
+                        };
+                        form.submit();
+                    }
+                },
                 onResourceListGet: (pageRequest = config.pageRequest, pageSize = config.pageSize) => {
                     const url = '/api/resourceList';
                     $.ajax({

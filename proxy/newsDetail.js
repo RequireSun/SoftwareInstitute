@@ -2,9 +2,9 @@
  * Created by KelvinSen on 2016/3/17.
  */
 'use strict';
-let database = require('../common/database');
-let formatUpdateParameters = require('../common/tool').formatUpdateParameters;
-let formatDateTime = require('../common/tool').formatDateTime;
+const database = require('../common/database');
+const formatUpdateParameters = require('../common/tool').formatUpdateParameters;
+const formatDateTime = require('../common/tool').formatDateTime;
 
 exports.get     = (callback, id) => {
     if ('number' !== typeof id) {
@@ -63,9 +63,7 @@ exports.post    = (callback, detail) => {
     );
 };
 
-exports.put     = (callback, id, detail) => {
-    !detail && (detail = {});
-
+exports.put     = (callback, id, detail = {}) => {
     if (isNaN(id)) {
         return callback(new Error('Parameter: id must be number!'));
     } else if ((undefined !== detail['categoryId'] && isNaN(+detail['categoryId'])) ||
@@ -107,7 +105,7 @@ exports.put     = (callback, id, detail) => {
                 callback(null, id);
             }
         }
-    )
+    );
 };
 
 exports.delete  = (callback, id) => {

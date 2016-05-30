@@ -37,7 +37,6 @@ exports.get     = (req, res, next) => {
 };
 
 exports.post    = (req, res, next) => {
-    console.log(req.file);
     const title = req.body.title,
           path  = req.file.name;
 
@@ -48,6 +47,37 @@ exports.post    = (req, res, next) => {
     }
 
     new Promise(promiseWrap(Resource.post, { title, path })).
+        then(result => {
+            res.jsonSuccess(result);
+            next();
+        }).
+        catch(err => {
+            res.jsonErrorParameterWrong(err['message']);
+            next();
+        });
+};
+
+exports.put     = (req, res, next) => {
+    let id    = +req.query.id,
+        title = req.body.title,
+        path  = req.file.name;
+
+    if (isNaN(id)) {
+        res.jsonErrorParameterMissing('id 不能为空！');
+        next();
+        return;
+    } else if ((undefined !== title && !title) ||
+        (undefined !== path && !path)) {
+        res.jsonErrorParameterMissing('标题 / 路径不能为空字符串！');
+        next();
+        return;
+    }
+
+    let resource = {};
+    title && (resource['title'] = title);
+    path  && (resource['path']  = path);
+
+    return new Promise(promiseWrap(Resource.put, id, resource)).
         then(result => {
             res.jsonSuccess(result);
             next();

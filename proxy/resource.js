@@ -2,6 +2,7 @@
 
 const database    = require('../common/database');
 const formatDateTime = require('../common/tool').formatDateTime;
+const formatUpdateParameters = require('../common/tool').formatUpdateParameters;
 
 exports.get     = (callback, id) => {
     if (isNaN(id)) {
@@ -56,7 +57,48 @@ exports.post    = (callback, resource = {}) => {
     );
 };
 
-exports.put     = (callback) => {};
+exports.put     = (callback, id, resource = {}) => {
+    if (isNaN(id)) {
+        return callback(new Error('Parameter: id must be number!'));
+    } else if ((undefined !== resource['title'] && ('string' !== typeof resource['title'] || !resource['title'])) ||
+        (undefined !== resource['path'] && ('string' !== typeof resource['path'] || !resource['path']))) {
+        return callback(new Error('Parameter: title / path should not be empty string!'));
+    } else if (undefined !== resource['title'] && ('string' !== typeof resource['title'] || !(50 > resource['title'].length))) {
+        return callback(new Error('Parameter: title max size is 50!'))
+    } else if (undefined !== resource['path'] && ('string' !== typeof resource['path'] || !(512 > resource['path'].length))) {
+        return callback(new Error('Parameter: path max size is 512!'))
+    }
+
+    // 构建更新数组
+    const retObj = formatUpdateParameters(resource, {
+        title: 'title',
+        path : 'path',
+    });
+    let queryArray = retObj['queryArray'];
+    resource       = retObj['processedParams'];
+    // 空
+    if (!queryArray.length) {
+        return callback(new Error('Nothing to update!'));
+    }
+
+    resource['id'] = +id;
+
+    const queryString = `UPDATE \`resource\` SET ${queryArray.join(',')} WHERE \`id\` = :id`;
+
+    return database.query(
+        queryString,
+        resource,
+        (err, result) => {
+            if (err) {
+                callback(err);
+            } else if (!result || !result['affectedRows']) {
+                callback(new Error('Edit failed!'));
+            } else {
+                callback(null, id);
+            }
+        }
+    );
+};
 
 exports.delete  = (callback, id) => {
     if (isNaN(id)) {

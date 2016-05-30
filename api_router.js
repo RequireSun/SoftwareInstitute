@@ -18,7 +18,7 @@ let style           = require('./api/style');
 let comment         = require('./api/comment');
 // 引入 middleware
 // let middlewareName = require('pathToMiddleware');
-let config          = require('./config');
+// let config          = require('./config');
 let whiteList       = require('./whiteList') || {};
 let hasOwnProperty  = require('./common/tool').hasOwnProperty;
 
@@ -69,6 +69,7 @@ router.put('/styleAll', style.putAll);
 // 资源列表
 router.get   ('/resource', resource.get);
 router.post  ('/resource', resource.post);
+router.put   ('/resource', resource.put);
 router.delete('/resource', resource.delete);
 
 router.get('/resourceList', resource.ListGet);

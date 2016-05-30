@@ -30,6 +30,12 @@ define([
         componentWillMount () {
             this.getData(this.props);
         }
+        componentDidMount () {
+            this.fillData();
+        }
+        componentDidUpdate () {
+            this.fillData();
+        }
         getData (props) {
             const id = +props.query.id;
             if (this.state.id !== id) {
@@ -50,8 +56,27 @@ define([
 
             return Object.assign({}, resource);
         }
-        submitData () {
-            this.refs.form.submit();
+        fillData () {
+            const recordId = this.refs.id.value,
+                  currentId = this.state.id;
+            if (recordId == currentId && this.refs.title.value !== this.state.title) {
+                this.setState({ title: this.refs.title.value });
+            } else {
+                this.refs.title.value = this.state.title || '';
+            }
+            // TODO: 这里怎么改
+            // if (recordId == currentId && this.refs.article.value !== this.state.article) {
+            //     this.setState({ article: this.refs.article.value });
+            // } else {
+            //     this.refs.article.value = this.state.article || '';
+            // }
+            if (recordId != currentId) {
+                this.refs.id.value = currentId;
+            }
+        }
+        submitData (e) {
+            this.props.onResourceUpload(this.refs.form);
+            e.preventDefault();
         }
         render () {
             return (
@@ -71,11 +96,10 @@ define([
                             <div className="panel-body">
                                 <form ref="form" className="form-horizontal"
                                       action="/api/resource" method="POST"
-                                      encType="multipart/form-data"
-                                      target="target_frame">
-                                    <iframe name="target_frame" frameborder="0"
-                                            style={{ display: 'none' }}/>
-                                    <input type="hidden" ref="id"/>
+                                      encType="multipart/form-data">
+                                    {/*<iframe name="target_frame" frameborder="0"
+                                            style={{ display: 'none' }} onLoad={function () { console.log(111); }}/>*/}
+                                    <input type="hidden" ref="id" name="id"/>
                                     <input type="hidden" name="_method"
                                            value={!!this.state.id ? 'PUT' : 'POST'}/>
                                     <div className="form-group">
