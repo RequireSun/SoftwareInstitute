@@ -25,6 +25,7 @@
     "npm": ">=3.0.0"
   },
   "dependencies": {
+    "archiver": "^1.0.0",
     "async": "^2.0.0-rc.3",
     "body-parser": "^1.13.1",
     "colors": "^1.1.2",
@@ -36,9 +37,11 @@
     "eventproxy": "^0.3.4",
     "express": "^4.13.0",
     "express-session": "^1.11.3",
+    "formidable": "^1.0.17",
     "graceful-fs": "^4.0.0",
     "loader": "^2.1.0",
     "lodash": "^3.9.3",
+    "method-override": "^2.3.6",
     "mysql": "^2.7.0",
     "response-time": "^2.3.1",
     "validator": "^3.41.2"

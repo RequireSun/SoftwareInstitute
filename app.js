@@ -6,7 +6,7 @@
  */
 'use strict';
 
-let config = require('./config');
+const config = require('./config');
 
 // TODO 部署的时候记得用 newrelic 性能检测（配置文件里还有相应配置）
 // if (!config.debug) {
@@ -17,11 +17,11 @@ let config = require('./config');
 
 // 用于更改命令行显示的字色
 require('colors');
-let path        = require('path');
+const path        = require('path');
 // 一个用来压缩、加载 css 的插件
 // let Loader      = require('loader');
-let express     = require('express');
-let session     = require('express-session');
+const express     = require('express');
+const session     = require('express-session');
 // 用来验证登陆
 //let passport    = require('passport');
 
@@ -30,8 +30,8 @@ let session     = require('express-session');
 
 ////////// 引入自定 router 开始 //////////
 
-let webRouter   = require('./web_router');
-let apiRouter   = require('./api_router');
+const webRouter   = require('./web_router');
+const apiRouter   = require('./api_router');
 
 ////////// 引入自定 router 结束 //////////
 
@@ -44,34 +44,35 @@ let apiRouter   = require('./api_router');
 // lodash 常用函数库
 // let _                   = require('lodash');
 // 用于解析请求体
-let bodyParser          = require('body-parser');
+const bodyParser          = require('body-parser');
 // 验证用的模块，必须在 session 模块之后引用
-let csurf               = require('csurf');
+const csurf               = require('csurf');
 // http 压缩用的模块（deflate，gzip）
 //let compression         = require('compression');
 // 用于大文件上传
 //let busboy              = require('connect-busboy');
 // 用于在开发环境下打印错误信息
-let errorhandler        = require('errorhandler');
+const errorhandler        = require('errorhandler');
 // 用于支持 CORS 跨域
-let cors                = require('cors');
-let requestLog          = require('./middlewares/request_log');
-let renderPageMiddleware= require('./middlewares/render_page');
-let renderJsonMiddleware= require('./middlewares/render_json');
+const cors                = require('cors');
+const requestLog          = require('./middlewares/request_log');
+const renderPageMiddleware= require('./middlewares/render_page');
+const renderJsonMiddleware= require('./middlewares/render_json');
 //let renderMiddleware    = require('./middlewares/render');
-let logger              = require('./common/logger');
+const upload              = require('./middlewares/upload');
+const logger              = require('./common/logger');
 
 // 引入的 ejs 模块并自定义了一些 filter， 引入顺序不能错
-let ejs                 = require('ejs');
+const ejs                 = require('ejs');
 require('./common/ejs_filter');
 
 ////////// 引入中间件 结束 //////////
 
 
 // 静态文件目录
-let staticDir   = path.join(__dirname, 'public');
+const staticDir   = path.join(__dirname, 'public');
 // assets
-let assets      = {};
+const assets      = {};
 
 // 非 debug 模式下开启压缩
 // if (config.mini_assets) {
@@ -114,8 +115,6 @@ app.use('/public', express.static(staticDir));
 app.use(require('response-time')());
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.urlencoded({ extended: true }));
-// 添加额外的支持头，如 PUT DELETE
-//app.use(require('method-override')());
 app.use(require('cookie-parser')(config.session_secret));
 //app.use(compression());
 app.use(session({
@@ -128,9 +127,17 @@ app.use(session({
    saveUninitialized: true,
 }));
 
-
 //app.use(passport.initiallize());
-
+// 添加上传文件中中间件
+app.use(upload);
+// 添加额外的支持头，如 PUT DELETE
+app.use(require('method-override')(req => {
+    if (req.body && 'object' === typeof req.body && '_method' in req.body) {
+        const method = req.body._method;
+        delete req.body._method;
+        return method
+    }
+}));
 
 // 自定义中间件
 // app.use(auth.authUser);

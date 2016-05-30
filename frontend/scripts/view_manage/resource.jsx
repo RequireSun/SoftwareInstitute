@@ -50,6 +50,9 @@ define([
 
             return Object.assign({}, resource);
         }
+        submitData () {
+            this.refs.form.submit();
+        }
         render () {
             return (
                 <div className="row resource-container">
@@ -64,6 +67,46 @@ define([
                                 {this.state.supervisor_name ?
                                     <small className="pull-right">上次更新者: {this.state.supervisor_name}</small> : ''
                                 }
+                            </div>
+                            <div className="panel-body">
+                                <form ref="form" className="form-horizontal"
+                                      action="/api/resource"
+                                      method={!!this.state.id ? 'PUT' : 'POST'}>
+                                    <input type="hidden" ref="id"/>
+                                    <div className="form-group">
+                                        <label htmlFor="titleInput"
+                                               className="control-label col-sm-1">
+                                            标题
+                                        </label>
+                                        <div className="col-sm-11">
+                                            <input id="titleInput" ref="title"
+                                                   type="text"
+                                                   className="form-control"
+                                                   placeholder="title"/>
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="fileInput"
+                                               className="control-label col-sm-1">
+                                            文件
+                                        </label>
+                                        <div className="col-sm-11">
+                                            <input id="fileInput" ref="file"
+                                                   type="file"
+                                                   className="form-control"
+                                                   placeholder="file"/>
+                                        </div>
+                                    </div>
+                                    <button onClick={this.submitData.bind(this)}
+                                            className="btn btn-success pull-right">提交</button>
+                                    {0 == this.state.id ? '' :
+                                        <button className="btn btn-danger pull-right"
+                                                style={{ margin: '0 .1rem' }}
+                                                onClick={this.props.onNewsDetailDelete.bind(null, this.state.id)}>
+                                            删除
+                                        </button>
+                                    }
+                                </form>
                             </div>
                         </div>
                     </div>
