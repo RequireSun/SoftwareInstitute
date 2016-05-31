@@ -163,7 +163,7 @@ app.get('/err', function (req, res, next) {
 
 // 设置辅助函数
 Object.assign(app.locals, {
-    config: config,
+    config: config,     // 配置
     // Loader: Loader,
     assets: assets,
 });

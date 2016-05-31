@@ -11,11 +11,11 @@ define([
     'view/public',
 ], function (Immutable, React, ReactRedux, reduxHelper, config, store, commonUtil, templatePublic) {
     const { Provider } = ReactRedux;
-    var { TitleLine, Shortcut, Pager } = templatePublic;
+    const { TitleLine, Shortcut, Pager } = templatePublic;
 
     const ResourceItem = (props) => (
         <li>
-            <a href={`/public/upload/${props['path']}`}>
+            <a href={`${uploadUrl}${props['path']}`}>
                 {props['title']}
                 <span className="pull-right">
                     {commonUtil.convertDateTimeStringToDate(props['update_time'])}
@@ -53,9 +53,6 @@ define([
             if (!Immutable.List.isList(resource['list'])) {
                 resource['list'] = Immutable.List();
             }
-            // if (!Array.isArray(resource['list'])) {
-            //     resource['list'] = [];
-            // }
             if (isNaN(resource['count'])) {
                 resource['count'] = 0;
             }

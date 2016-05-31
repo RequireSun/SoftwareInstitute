@@ -119,10 +119,18 @@ define([
                                             文件
                                         </label>
                                         <div className="col-sm-11">
-                                            <input id="fileInput" ref="file"
-                                                   type="file" name="file"
-                                                   className="form-control"
-                                                   placeholder="file"/>
+                                            <div className="input-group">
+                                                <span className="input-group-btn">
+                                                    <a className="btn btn-primary"
+                                                       href={uploadUrl + this.state.path}
+                                                       target="_blank">当前文件下载</a>
+                                                    <span className="btn">新文件上传</span>
+                                                </span>
+                                                <input id="fileInput" ref="file"
+                                                       type="file" name="file"
+                                                       className="form-control"
+                                                       placeholder="file"/>
+                                            </div>
                                         </div>
                                     </div>
                                     <button onClick={this.submitData.bind(this)}

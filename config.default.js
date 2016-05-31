@@ -105,7 +105,7 @@ var config = {
     // 文件上传配置
     upload: {
         path: path.join(__dirname, 'public/upload/'),
-        url: 'public/upload/'
+        url: '/public/upload/'
     },
 
     // 右上角的导航区
