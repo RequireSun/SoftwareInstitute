@@ -1,6 +1,7 @@
 'use strict';
 
 define([
+    'immutable',
     'react',
     'ReactRouter',
     'react-redux',
@@ -8,13 +9,14 @@ define([
     'common/redux_helper',
     'root/config',
     'root/store',
-    'action/news',
-    'action/resource',
-], function (React, Router, ReactRedux, commonUtil, reduxHelper, config, store, actionNews, actionResource) {
+], function (
+    Immutable, React, Router, ReactRedux,
+    util, reduxHelper, config, store
+) {
     const { Link }      = Router;
     const { Provider }  = ReactRedux;
-    const scrollSize    = config['style'] && config['style']['scroll'] ? config['style']['scroll'] : 0;
-          // scrollTime    = config['time']  && config['time']['scroll']  ? config['time']['scroll']  : 2000;
+    const scrollSize    = config['style'] && config['style']['scroll']   ? config['style']['scroll']   : 0,
+          resourceSize  = config['style'] && config['style']['resource'] ? config['style']['resource'] : 5;
 
     class ScrollItem extends React.Component {
         constructor (props) {
@@ -188,7 +190,7 @@ define([
                             <Link className="list-group-item" to="detail" params={{ newsId: news.id }}>
                                 {news.title}
                                 <span className="pull-right">
-                                    {commonUtil.convertDateTimeToDate(news.update_time)}
+                                    {util.convertDateTimeToDate(news.update_time)}
                                 </span>
                             </Link>
                         ))}
@@ -201,29 +203,29 @@ define([
     class Resource extends React.Component {
         constructor (props) {
             super(props);
-            this.state = {
-                resourceList: [],
-            };
         }
-        componentWillMount () {}
         render () {
             return (
                 <div className="col-sm-4">
-                    <h4>资源下载</h4>
-                    <div className="list-group">
-                        {this.state.resourceList.map((resource) => (
-                            <a className="list-group-item" href={resource.path}>
-                                {resource.title}
-                                <span className="pull-right">
-                                    {commonUtil.convertDateTimeToDate(resource.update_time)}
-                                </span>
-                            </a>
-                        ))}
+                    <div className="panel panel-index style-3">
+                        <div className="panel-heading">资源下载</div>
+                        <div className="list-group">
+                            {this.props.list.map((item) => (
+                                <a className="list-group-item" href={`${uploadUrl}${item.get('path')}`}
+                                   key={item.get('id')} target="_blank">
+                                    {item.get('title')}
+                                    {/*<span className="pull-right">
+                                        {util.convertDateTimeStringToDate(item.get('update_time'))}
+                                    </span>*/}
+                                </a>
+                            ))}
+                        </div>
                     </div>
                 </div>
             );
         }
     }
+    Resource.defaultProps = { list: Immutable.List() };
 
     class Index extends React.Component {
         constructor (props) {
@@ -233,14 +235,23 @@ define([
         componentWillReceiveProps (nextProps) {
             this.setState(Index.getState(nextProps));
         }
+        componentWillMount () {
+            this.props.onResourceListGet(0, 5);
+        }
         static getState (state) {
             let scrollList =
                 !state || !state['style'] || !state['style']['scroll'] ||
                 !Array.isArray(state['style']['scroll']) ?
                     [] :
                     state['style']['scroll'];
+            let resourceList =
+                !state || !state['resource'] || !state['resource']['list'] ||
+                !Immutable.List.isList(state['resource']['list']) ?
+                    Immutable.List() :
+                    state['resource']['list'];
             scrollList = scrollList.slice(0, scrollSize || scrollList.length);
-            return { scrollList };
+            resourceList = resourceList.slice(0, resourceSize || resourceList.length);
+            return { scrollList, resourceList };
         }
         render () {
             // var newsArray = [], newsCount = 0;
@@ -261,7 +272,7 @@ define([
                         {/*newsArray.map((news) =>
                             <News id={news.id} title={news.title}/>
                         )*/}
-                        <Resource/>
+                        <Resource list={this.state.resourceList}/>
                     </div>
                 </div>
             );

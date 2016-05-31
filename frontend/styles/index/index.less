@@ -1,0 +1,57 @@
+
+.panel-index {
+  background-color: rgb(245, 245, 245);
+
+  border-radius: 0;
+
+  &>.panel-heading {
+    border-bottom: .03rem solid #fff;
+
+    font-size: .18rem;
+  }
+
+  &>.list-group {
+    &>.list-group-item {
+      background-color: rgb(245, 245, 245);
+
+      color: #004185;
+
+      &:hover {
+        background-color: rgb(255, 255, 255);
+      }
+    }
+  }
+
+  &.style-3 {
+    border-top: none;
+    border-right: .04rem solid #32659c;
+    border-bottom: none;
+    border-left: none;
+
+    &>.list-group {
+      padding: .05rem 0;
+
+      &>.list-group-item {
+        padding: .06rem .15rem;
+
+        border: none;
+
+        font-size: .14rem;
+
+        &:before {
+          display: inline-block;
+          content: "\e258";
+
+          margin-right: .05rem;
+
+          transform: scale(.7);
+
+          color: #333;
+          font-size: .12rem;
+          font-family: 'Glyphicons Halflings';
+          vertical-align: baseline;
+        }
+      }
+    }
+  }
+}
