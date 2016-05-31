@@ -207,7 +207,7 @@ define([
         render () {
             return (
                 <div className="col-sm-4">
-                    <div className="panel panel-index style-3">
+                    <div className="panel panel-index style-3 row">
                         <div className="panel-heading">资源下载</div>
                         <div className="list-group">
                             {this.props.list.map((item) => (
@@ -268,7 +268,7 @@ define([
             return (
                 <div className="container">
                     <Scroll list={this.state.scrollList}/>
-                    <div className="row">
+                    <div className="row index-news-container">
                         {/*newsArray.map((news) =>
                             <News id={news.id} title={news.title}/>
                         )*/}

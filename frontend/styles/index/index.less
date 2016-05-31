@@ -1,18 +1,42 @@
 
+@index-item-bkgc: rgb(240, 240, 240);
+
+.index-news-container {
+  margin: .4rem -.15rem;
+}
+
 .panel-index {
-  background-color: rgb(245, 245, 245);
+  background-color: @index-item-bkgc;
 
   border-radius: 0;
 
   &>.panel-heading {
+    position: relative;
+
     border-bottom: .03rem solid #fff;
 
     font-size: .18rem;
+
+    &:before {
+      content: " ";
+      display: block;
+      position: absolute;
+
+      left: 0;
+      top: 50%;
+      margin-top: -.1rem;
+
+      height: .2rem;
+
+      border-left: .1rem solid #fff;
+      border-top: .1rem solid transparent;
+      border-bottom: .1rem solid transparent;
+    }
   }
 
   &>.list-group {
     &>.list-group-item {
-      background-color: rgb(245, 245, 245);
+      background-color: @index-item-bkgc;
 
       color: #004185;
 
