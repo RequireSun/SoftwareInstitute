@@ -38,8 +38,9 @@ define([
         }
         getData (props) {
             const id = +props.query.id;
-            if (this.state.id !== id) {
-                if (0 === id) {
+            // 负数代表该项为空
+            if (this.state.id !== id && this.state.id !== -id) {
+                if (0 === id || this.state.id === -id) {
                     this.refs.title.value = '';
                     this.setState({ title: '' });
                     props.onResourceDetailClear();
@@ -64,12 +65,10 @@ define([
             } else {
                 this.refs.title.value = this.state.title || '';
             }
-            // TODO: 这里怎么改
-            // if (recordId == currentId && this.refs.article.value !== this.state.article) {
-            //     this.setState({ article: this.refs.article.value });
-            // } else {
-            //     this.refs.article.value = this.state.article || '';
-            // }
+            if (recordId != currentId) {
+                const file = this.refs.form.file;
+                file.parentNode.replaceChild(file.cloneNode(), file);
+            }
             if (recordId != currentId) {
                 this.refs.id.value = currentId;
             }
@@ -128,12 +127,12 @@ define([
                                     </div>
                                     <button onClick={this.submitData.bind(this)}
                                             className="btn btn-success pull-right">提交</button>
-                                    {0 == this.state.id ? '' :
+                                    {0 < +this.state.id ?
                                         <button className="btn btn-danger pull-right"
                                                 style={{ margin: '0 .1rem' }}
                                                 onClick={this.props.onNewsDetailDelete.bind(null, this.state.id)}>
                                             删除
-                                        </button>
+                                        </button> : ''
                                     }
                                 </form>
                             </div>

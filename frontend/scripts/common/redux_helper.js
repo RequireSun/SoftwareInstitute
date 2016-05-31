@@ -148,7 +148,15 @@ define([
                         if (!data['code']) {
                             dispatch(Detail.detailSet(data['data']));
                         } else {
-                            dispatch(Detail.detailSet({}));
+                            dispatch(Detail.detailSet({
+                                id: -id,
+                                title: '',
+                                article: '',
+                                supervisor_name: '',
+                                page_view: 0,
+                                update_time: 0,
+                                category_id: 0,
+                            }));
                         }
                     }).error((xhr, msg) => {
                         // console.log(msg);
@@ -226,16 +234,21 @@ define([
                         if (!data['code']) {
                             dispatch(Resource.detailSet(data['data']));
                         } else {
-                            dispatch(Resource.detailSet({}));
+                            dispatch(Resource.detailSet({
+                                id: -id,
+                                title: '',
+                                path: '',
+                                update_time: 0,
+                            }));
                         }
                     }).error((xhr, msg) => {
                         // console.log(msg);
                         alert('请检查您的网络！');
                     });
                 },
-                onResourceDetailClear () {
+                onResourceDetailClear (id) {
                     dispatch(Resource.detailSet({
-                        id: 0,
+                        id: id || 0,
                         title: '',
                         path: '',
                         update_time: 0,

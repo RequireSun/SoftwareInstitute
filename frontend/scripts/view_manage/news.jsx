@@ -38,9 +38,8 @@ define([
         }
         getData (props) {
             const id = +props.query.id;
-            if (this.state.id !== id) {
-                // this.setState({ id });
-                if (0 === id) {
+            if (this.state.id !== id && this.state.id !== -id) {
+                if (0 === id || this.state.id === -id) {
                     this.refs.title.value = '';
                     this.refs.article.value = '';
                     this.setState({ title: '', article: '' });
