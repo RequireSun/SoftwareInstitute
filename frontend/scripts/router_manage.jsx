@@ -8,7 +8,8 @@ define([
     'view/classification',
     'view/news',
     'view/resource',
-], (React, ReactRouter, main, index, classification, newsComponents, resourceComponents) => {
+    'view/style',
+], (React, ReactRouter, main, index, classification, newsComponents, resourceComponents, style) => {
     const { Router, Route, IndexRoute, hashHistory } = ReactRouter;
     const { news, newsList, newsDetail } = newsComponents;
     const { resourceList, resourceDetail } = resourceComponents;
@@ -27,6 +28,7 @@ define([
                     <Route name="list" path="list" component={resourceList}/>
                     <Route name="detail" path="detail" component={resourceDetail}/>
                 </Route>
+                <Route name="style" path="style" component={style}/>
             </Route>
         </Router>
     );

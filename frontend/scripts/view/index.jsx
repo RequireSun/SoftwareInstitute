@@ -66,7 +66,7 @@ define([
     }
 
     const ScrollSection = (props) => {
-        const length = props.list.length;
+        const length = props.list.size;
         const left   = (props.active - 1 + length) % length,
               center = props.active,
               right  = (props.active + 1) % length;
@@ -78,7 +78,8 @@ define([
                      pos}>
                 <ul>
                     {props.list.map((item, index) =>
-                        <ScrollItem key={index} {...item}
+                        <ScrollItem key={index} img={item.get('img')}
+                                    name={item.get('name')} desc={item.get('desc')}
                                     pos={left === index ? 'left' :
                                          center === index ? 'center' :
                                          right === index ? 'right' : ''}/>
@@ -104,7 +105,7 @@ define([
             </section>
         );
     };
-    ScrollSection.defaultProp = { list: [], active: 0, play: false, coolDown: false, };
+    ScrollSection.defaultProp = { list: Immutable.List(), active: 0, play: false, coolDown: false, };
 
     class Scroll extends React.Component {
         constructor (props) {
@@ -136,7 +137,7 @@ define([
         round (isReverse = false) {
             if (!this.state.coolDown) {
                 const lastActive = this.state.active,
-                      listLength = this.props.list.length;
+                      listLength = this.props.list.size;
                 const active = !isReverse ?
                                    ((lastActive + 1) % listLength) :
                                    ((lastActive - 1 + listLength)) % listLength;
@@ -170,7 +171,7 @@ define([
             );
         }
     }
-    Scroll.defaultProps = { list: [] };
+    Scroll.defaultProps = { list: Immutable.List() };
 
     class News extends React.Component {
         constructor (props) {
@@ -214,9 +215,6 @@ define([
                                 <a className="list-group-item" href={`${uploadUrl}${item.get('path')}`}
                                    key={item.get('id')} target="_blank">
                                     {item.get('title')}
-                                    {/*<span className="pull-right">
-                                        {util.convertDateTimeStringToDate(item.get('update_time'))}
-                                    </span>*/}
                                 </a>
                             ))}
                         </div>
@@ -241,15 +239,15 @@ define([
         static getState (state) {
             let scrollList =
                 !state || !state['style'] || !state['style']['scroll'] ||
-                !Array.isArray(state['style']['scroll']) ?
-                    [] :
+                !Immutable.List.isList(state['style']['scroll']) ?
+                    Immutable.List() :
                     state['style']['scroll'];
             let resourceList =
                 !state || !state['resource'] || !state['resource']['list'] ||
                 !Immutable.List.isList(state['resource']['list']) ?
                     Immutable.List() :
                     state['resource']['list'];
-            scrollList = scrollList.slice(0, scrollSize || scrollList.length);
+            scrollList   = scrollList.slice(0, scrollSize || scrollList.length);
             resourceList = resourceList.slice(0, resourceSize || resourceList.length);
             return { scrollList, resourceList };
         }

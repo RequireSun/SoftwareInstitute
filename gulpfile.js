@@ -57,12 +57,18 @@ gulp.task('less', function () {
 });
 
 gulp.task('css', function () {
-    gulp.src(nodeModule('bootstrap/dist/css/bootstrap.css'))
+    gulp.src([
+        nodeModule('bootstrap/dist/css/bootstrap.css'),
+        nodeModule('jsoneditor/dist/jsoneditor.css'),
+    ])
         .pipe(gulp.dest(dist('styles')))
         .pipe(livereload());
 });
 
 gulp.task('images', () => {
+    gulp.src(nodeModule('jsoneditor/dist/img/*'))
+        .pipe(gulp.dest(dist('styles/img')));
+
     gulp.src(app('images/**/*.*'))
         .pipe(gulp.dest(dist('images')));
 });
@@ -96,6 +102,7 @@ gulp.task('javascript', function () {
         // nodeModule('react-bootstrap/react-bootstrap.js'),
         nodeModule('requirejs/require.js'),
         nodeModule('immutable/dist/immutable.js'),
+        nodeModule('jsoneditor/dist/jsoneditor.js'),
     ])
         // .pipe(uglify())
         .pipe(gulp.dest(dist('scripts/lib')))

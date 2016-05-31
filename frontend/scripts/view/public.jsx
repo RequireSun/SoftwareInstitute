@@ -1,6 +1,7 @@
 'use strict';
 
 define([
+    'immutable',
     'react',
     'ReactRouter',
     'react-redux',
@@ -8,7 +9,7 @@ define([
     'common/redux_helper',
     'root/config',
     'root/store',
-], (React, Router, ReactRedux, commonUtil, reduxHelper, config, store) => {
+], (Immutable, React, Router, ReactRedux, commonUtil, reduxHelper, config, store) => {
     const { mapStateToProps, mapDispatchToProps } = reduxHelper;
     const { Provider, connect } = ReactRedux;
     const { Link }      = Router;
@@ -82,10 +83,11 @@ define([
         }
     }
     Pager.defaultProps = { current: 0, max: 0, link: '', pathname: '', query: {} };
+    // TODO 兼容链接
     // 导航栏的单个选项列表
     const NavigatorItem = props => (
         <li className="dropdown">
-            {!!props.list && !!props.list.length ? [
+            {!!props.list && !!props.list.size ? [
                 <a key="name" href="javascript:;"
                    className="dropdown-toggle" data-toggle="dropdown" role="button">
                     {props.name}
@@ -94,12 +96,12 @@ define([
                 <ul key="list" className="dropdown-menu">
                     {props.list.map((item, index) =>
                         <li key={index}>
-                            {!!item['id'] ?
-                                <Link to={{ pathname: `/browse/news/${item['type']}`,
-                                            query: { id: item['id'], pageSize, pageRequest }}}>
-                                    {item['name']}
+                            {!!item.get('id') ?
+                                <Link to={{ pathname: `/browse/news/${item.get('type')}`,
+                                            query: { id: item.get('id'), pageSize, pageRequest }}}>
+                                    {item.get('name')}
                                 </Link> :
-                                <a href={item['link'] || 'javascript:;'}>{item['name']}</a>
+                                <a href={item.get('link') || 'javascript:;'}>{item.get('name')}</a>
                             }
                         </li>
                     )}
@@ -128,10 +130,10 @@ define([
         static getState (state) {
             let list =
                 !state || !state['style'] || !state['style']['navigator'] ||
-                !Array.isArray(state['style']['navigator']) ?
-                    [] :
+                !Immutable.List.isList(state['style']['navigator']) ?
+                    Immutable.List() :
                     state['style']['navigator'];
-            list = list.slice(0, navigatorSize || list.length);
+            list = list.slice(0, navigatorSize || list.size);
             const needDecoration = !('/' === state['pathname'] || '/index' === state['pathname']);
             return { list, needDecoration };
         }
@@ -153,7 +155,9 @@ define([
                                     <Link to="index">首页</Link>
                                 </li>
                                 {this.state.list.map((item, index) =>
-                                    <NavigatorItem key={index} {...item}/>
+                                    <NavigatorItem key={index} list={item.get('list')}
+                                                   id={item.get('id')} type={item.get('type')}
+                                                   name={item.get('name')} link={item.get('link')}/>
                                 )}
                             </ul>
                         </div>
@@ -182,25 +186,25 @@ define([
         static getState (state) {
             let list =
                 !state || !state['style'] || !state['style']['shortcut'] ||
-                !Array.isArray(state['style']['shortcut']) ?
-                    [] :
+                !Immutable.List.isList(state['style']['shortcut']) ?
+                    Immutable.List() :
                     state['style']['shortcut'];
-            list = list.slice(0, shortcutSize || list.length);
+            list = list.slice(0, shortcutSize || list.size);
             return { list };
         }
         render () {
             return (
                 <aside className="list-group shortcut-box">
                     {this.state.list.map((item, index) =>
-                        !!item['id'] ?
+                        !!item.get('id') ?
                             <Link className="list-group-item" key={index}
-                                  to={{ pathname: `/browse/news/${item['type']}`,
-                                        query: { id: item['id'], pageSize, pageRequest }}}>
-                                {item['name']}
+                                  to={{ pathname: `/browse/news/${item.get('type')}`,
+                                        query: { id: item.get('id'), pageSize, pageRequest }}}>
+                                {item.get('name')}
                             </Link> :
-                            !!item['link'] ?
-                                <a className="list-group-item" href={item['link'] || 'javascript:;'}>
-                                    {item['name']}
+                            !!item.get('link') ?
+                                <a className="list-group-item" href={item.get('link') || 'javascript:;'}>
+                                    {item.get('name')}
                                 </a> :
                                 ''
                     )}
@@ -228,10 +232,10 @@ define([
         static getState (state) {
             let list =
                 !state || !state['style'] || !state['style']['header'] ||
-                !Array.isArray(state['style']['header']) ?
-                    [] :
+                !Immutable.List.isList(state['style']['header']) ?
+                    Immutable.List() :
                     state['style']['header'];
-            list = list.slice(0, headerSize || list.length);
+            list = list.slice(0, headerSize || list.size);
             return { list };
         }
         render () {
@@ -248,9 +252,9 @@ define([
                                 <ul className="breadcrumb">
                                     {this.state.list.map((item, index) =>
                                         <li key={index}>
-                                            <Link to={{ pathname: `/browse/news/${item['type']}`,
-                                                        query: { id: item['id'], pageSize, pageRequest }}}>
-                                                {item['name']}
+                                            <Link to={{ pathname: `/browse/news/${item.get('type')}`,
+                                                        query: { id: item.get('id'), pageSize, pageRequest }}}>
+                                                {item.get('name')}
                                             </Link>
                                         </li>
                                     )}
@@ -275,9 +279,9 @@ define([
             <ul>
                 {props.category.map((item, index) =>
                     <li key={index}>
-                        <Link to={{ pathname: `/browse/news/${item['type']}`,
-                                    query: { id: item['id'], pageSize, pageRequest }}}>
-                            {item['name']}
+                        <Link to={{ pathname: `/browse/news/${item.get('type')}`,
+                                    query: { id: item.get('id'), pageSize, pageRequest }}}>
+                            {item.get('name')}
                         </Link>
                     </li>
                 )}
@@ -297,10 +301,10 @@ define([
         static getState (state) {
             let list =
                 !state || !state['style'] || !state['style']['footer'] ||
-                !Array.isArray(state['style']['footer']) ?
-                    [] :
+                !Immutable.List.isList(state['style']['footer']) ?
+                    Immutable.List() :
                     state['style']['footer'];
-            list = list.slice(0, footerSize || list.length);
+            list = list.slice(0, footerSize || list.size);
             return { list };
         }
         render () {
@@ -325,8 +329,8 @@ define([
                     <footer className="container">
                         <div className="row">
                             {this.state.list.map((item, index) =>
-                                <FooterItem key={index} id={item['id']} type={item['type']}
-                                            title={item['name']} category={item['list']}/>
+                                <FooterItem key={index} id={item.get('id')} type={item.get('type')}
+                                            title={item.get('name')} category={item.get('list')}/>
                             )}
                             <div className="footer-information col-xs-12 col-md-6">
                                 <a className="logo" href="//www.hitwh.edu.cn">

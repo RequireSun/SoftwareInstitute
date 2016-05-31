@@ -64,6 +64,7 @@
     "immutable": "^3.8.1",
     "jquery": "^2.2.3",
     "jshint-stylish": "^0.4.0",
+    "jsoneditor": "^5.5.5",
     "less": "^2.6.1",
     "nodemon": "^1.9.1",
     "react": "^15.0.1",
