@@ -201,28 +201,21 @@ define([
         }
     }
 
-    class Resource extends React.Component {
-        constructor (props) {
-            super(props);
-        }
-        render () {
-            return (
-                <div className="col-sm-4">
-                    <div className="panel panel-index style-3 row">
-                        <div className="panel-heading">资源下载</div>
-                        <div className="list-group">
-                            {this.props.list.map((item) => (
-                                <a className="list-group-item" href={`${uploadUrl}${item.get('path')}`}
-                                   key={item.get('id')} target="_blank">
-                                    {item.get('title')}
-                                </a>
-                            ))}
-                        </div>
-                    </div>
+    const Resource = (props) => (
+        <div className="col-sm-4">
+            <div className="panel panel-index style-3 row">
+                <div className="panel-heading">资源下载</div>
+                <div className="list-group">
+                    {props.list.map((item) => (
+                        <a className="list-group-item" href={`${uploadUrl}${item.get('path')}`}
+                           key={item.get('id')} target="_blank">
+                            {item.get('title')}
+                        </a>
+                    ))}
                 </div>
-            );
-        }
-    }
+            </div>
+        </div>
+    );
     Resource.defaultProps = { list: Immutable.List() };
 
     class Index extends React.Component {

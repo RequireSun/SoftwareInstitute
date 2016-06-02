@@ -13,7 +13,8 @@ define([
     'action/news',
     'action/resource',
     'network/struct',
-], ($, config, util, Style, Struct, Detail, News, Resource, nStruct) => {
+    'network/style',
+], ($, config, util, Style, Struct, Detail, News, Resource, nStruct, nStyle) => {
 
     return {
         mapStateToProps: ({ style, detail, struct, news, resource }) => ({
@@ -60,6 +61,15 @@ define([
             return {
                 onStyleInit: (style) =>
                     dispatch(Style.init(style)),
+                onStyleAllGet () {
+                    return nStyle.getAll((err, data) => {
+                        if (err) {
+                            alert('请检查您的网络!');
+                        } else {
+                            dispatch(Style.init(data));
+                        }
+                    });
+                },
                 onStructInit: (data) =>
                     dispatch(Struct.init(data)),
                 onStructGet: ({ category = false, outline = false, all = false } = {}) => {
