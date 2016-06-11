@@ -47,7 +47,7 @@ exports.post = (callback, name, style) => {
     }).then(result =>
         writeStyleObject(result)
     ).then(result =>
-        callback(null)
+        callback(null, name)
     ).catch(err => callback(err));
 };
 
@@ -71,7 +71,7 @@ exports.put = (callback, name, style) => {
     }).then(result =>
         writeStyleObject(result)
     ).then(result =>
-        callback(null)
+        callback(null, name)
     ).catch(err => callback(err));
 };
 
@@ -87,7 +87,7 @@ exports.delete = (callback, name) => {
     }).then(result =>
         writeStyleObject(result)
     ).then(result =>
-        callback(null)
+        callback(null, name)
     ).catch(err => callback(err));
 };
 

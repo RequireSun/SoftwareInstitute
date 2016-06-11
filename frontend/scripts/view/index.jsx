@@ -15,7 +15,8 @@ define([
 ) {
     const { Link }      = Router;
     const { Provider }  = ReactRedux;
-    const scrollSize    = config['style'] && config['style']['scroll']   ? config['style']['scroll']   : 0,
+    const indexNewsSize = config['style'] && config['style']['indexNews']? config['style']['indexNews']: 2,
+          scrollSize    = config['style'] && config['style']['scroll']   ? config['style']['scroll']   : 0,
           resourceSize  = config['style'] && config['style']['resource'] ? config['style']['resource'] : 5;
 
     class ScrollItem extends React.Component {
@@ -177,29 +178,71 @@ define([
         constructor (props) {
             super(props);
             this.state = {
-                id      : props.id,
-                title   : props.title,
-                newsList: [],
+                title: '',
+                list: Immutable.List(),
             };
+        }
+        componentDidMount () {
+            if (1 === this.props.style) {
+                this.setState({
+                    title: '',
+                    list: Immutable.fromJS([{
+                        id: 1,
+                        title: '标题1',
+                        update_time: 1465679151054,
+                    },{
+                        id: 2,
+                        title: '标题2',
+                        update_time: 1465679151054,
+                    },{
+                        id: 3,
+                        title: '标题3',
+                        update_time: 1465679151054,
+                    },{
+                        id: 4,
+                        title: '标题4',
+                        update_time: 1465679151054,
+                    },]),
+                });
+            } else {
+                this.setState({
+                    title: '标题',
+                });
+            }
         }
         render () {
             return (
                 <div className="col-sm-4">
-                    <h4>{this.state.title || '暂无内容'}</h4>
-                    <div className="list-group">
-                        {this.state.newsList.map((news) => (
-                            <Link className="list-group-item" to="detail" params={{ newsId: news.id }}>
-                                {news.title}
-                                <span className="pull-right">
-                                    {util.convertDateTimeToDate(news.update_time)}
-                                </span>
-                            </Link>
-                        ))}
+                    <div className={"panel panel-index row style-" + this.props.style}>
+                        <div className="panel-heading">{this.state.title || this.props.name || '新闻'}</div>
+                        <div className={"list-group " + ['light-blue', 'blue', 'gray', 'cyan'][Math.floor(4 * Math.random())]}>
+                            {this.state.list.map((item) => (
+                                <Link className="list-group-item" key={item.get('id')}
+                                      to={{ pathname: '/browse/detail', query: { id: item.get('id') }}}>
+                                    <span className="time">
+                                        <span className="month">
+                                            {['JAN','FEB','MAR','APR','MAY','JUN',
+                                                'JUL','AUG','SEPT','OCT','NOV','DEC'][new Date(item.get('update_time')).getMonth()]}
+                                        </span>
+                                        <span className="date">
+                                            {new Date(item.get('update_time')).getDate()}
+                                        </span>
+                                    </span>
+                                    <span className="title">
+                                        {item.get('title')}
+                                    </span>
+                                    {/*<span className="pull-right">
+                                        {util.convertDateTimeStringToDate(item.get('update_time'))}
+                                    </span>*/}
+                                </Link>
+                            ))}
+                        </div>
                     </div>
                 </div>
             );
         }
     }
+    News.defaultProps = { id: 0, type: 'category', name: '', style: 1 };
 
     const Resource = (props) => (
         <div className="col-sm-4">
@@ -235,14 +278,20 @@ define([
                 !Immutable.List.isList(state['style']['scroll']) ?
                     Immutable.List() :
                     state['style']['scroll'];
+            let newsList =
+                !state || !state['style'] || !state['style']['indexNews'] ||
+                !Immutable.List.isList(state['style']['indexNews']) ?
+                    Immutable.List() :
+                    state['style']['indexNews'];
             let resourceList =
                 !state || !state['resource'] || !state['resource']['list'] ||
                 !Immutable.List.isList(state['resource']['list']) ?
                     Immutable.List() :
                     state['resource']['list'];
             scrollList   = scrollList.slice(0, scrollSize || scrollList.length);
+            newsList     = newsList.slice(0, indexNewsSize || newsList.length);
             resourceList = resourceList.slice(0, resourceSize || resourceList.length);
-            return { scrollList, resourceList };
+            return { scrollList, newsList, resourceList };
         }
         render () {
             // var newsArray = [], newsCount = 0;
@@ -263,6 +312,8 @@ define([
                         {/*newsArray.map((news) =>
                             <News id={news.id} title={news.title}/>
                         )*/}
+                        <News list={this.state.resourceList} style={1}/>
+                        <News list={this.state.resourceList} style={2}/>
                         <Resource list={this.state.resourceList}/>
                     </div>
                 </div>
