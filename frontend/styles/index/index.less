@@ -17,6 +17,8 @@
 }
 
 .panel-index {
+  min-height: 4rem;
+
   background-color: @index-item-bkgc;
 
   border-radius: 0;
@@ -27,6 +29,15 @@
     border-bottom: .02rem solid #fff;
 
     font-size: .18rem;
+
+    &>.more {
+      position: absolute;
+
+      right: .15rem;
+
+      font-size: 70%;
+      line-height: .24rem;
+    }
   }
 
   &>.list-group {
@@ -111,6 +122,21 @@
 
       &.cyan>.list-group-item>.time {
         background-position: 0 -276px;
+      }
+    }
+  }
+
+  &.style-2 {
+    &>.list-group {
+      &>.list-group-item {
+        &>.title {
+          display: block;
+          //padding: .12rem;
+        }
+        &>.time {
+          display: block;
+          color: #646464;
+        }
       }
     }
   }

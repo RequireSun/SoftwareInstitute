@@ -183,7 +183,7 @@ define([
             };
         }
         componentDidMount () {
-            if (1 === this.props.style) {
+            if (2 === this.props.style) {
                 this.setState({
                     title: '',
                     list: Immutable.fromJS([{
@@ -202,11 +202,36 @@ define([
                         id: 4,
                         title: '标题4',
                         update_time: 1465679151054,
+                    },{
+                        id: 5,
+                        title: '标题5',
+                        update_time: 1465679151054,
                     },]),
                 });
             } else {
                 this.setState({
                     title: '标题',
+                    list: Immutable.fromJS([{
+                        id: 1,
+                        title: '标题1',
+                        update_time: 1465679151054,
+                    },{
+                        id: 2,
+                        title: '标题2',
+                        update_time: 1465679151054,
+                    },{
+                        id: 3,
+                        title: '标题3',
+                        update_time: 1465679151054,
+                    },{
+                        id: 4,
+                        title: '标题4',
+                        update_time: 1465679151054,
+                    },{
+                        id: 5,
+                        title: '标题5',
+                        update_time: 1465679151054,
+                    },]),
                 });
             }
         }
@@ -214,29 +239,48 @@ define([
             return (
                 <div className="col-sm-4">
                     <div className={"panel panel-index row style-" + this.props.style}>
-                        <div className="panel-heading">{this.state.title || this.props.name || '新闻'}</div>
-                        <div className={"list-group " + ['light-blue', 'blue', 'gray', 'cyan'][Math.floor(4 * Math.random())]}>
-                            {this.state.list.map((item) => (
-                                <Link className="list-group-item" key={item.get('id')}
-                                      to={{ pathname: '/browse/detail', query: { id: item.get('id') }}}>
-                                    <span className="time">
-                                        <span className="month">
-                                            {['JAN','FEB','MAR','APR','MAY','JUN',
-                                                'JUL','AUG','SEPT','OCT','NOV','DEC'][new Date(item.get('update_time')).getMonth()]}
-                                        </span>
-                                        <span className="date">
-                                            {new Date(item.get('update_time')).getDate()}
-                                        </span>
-                                    </span>
-                                    <span className="title">
-                                        {item.get('title')}
-                                    </span>
-                                    {/*<span className="pull-right">
-                                        {util.convertDateTimeStringToDate(item.get('update_time'))}
-                                    </span>*/}
-                                </Link>
-                            ))}
+                        <div className="panel-heading">
+                            {this.state.title || this.props.name || '新闻'}
+                            <Link to={{ pathname: `/browse/news/${this.props.type}`, query: { id: this.props.id }}}
+                                  className="more">
+                                查看更多
+                            </Link>
                         </div>
+                        {1 === this.props.style ? (
+                            <div className={"list-group " + ['light-blue', 'blue', 'gray', 'cyan'][Math.floor(4 * Math.random())]}>
+                                {this.state.list.map(item => (
+                                    <Link className="list-group-item" key={item.get('id')}
+                                          to={{ pathname: '/browse/detail', query: { id: item.get('id') }}}>
+                                        <span className="time">
+                                            <span className="month">
+                                                {['JAN','FEB','MAR','APR','MAY','JUN',
+                                                    'JUL','AUG','SEPT','OCT','NOV','DEC'][new Date(item.get('update_time')).getMonth()]}
+                                            </span>
+                                            <span className="date">
+                                                {new Date(item.get('update_time')).getDate()}
+                                            </span>
+                                        </span>
+                                        <span className="title">
+                                            {item.get('title')}
+                                        </span>
+                                    </Link>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="list-group">
+                                {this.state.list.map(item => (
+                                    <Link className="list-group-item" key={item.get('id')}
+                                          to={{ pathname: '/browse/detail', query: { id: item.get('id') }}}>
+                                        <span className="title">
+                                            {item.get('title')}
+                                        </span>
+                                        <span className="time">
+                                            {util.convertDateTimeStringToDate(item.get('update_time'))}
+                                        </span>
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             );
