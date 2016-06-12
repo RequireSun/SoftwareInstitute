@@ -5,36 +5,36 @@
 
 const xml    = require('xml');
 const config = require('../config');
-const news   = require('../proxy').News;
+const News   = require('../proxy').News;
+const promiseWrap = require('../common/tool').promiseWrap;
 
 module.exports = (req, res, next) => {
     const channel = [];
     for (let i in config.rss) {
         channel.push({ [i]: config.rss[i] });
     }
-    const rssObj = { rss: [{ _attr: { version: '2.0' } }, { channel }]};
+    const rssObj = { rss: [{ _attr: { version: '2.0' } }]};
 
-    res.xml(rssObj);
-    // {
-    //     rss: [{ _attr: { version: '2.0' } }, {
-    //         channel: [{
-    //             lastBuildDate: ''
-    //         }, {
-    //             item: [{
-    //                 title: 'ttt',
-    //             }, {
-    //                 description: 'ddd',
-    //             }, {
-    //                 link: 'lll',
-    //             }, {
-    //                 author: 'aaa',
-    //             }, {
-    //                 category: 'ccc',
-    //             }, {
-    //                 pubDate: '',
-    //             }]
-    //         }]
-    //     }]
-    // }
-    next();
+    new Promise(promiseWrap(News.all, 50, 0)).
+        then(result => {
+            if (result && result.length) {
+                channel.push({ lastBuildDate: new Date(result[0]['update_time']).toString() });
+            }
+            result.forEach(item => {
+                channel.push({ item: [{
+                    title: item['title'],
+                }, {
+                    description: item['article'].slice(0, 200),
+                }, {
+                    category: item['category_name'],
+                }, {
+                    pubDate: new Date(item['update_time']).toString()
+                }, {
+                    link: `http://software.hitwh.edu.cn/page/index/#/browse/detail?id=${item['id']}`,
+                }]});
+            });
+            rssObj['rss'].push({ channel: channel });
+            res.xml(rssObj);
+            next();
+        }, err => {});
 };

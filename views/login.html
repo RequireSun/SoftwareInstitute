@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员登录</title>
+    <style>
+html {
+    font-family: "Microsoft Yahei", Arial, Helvetica, sans-serif;
+}
+body {
+    margin: 0;
+}
+header {
+    overflow: hidden;
+    width: 100%;
+    height: 110px;
+}
+header:after {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    clear: both;
+}
+header>.container {
+    width: 1024px;
+    height: 110px;
+    margin: 0 auto;
+}
+.logo {
+    float: left;
+    width: 50%;
+    height: 110px;
+    padding-top: 2em;
+}
+.logo>a {
+    float: left;
+    width: 511px;
+    height: 50px;
+    background-size: 100% 100%;
+}
+.logo>a>img {
+    float: left;
+    width: 100%;
+    max-height: 70px;
+}
+.main:after {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    clear: both;
+}
+.wrapper {
+    position: relative;
+    max-width: 1022px;
+    height: 440px;
+    margin: 0 auto;
+}
+.wrapper>.background-login {
+    position: absolute;
+    z-index: -1;
+
+    width: 100%;
+    height: 90%;
+
+    top: 5%;
+
+    background-color: #32659c;
+}
+.wrapper>.background-login:after {
+    content: "管理员登录";
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    background: url("/public/images/LoginBackground.png") no-repeat;
+
+    color: #eee;
+    font-size: 40px;
+    line-height: 80px;
+    text-indent: 30px;
+}
+.container-login {
+    float: right;
+    position: relative;
+
+    width: 300px;
+    height: 100%;
+
+    margin-right: 5%;
+
+    background-color: #fff;
+
+    border: 1px solid gray;
+    border-bottom: 3px solid gray;
+    border-right: 3px solid gray;
+}
+.container-login>.title {
+    position: relative;
+    box-sizing: border-box;
+
+    width: 90%;
+    height: 75px;
+
+    left: 5%;
+    padding: 5%;
+
+    border-bottom: 1px solid gray;
+
+    font-size: 20px;
+    line-height: 75px;
+}
+.container-login>.title>.blue {
+    color: #2b65b7;
+}
+.container-login>.title>.gray {
+    color: gray;
+}
+form.form-login {
+    position: relative;
+}
+form.form-login>label[for] {
+    display: block;
+    position: relative;
+    box-sizing: border-box;
+
+    width: 100%;
+    height: 25px;
+
+    margin-top: 15px;
+    padding: 0 10%;
+
+    color: #2b65b7;
+    font-size: 16px;
+}
+form.form-login>input[type=text], form.form-login>input[type=password] {
+    display: block;
+    position: relative;
+    box-sizing: border-box;
+
+    width: 80%;
+    height: 70%;
+
+    margin: 0 auto;
+    padding: 10px 4%;
+
+    border: 1px solid gray;
+    border-radius: 0;
+
+    box-shadow: none;
+}
+form.form-login>input[type=submit] {
+    float: right;
+    display: block;
+
+    width: 35%;
+    height: 40px;
+
+    margin: 20px 10% 0 0;
+
+    background-color: #004185;
+
+    border: none;
+    box-shadow: none;
+
+    color: #eee;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: "Microsoft Yahei";
+}
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="logo">
+            <a href="/page/index">
+                <img src="/public/images/LogoTitle.png" style="width: 100%;">
+            </a>
+        </div>
+    </div>
+</header>
+<div class="main">
+    <div class="wrapper">
+        <div class="background-login"></div>
+        <div class="container-login">
+            <div class="title">
+                <span class="blue">登录</span>
+                <span class="gray">&nbsp;/&nbsp;Login</span>
+            </div>
+            <form action="/api/login" method="post" class="form-login">
+                <label for="alias">用户名</label>
+                <input type="text" id="alias" placeholder="用户名" name="alias"/>
+                <label for="cipher">密码</label>
+                <input type="password" id="cipher" placeholder="密码" name="cipher"/>
+                <input type="submit" value="登录"/>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

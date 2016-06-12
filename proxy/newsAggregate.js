@@ -144,7 +144,7 @@ exports.all             = (callback, pageSize, pageRequest) => {
     }
 
     var queryString =
-        'SELECT news.id AS id, news.title AS title, news.update_time AS update_time, category.name AS category_name ' +
+        'SELECT news.id AS id, news.title AS title, news.article AS article, news.update_time AS update_time, category.name AS category_name ' +
         'FROM news LEFT JOIN category ON news.category_id = category.id ' +
         'WHERE news.deleted <> TRUE ' +
         'ORDER BY update_time DESC LIMIT :pageLimit OFFSET :pageOffset';

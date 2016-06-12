@@ -22,11 +22,14 @@ const index = (req, res, next) => {
     });
 };
 
-const login = (req, res, next) => {};
+const login = (req, res, next) => {
+    res.render('login');
+    next();
+};
 // TODO 登录态验证
 const manage = (req, res, next) => {
     res.render('manage');
     next();
 };
 
-module.exports = { index, manage, };
+module.exports = { index, login, manage, };

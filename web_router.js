@@ -33,5 +33,6 @@ let router          = express.Router();
 router.get('/index', singlePage.index);
 // TODO 登录态验证
 router.get('/manage', singlePage.manage);
+router.get('/login', singlePage.login);
 
 module.exports = router;
