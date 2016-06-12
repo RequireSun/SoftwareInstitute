@@ -16,6 +16,7 @@ let supervisor      = require('./api/supervisor');
 let power           = require('./api/power');
 let style           = require('./api/style');
 let comment         = require('./api/comment');
+const rss           = require('./api/rss');
 // 引入 middleware
 // let middlewareName = require('pathToMiddleware');
 // let config          = require('./config');
@@ -42,6 +43,7 @@ router.delete('/news', news.NewsDelete);
 // 新闻列表
 router.get('/newsCategory', news.NewsCategory);
 router.get('/newsOutline',  news.NewsOutline);
+router.get('/newsAll',      news.NewsAllGet);
 // 结构 - category
 router.get   ('/category', struct.CategoryGet);
 router.post  ('/category', struct.CategoryPost);
@@ -83,6 +85,8 @@ router.get('/commentAll', comment.getAll);
 
 router.get('/validate', supervisor.ValidateGet);
 router.get('/login', supervisor.LoginGet);
+
+router.get('/rss', rss);
 
 // router.get('/pValidate', power.validate);
 

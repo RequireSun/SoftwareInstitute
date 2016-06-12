@@ -67,7 +67,9 @@ var config = {
         language: 'zh-cn',
         description: '来自哈尔滨工业大学（威海）软件学院的新闻通知',
         // 最多获取 RSS Item 的数量
-        max_rss_items: 50
+        max_rss_items: 50,
+        docs: 'http://software.hitwh.edu.cn/api/rss',
+        ttl: 60,
     },
 
     // 邮箱配置

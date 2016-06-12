@@ -209,3 +209,35 @@ exports.NewsDelete = (req, res, next) => {
             next();
         });
 };
+
+exports.NewsAllGet = (req, res, next) => {
+    let pageSize    = +req.query.pageSize;
+    let pageRequest = +req.query.pageRequest;
+
+    if (isNaN(pageSize) || isNaN(pageRequest)) {
+        res.jsonErrorParameterMissing('请选择正确的页码或页面大小！');
+        next();
+        return;
+    } else if (0 > pageSize || 0 > pageRequest) {
+        res.jsonErrorParameterWrong('页码和页面大小不能为负！');
+        next();
+        return;
+    }
+
+    Promise.all([
+        new Promise(promiseWrap(News.all, pageSize, pageRequest)),
+        new Promise(promiseWrap(News.allCount)),
+    // es6 type
+    ]).then(([newsList, newsCount]) => {
+        let pageMax     = Math.ceil(newsCount / pageSize);
+
+        res.jsonSuccess({
+            list    : newsList,
+            count   : pageMax,
+        });
+        next();
+    }).catch(err => {
+        res.jsonErrorParameterWrong(err['message']);
+        next();
+    });
+};

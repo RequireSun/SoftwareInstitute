@@ -58,6 +58,7 @@ const cors                = require('cors');
 const requestLog          = require('./middlewares/request_log');
 const renderPageMiddleware= require('./middlewares/render_page');
 const renderJsonMiddleware= require('./middlewares/render_json');
+const renderXmlMiddleware = require('./middlewares/render_xml');
 //let renderMiddleware    = require('./middlewares/render');
 const upload              = require('./middlewares/upload');
 const logger              = require('./common/logger');
@@ -171,6 +172,7 @@ Object.assign(app.locals, {
 // 为 response 添加信息提示渲染方法的中间件
 app.use(renderPageMiddleware.errorPage);
 app.use(renderJsonMiddleware);
+app.use(renderXmlMiddleware);
 // 为当前作用域添加 lodash 方法（标识符为 _）和渲染相关方法
 Object.assign(app.locals, require('./common/render_helper'));
 

@@ -135,3 +135,46 @@ exports.outlineCount    = (callback, id) => {
         }
     );
 };
+
+exports.all             = (callback, pageSize, pageRequest) => {
+    if (isNaN(+pageSize) || isNaN(+pageRequest)) {
+        return callback(new Error('Parameter: pageSize / pageRequest must be number!'));
+    } else if (0 > pageSize || 0 > pageRequest) {
+        return callback(new Error('Parameter: pageSize / pageRequest must be non-negative number!'));
+    }
+
+    var queryString =
+        'SELECT news.id AS id, news.title AS title, news.update_time AS update_time, category.name AS category_name ' +
+        'FROM news LEFT JOIN category ON news.category_id = category.id ' +
+        'WHERE news.deleted <> TRUE ' +
+        'ORDER BY update_time DESC LIMIT :pageLimit OFFSET :pageOffset';
+
+    database.query(queryString, {
+        pageLimit   : pageSize,
+        pageOffset  : pageRequest * pageSize,
+    }, (err, rows) => {
+        if (err) {
+            callback(err);
+        } else {
+            rows = formatDateTimeArray(rows, 'update_time');
+            callback(null, rows);
+        }
+    });
+};
+
+exports.allCount        = callback => {
+    const queryString = 'SELECT COUNT(*) as newsCount FROM news WHERE news.deleted <> TRUE';
+
+    database.query(
+        queryString,
+        (err, result) => {
+            if (err) {
+                callback(err);
+            } else if (!result || !result.length) {
+                callback(new Error('No data!'));
+            } else {
+                callback(null, result[0].newsCount);
+            }
+        }
+    );
+};
